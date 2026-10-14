@@ -7,6 +7,8 @@ import {
 } from "next/font/google"
 
 import "./globals.css"
+import { OfflineBanner } from "@/components/pwa/offline-banner"
+import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 
@@ -44,6 +46,7 @@ export const metadata: Metadata = {
   description:
     "An open-source German course for software engineers joining a German-speaking team.",
   applicationName: "Klarlingo",
+  icons: { apple: "/icons/apple-touch-icon.png" },
 }
 
 export const viewport: Viewport = {
@@ -70,7 +73,11 @@ export default function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <OfflineBanner />
+          {children}
+        </ThemeProvider>
+        <ServiceWorkerRegister />
       </body>
     </html>
   )
