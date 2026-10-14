@@ -22,11 +22,15 @@ export function parsePublicEnv(source: Record<string, string | undefined>) {
   return result.data
 }
 
-// Next.js inlines NEXT_PUBLIC_ values only when they are referenced by their full name.
-export function getPublicEnv(): PublicEnv {
-  return parsePublicEnv({
+export function readPublicEnvSource() {
+  return {
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-  })
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  }
+}
+
+export function getPublicEnv(): PublicEnv {
+  return parsePublicEnv(readPublicEnvSource())
 }

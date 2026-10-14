@@ -6,7 +6,7 @@ import {
   isProtectedPath,
   isSignedOutOnlyPath,
 } from "@/lib/auth/routes"
-import { parsePublicEnv } from "@/lib/env"
+import { parsePublicEnv, readPublicEnvSource } from "@/lib/env"
 
 /**
  * Refreshes the Supabase session cookie before any page renders and redirects for UX.
@@ -19,11 +19,7 @@ export async function updateSession(request: NextRequest) {
 
   let env: ReturnType<typeof parsePublicEnv> | null = null
   try {
-    env = parsePublicEnv({
-      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
-        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-    })
+    env = parsePublicEnv(readPublicEnvSource())
   } catch {
     env = null
   }
