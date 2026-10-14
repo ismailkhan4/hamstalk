@@ -7,9 +7,11 @@ import { cn } from "@/lib/utils"
 
 import type { NavItem } from "./nav-items"
 
-export function useIsActive(href: string) {
+export function useIsActive(href: string, also: string[] = []) {
   const pathname = usePathname()
-  return pathname === href || pathname.startsWith(`${href}/`)
+  return [href, ...also].some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  )
 }
 
 type CountProps = { item: NavItem; count: number | undefined }
@@ -19,7 +21,7 @@ function countLabel(count: number | undefined) {
 }
 
 export function SidebarLink({ item, count }: CountProps) {
-  const active = useIsActive(item.href)
+  const active = useIsActive(item.href, item.also)
   const shown = countLabel(count)
   return (
     <Link
@@ -48,7 +50,7 @@ export function SidebarLink({ item, count }: CountProps) {
 }
 
 export function BottomNavLink({ item, count }: CountProps) {
-  const active = useIsActive(item.href)
+  const active = useIsActive(item.href, item.also)
   const shown = countLabel(count)
   return (
     <Link

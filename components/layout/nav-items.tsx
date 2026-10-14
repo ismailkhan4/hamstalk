@@ -1,19 +1,30 @@
-import { BookMarked, House, NotebookPen, Repeat, Route, Users, } from "lucide-react"
+import {
+  BookMarked,
+  ChartNoAxesColumn,
+  House,
+  NotebookPen,
+  Route,
+  Target,
+  Users,
+} from "lucide-react"
 
 import type { NotebookCounts } from "@/features/review/data"
 
 export type NavItem = {
   href: string
+  /** Other places that belong to this destination, so it stays highlighted there. */
+  also?: string[]
   label: string
   shortLabel: string
   icon: React.ReactElement
+  /** Which count, if any, is shown beside the label. */
   count?: keyof NotebookCounts
 }
 
 /**
  * Only destinations that exist are listed, so navigation never leads to an empty page.
- * Practice, Team, Progress, Phrasebook and Mistakes join as their screens ship.
- * Icons are elements, because Server Components cannot pass component functions to client components.
+ * The phone bar shows only these main destinations; notes are reached from Practice. Icons are elements, because Server
+ * Components cannot pass component functions to client components.
  */
 export const primaryNav: NavItem[] = [
   {
@@ -28,11 +39,12 @@ export const primaryNav: NavItem[] = [
     shortLabel: "Path",
     icon: <Route aria-hidden="true" />,
   },
-{
-    href: "/review",
-    label: "Review",
-    shortLabel: "Review",
-    icon: <Repeat aria-hidden="true" />,
+  {
+    href: "/practice",
+    also: ["/review"],
+    label: "Practice",
+    shortLabel: "Practice",
+    icon: <Target aria-hidden="true" />,
     count: "due",
   },
   {
@@ -40,6 +52,12 @@ export const primaryNav: NavItem[] = [
     label: "Team",
     shortLabel: "Team",
     icon: <Users aria-hidden="true" />,
+  },
+  {
+    href: "/progress",
+    label: "Progress",
+    shortLabel: "Progress",
+    icon: <ChartNoAxesColumn aria-hidden="true" />,
   },
 ]
 
@@ -59,5 +77,3 @@ export const notesNav: NavItem[] = [
     count: "mistakes",
   },
 ]
-
-export const allNav = [...primaryNav, ...notesNav]
