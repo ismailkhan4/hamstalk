@@ -5,6 +5,7 @@ import { z } from "zod"
 
 import { requireUser } from "@/lib/auth/session"
 import { createClient } from "@/lib/supabase/server"
+import type { Database } from "@/lib/supabase/database.types"
 
 import { isMissingTable } from "./data"
 import { ONBOARDING_STEPS, preferencesSchema } from "./options"
@@ -15,6 +16,9 @@ const DATABASE_NOT_READY =
   "Your answers can’t be saved yet because the database isn’t set up. If you run this copy of Klarlingo, apply the migrations in supabase/migrations."
 const SAVE_FAILED =
   "Your answer wasn’t saved. Check your connection and try again; nothing you chose is lost."
+
+type TablesInsert<T extends keyof Database["public"]["Tables"]> =
+  Database["public"]["Tables"][T]["Insert"]
 
 const saveStepInput = z.object({
   patch: preferencesSchema.partial(),
@@ -31,7 +35,7 @@ export async function saveOnboardingStepAction(
   const supabase = await createClient()
 
   const { patch, step } = parsed.data
-  const row: Record<string, unknown> = {
+  const row: TablesInsert<"learner_preferences"> = {
     user_id: user.id,
     onboarding_step: step,
   }
