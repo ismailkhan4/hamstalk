@@ -4,20 +4,28 @@ import { getUnit } from "@/content/curriculum"
 import { getStandup } from "@/content/standup"
 import type { LessonProgress } from "@/features/path/model"
 
+import { ChatScreen } from "./chat-screen"
 import { StandupSession } from "./standup-session"
+import { TicketScreen } from "./ticket-screen"
 import { TeamView } from "./team-view"
 
 export type TeamPreviewView =
-  "locked" | "ready" | "done" | "standup" | "standup-save-fails"
+  | "locked"
+  | "ready"
+  | "done"
+  | "standup"
+  | "standup-save-fails"
+  | "ticket"
+  | "chat"
 
-const finishedUnit: LessonProgress[] = (getUnit("a1-u1")?.lessons ?? []).map(
-  (lesson) => ({
+const finishedUnit: LessonProgress[] = ["a1-u1", "a1-u2", "a1-u3"]
+  .flatMap((id) => getUnit(id)?.lessons ?? [])
+  .map((lesson) => ({
     lessonId: lesson.id,
     status: "completed",
     step: 0,
     xp: 30,
-  })
-)
+  }))
 
 const shell = {
   name: "Sam Haddad",
@@ -26,6 +34,8 @@ const shell = {
 }
 
 export function TeamPreview({ view }: { view: TeamPreviewView }) {
+  if (view === "ticket") return <TicketScreen shell={shell} firstName="Sam" />
+  if (view === "chat") return <ChatScreen shell={shell} firstName="Sam" />
   const standup = getStandup("a1-u1")
   if ((view === "standup" || view === "standup-save-fails") && standup)
     return (
@@ -50,7 +60,7 @@ export function TeamPreview({ view }: { view: TeamPreviewView }) {
       {...shell}
       startedAt="2026-10-12T08:00:00Z"
       progress={view === "locked" ? [] : finishedUnit}
-      completedStandups={view === "done" ? ["a1-u1"] : []}
+      completedStandups={view === "done" ? ["a1-u3"] : []}
     />
   )
 }

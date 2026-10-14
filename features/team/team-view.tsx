@@ -12,11 +12,12 @@ import { Avatar, type Person } from "@/components/learning/avatar"
 import { GermanText } from "@/components/learning/german-text"
 import { AppShell } from "@/components/layout/app-shell"
 import { buttonVariants } from "@/components/ui/button-variants"
-import { getLevel } from "@/content/curriculum"
+import { getLevel, getUnit } from "@/content/curriculum"
+import { TICKET_UNIT_ID } from "@/content/team-tasks"
 import { getStandup, standups } from "@/content/standup"
 import { dayAtCompany } from "@/features/learner/day-at-company"
 import type { NotebookCounts } from "@/features/review/data"
-import type { LessonProgress } from "@/features/path/model"
+import { isUnitCompleted, type LessonProgress } from "@/features/path/model"
 import { cn } from "@/lib/utils"
 
 import { playableStandup, standupState, type StandupState } from "./model"
@@ -86,6 +87,8 @@ export function TeamView({
     ? standupState(featuredId, progress, completedStandups)
     : "planned"
   const featuredUnit = units.find((unit) => unit.id === featuredId)
+  const tasksUnit = getUnit(TICKET_UNIT_ID)
+  const tasksOpen = tasksUnit ? isUnitCompleted(tasksUnit, progress) : false
 
   return (
     <AppShell name={name} email={email} counts={counts}>
@@ -189,31 +192,62 @@ export function TeamView({
             )}
 
             <ul className="mt-4 grid gap-4 sm:grid-cols-2">
-              <li className="rounded-2xl border border-dashed border-input p-5">
-                <p className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-                  <Ticket aria-hidden="true" className="size-4" />
-                  Tickets · planned
-                </p>
-                <p className="mt-2 font-semibold">
-                  Read a ticket, give an update
-                </p>
-                <p className="mt-1 text-sm text-secondary-text">
-                  Reading a short ticket and answering in one sentence needs the
-                  verbs and word order of Unit 3. It opens there.
-                </p>
-              </li>
-              <li className="rounded-2xl border border-dashed border-input p-5">
-                <p className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-                  <MessageSquare aria-hidden="true" className="size-4" />
-                  Messages · planned
-                </p>
-                <p className="mt-2 font-semibold">Reply to a teammate</p>
-                <p className="mt-1 text-sm text-secondary-text">
-                  Replying to a colleague’s request also needs Unit 3. It opens
-                  there, with model replies instead of grading free writing.
-                </p>
-              </li>
+              {[
+                {
+                  icon: <Ticket aria-hidden="true" className="size-4" />,
+                  kind: "Task · 11:00",
+                  title: "Ticket KLAR-142: test the new sign-in",
+                  text: "Read the ticket and tell Lena what you’re doing today.",
+                  href: "/team/tickets/KLAR-142",
+                  action: "Open ticket",
+                },
+                {
+                  icon: <MessageSquare aria-hidden="true" className="size-4" />,
+                  kind: "Message · 14:02",
+                  title: "Jonas needs a quick review",
+                  text: "Read his message and reply the way a colleague would.",
+                  href: "/team/chat",
+                  action: "Read and reply",
+                },
+              ].map((task) => (
+                <li
+                  key={task.href}
+                  className={cn(
+                    "rounded-2xl p-5",
+                    tasksOpen
+                      ? "border border-border bg-card"
+                      : "border border-dashed border-input"
+                  )}
+                >
+                  <p className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
+                    {task.icon}
+                    {task.kind}
+                    {!tasksOpen && " · locked"}
+                  </p>
+                  <p className="mt-2 font-semibold">{task.title}</p>
+                  <p className="mt-1 text-sm text-secondary-text">
+                    {tasksOpen
+                      ? task.text
+                      : `Opens when you finish Unit ${tasksUnit?.number}. It uses the German from that unit.`}
+                  </p>
+                  {tasksOpen && (
+                    <Link
+                      href={task.href}
+                      className={cn(
+                        buttonVariants({ variant: "outline" }),
+                        "mt-3"
+                      )}
+                    >
+                      {task.action}
+                    </Link>
+                  )}
+                </li>
+              ))}
             </ul>
+            <p className="mt-3 text-sm text-muted-foreground">
+              These are practice tasks. The tickets and messages are made up,
+              and nothing you answer is sent to a person or saved.
+            </p>
 
             <section aria-labelledby="ladder" className="mt-10">
               <h2 id="ladder" className="font-display text-h2 font-bold">
