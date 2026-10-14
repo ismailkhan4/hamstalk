@@ -60,7 +60,11 @@ export default async function UnitCompletePage({ params }: Props) {
                 open: next.lessons.some((lesson) =>
                   isLessonAvailable(lesson.id)
                 ),
-                href: null,
+                href:
+                  next.lessons.find((lesson) => isLessonAvailable(lesson.id))
+                    ?.id !== undefined
+                    ? `/learn/${next.lessons.find((lesson) => isLessonAvailable(lesson.id))?.id}`
+                    : null,
               }
             : null
         }

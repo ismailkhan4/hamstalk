@@ -181,9 +181,18 @@ export function UnitComplete({
               </p>
               <p className="font-semibold">{nextUnit.title}</p>
             </div>
-            <p className="shrink-0 text-sm text-muted-foreground">
-              {nextUnit.open ? "Available" : "Planned · not built yet"}
-            </p>
+            {nextUnit.open && nextUnit.href ? (
+              <Link
+                href={nextUnit.href}
+                className={buttonVariants({ variant: "outline" })}
+              >
+                Start Unit {unit.number + 1}
+              </Link>
+            ) : (
+              <p className="shrink-0 text-sm text-muted-foreground">
+                {nextUnit.open ? "Available" : "Planned · not built yet"}
+              </p>
+            )}
           </div>
         </section>
       )}

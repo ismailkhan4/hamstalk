@@ -64,6 +64,71 @@ export const standups: Standup[] = [
       },
     ],
   },
+  {
+    unitId: "a1-u2",
+    line: { de: "Gut, danke. Und dir?", en: "Fine, thanks. And you?" },
+    prompts: [
+      {
+        task: "Answer the check-in",
+        ask: {
+          de: "Guten Morgen, %N! Wie geht’s dir?",
+          en: "Good morning, %N! How are you?",
+        },
+        options: [
+          { de: "Gut, danke. Und dir?", en: "Fine, thanks. And you?" },
+          {
+            de: "Gut, danke. Und Ihnen?",
+            en: "Fine, thanks. And you? (formal)",
+          },
+          { de: "Tschüss, Lena!", en: "Bye, Lena!" },
+        ],
+        correct: 0,
+        right:
+          "Lena is your teammate, so you ask back with du: Und dir? Short and friendly.",
+        wrong: {
+          1: "Und Ihnen? is the Sie form, for visitors and people you don’t know. Lena is your teammate: Und dir?",
+          2: "Tschüss is goodbye. The meeting is just starting.",
+        },
+        react: {
+          de: "Gut, danke! Herr Schulz, das ist %N.",
+          en: "Fine, thanks! Mr Schulz, this is %N.",
+        },
+        phrases: [
+          { de: "Gut, danke. Und dir?", en: "Fine, thanks. And you?" },
+          { de: "Es geht. Und dir?", en: "So-so. And you?" },
+        ],
+      },
+      {
+        task: "Greet the visitor",
+        options: [
+          {
+            de: "Guten Tag, Herr Schulz. Freut mich!",
+            en: "Hello, Mr Schulz. Nice to meet you!",
+          },
+          {
+            de: "Hallo, Herr Schulz! Wie geht’s dir?",
+            en: "Hi, Mr Schulz! How are you? (informal)",
+          },
+          {
+            de: "Guten Tag, Lena. Freut mich!",
+            en: "Hello, Lena. Nice to meet you!",
+          },
+        ],
+        correct: 0,
+        right:
+          "Guten Tag and his name are polite for a visitor, and Freut mich! says you’re glad to meet him.",
+        wrong: {
+          1: "Wie geht’s dir? uses du, which is for teammates. A visitor gets Sie, and you’ve only just met.",
+          2: "Lena introduced you, but Herr Schulz is the one you’re meeting: Guten Tag, Herr Schulz.",
+        },
+        react: { de: "Danke, %N!", en: "Thanks, %N!" },
+        phrases: [
+          { de: "Freut mich!", en: "Nice to meet you!" },
+          { de: "Freut mich auch!", en: "Nice to meet you too!" },
+        ],
+      },
+    ],
+  },
 ]
 
 export function getStandup(unitId: string) {

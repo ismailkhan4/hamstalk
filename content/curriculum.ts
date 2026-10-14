@@ -229,12 +229,113 @@ const a1Units: Unit[] = [
     grammar:
       "du and Sie: Wie geht’s dir? with teammates, Wie geht es Ihnen? with HR and strangers.",
     skills: ["Speaking", "Listening", "Vocabulary"],
-    lessons: lessonsPlanned("a1-u2", [
-      ["Wie geht’s?", true],
-      ["du oder Sie?", true],
-      ["Das ist Lena", true],
-      ["Freut mich!", true],
-    ]),
+    milestone: {
+      summary:
+        "You can ask how someone is, choose between du and Sie, introduce a colleague and say you’re glad to meet people.",
+      canDo: [
+        "Ask how someone is and answer back",
+        "Use du with teammates and Sie with visitors",
+        "Introduce a colleague and say Freut mich!",
+      ],
+      standup: { de: "Gut, danke. Und dir?", en: "Fine, thanks. And you?" },
+    },
+    lessons: [
+      {
+        id: "a1-u2-l1",
+        title: "Wie geht’s?",
+        titleIsGerman: true,
+        goal: "Ask how someone is and answer back",
+        minutes: 7,
+        exercises: 8,
+        kind: "lesson",
+        mission: {
+          description:
+            "Wie geht’s?, Gut, danke and Es geht in eight short exercises: check-ins in the team kitchen before the day starts.",
+          quote: {
+            person: "jk",
+            initials: "JK",
+            de: "Guten Morgen! Wie geht’s?",
+            en: "Jonas in the team kitchen, before the day starts.",
+          },
+        },
+      },
+      {
+        id: "a1-u2-l2",
+        title: "du oder Sie?",
+        titleIsGerman: true,
+        goal: "Choose between du and Sie when you ask how someone is",
+        minutes: 7,
+        exercises: 8,
+        kind: "lesson",
+        mission: {
+          description:
+            "Wie geht’s dir? and Wie geht es Ihnen? in eight short exercises: teammates get du, a visitor gets Sie.",
+          quote: {
+            person: "lf",
+            initials: "LF",
+            de: "Guten Tag, Herr Schulz. Wie geht es Ihnen?",
+            en: "Lena, greeting a visitor in the kitchen.",
+          },
+        },
+      },
+      {
+        id: "a1-u2-l3",
+        title: "Das ist Lena",
+        titleIsGerman: true,
+        goal: "Introduce a colleague and say who is who",
+        minutes: 7,
+        exercises: 8,
+        kind: "lesson",
+        mission: {
+          description:
+            "Das ist …, Kollege and Kollegin in eight short exercises: Lena introduces the team and you introduce someone back.",
+          quote: {
+            person: "lf",
+            initials: "LF",
+            de: "Das ist meine Kollegin Anna.",
+            en: "Lena, at the team kick-off.",
+          },
+        },
+      },
+      {
+        id: "a1-u2-l4",
+        title: "Freut mich!",
+        titleIsGerman: true,
+        goal: "Say you are glad to meet someone and answer when they say it to you",
+        minutes: 7,
+        exercises: 8,
+        kind: "lesson",
+        mission: {
+          description:
+            "Freut mich! and Freut mich auch! in eight short exercises: three first meetings at the kick-off.",
+          quote: {
+            person: "aw",
+            initials: "AW",
+            de: "Hallo, ich bin Anna. Freut mich!",
+            en: "Anna, in her first week.",
+          },
+        },
+      },
+      {
+        id: "a1-u2-review",
+        title: "Unit review",
+        titleIsGerman: false,
+        goal: "Team lunch, first week: check in, choose du or Sie, introduce and be polite",
+        minutes: 8,
+        exercises: 8,
+        kind: "review",
+        mission: {
+          description:
+            "Eight exercises that bring back Lessons 1 to 4 at the team lunch. Nothing new; it shows what to practise next.",
+          quote: {
+            person: "lf",
+            initials: "LF",
+            de: "Hallo, %N! Wie geht’s?",
+            en: "Lena at the team lunch, ready for a review of your second week.",
+          },
+        },
+      },
+    ],
   },
   {
     id: "a1-u3",

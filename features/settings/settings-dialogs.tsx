@@ -166,7 +166,7 @@ export function LevelDialog(
     <ChoiceDialog
       {...props}
       title="Change your starting level?"
-      description="This changes where your path begins. Lessons you’ve finished and your words stay as they are. Only A1 Unit 1 has lessons so far."
+      description="This changes where your path begins. Lessons you’ve finished and your words stay as they are. Only A1 Units 1 and 2 have lessons so far."
       name="level"
       values={LEVELS}
       labels={(level) => levelOptions[level]}
