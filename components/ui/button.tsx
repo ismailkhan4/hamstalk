@@ -17,6 +17,7 @@ type ButtonProps = Omit<ButtonPrimitive.Props, "className"> &
     iconRight?: React.ReactElement
     /** Shows a spinner, keeps the button's width and accessible name, and blocks presses. */
     loading?: boolean
+    loadingText?: string
   }
 
 function Button({
@@ -27,6 +28,7 @@ function Button({
   iconLeft,
   iconRight,
   loading = false,
+  loadingText,
   children,
   onClick,
   ...props
@@ -52,20 +54,29 @@ function Button({
       }}
       {...props}
     >
-      <span
-        className={cn(
-          "inline-flex items-center justify-center gap-[inherit]",
-          loading && "opacity-0"
-        )}
-      >
-        {iconLeft}
-        {children}
-        {iconRight}
-      </span>
-      {loading && (
-        <span className="absolute inset-0 grid place-items-center">
+      {loading && loadingText ? (
+        <span className="inline-flex items-center justify-center gap-[inherit]">
           <Spinner />
+          {loadingText}
         </span>
+      ) : (
+        <>
+          <span
+            className={cn(
+              "inline-flex items-center justify-center gap-[inherit]",
+              loading && "opacity-0"
+            )}
+          >
+            {iconLeft}
+            {children}
+            {iconRight}
+          </span>
+          {loading && (
+            <span className="absolute inset-0 grid place-items-center">
+              <Spinner />
+            </span>
+          )}
+        </>
       )}
     </ButtonPrimitive>
   )

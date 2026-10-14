@@ -35,6 +35,8 @@ type FieldProps = {
   success?: string | undefined
   required?: boolean
   optional?: boolean
+  invalid?: boolean
+  labelAside?: React.ReactNode
   className?: string
   children: React.ReactNode
 }
@@ -46,6 +48,8 @@ function Field({
   success,
   required = false,
   optional = false,
+  invalid = false,
+  labelAside,
   className,
   children,
 }: FieldProps) {
@@ -61,28 +65,31 @@ function Field({
       value={{
         controlId,
         describedBy,
-        invalid: Boolean(error),
+        invalid: Boolean(error) || invalid,
         valid: Boolean(success) && !error,
         required,
       }}
     >
       <div data-slot="field" className={cn("flex flex-col gap-1.5", className)}>
-        <label
-          htmlFor={controlId}
-          className="flex items-baseline gap-1.5 text-sm leading-5 font-semibold"
-        >
-          {label}
-          {required && (
-            <span aria-hidden="true" className="text-danger-text">
-              *
-            </span>
-          )}
-          {optional && (
-            <span className="font-normal text-muted-foreground">
-              (optional)
-            </span>
-          )}
-        </label>
+        <div className="flex items-baseline justify-between gap-3">
+          <label
+            htmlFor={controlId}
+            className="flex items-baseline gap-1.5 text-sm leading-5 font-semibold"
+          >
+            {label}
+            {required && (
+              <span aria-hidden="true" className="text-danger-text">
+                *
+              </span>
+            )}
+            {optional && (
+              <span className="font-normal text-muted-foreground">
+                (optional)
+              </span>
+            )}
+          </label>
+          {labelAside}
+        </div>
         {children}
         {error ? (
           <p
