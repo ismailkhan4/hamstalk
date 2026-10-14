@@ -8,6 +8,7 @@ type ExerciseFeedbackProps = {
   result: FeedbackResult
   title: string
   children: React.ReactNode
+  titleLang?: "de"
   /** Shown on a first miss: the item went to the mistakes notebook. */
   savedToMistakes?: boolean
   action: React.ReactNode
@@ -22,6 +23,7 @@ const icons = { correct: Check, incorrect: X, shown: Info }
 function ExerciseFeedback({
   result,
   title,
+  titleLang,
   children,
   savedToMistakes = false,
   action,
@@ -63,7 +65,7 @@ function ExerciseFeedback({
                 result === "correct" ? "text-success-text" : "text-danger-text"
               )}
             >
-              {title}
+              <span lang={titleLang}>{title}</span>
             </p>
             <div className="mt-0.5 text-[15px] leading-normal text-secondary-text">
               {children}
