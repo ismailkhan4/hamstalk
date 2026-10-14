@@ -20,6 +20,40 @@ export const lesson1: Lesson = {
     en: "Mia Braun works at reception. She’s the first person you’ll greet on your first morning, at the end of this lesson.",
   },
   phrases: ["Hallo", "Hallo zusammen", "Tschüss", "Auf Wiedersehen"],
+  vocabulary: [
+    {
+      word: "Hallo",
+      en: "hello",
+      example: {
+        de: "Hallo, Lena!",
+        en: "Hello, Lena!",
+      },
+    },
+    {
+      word: "Hallo zusammen",
+      en: "hello, everyone",
+      example: {
+        de: "Hallo zusammen!",
+        en: "Hello, everyone!",
+      },
+    },
+    {
+      word: "Tschüss",
+      en: "bye (friendly)",
+      example: {
+        de: "Tschüss, Jonas!",
+        en: "Bye, Jonas!",
+      },
+    },
+    {
+      word: "Auf Wiedersehen",
+      en: "goodbye (polite)",
+      example: {
+        de: "Auf Wiedersehen, Frau Krüger!",
+        en: "Goodbye, Ms Krüger!",
+      },
+    },
+  ],
   practised: ["Hallo", "Hallo zusammen", "Tschüss", "Auf Wiedersehen"],
   canDo: [
     "Say hello to one person or to a whole group",
@@ -43,6 +77,11 @@ export const lesson1: Lesson = {
           en: "Hello!",
           note: "Hallo works at any time of day, with anyone.",
           saveKey: "U1a",
+          topic: "Greetings",
+          example: {
+            de: "Hallo, Lena!",
+            en: "Hello, Lena!",
+          },
         },
         {
           speaker: {
@@ -63,6 +102,11 @@ export const lesson1: Lesson = {
           en: "Goodbye!",
           note: "The polite goodbye: in shops, at reception, with people you don’t know well.",
           saveKey: "U1b",
+          topic: "Greetings",
+          example: {
+            de: "Auf Wiedersehen, Frau Krüger!",
+            en: "Goodbye, Ms Krüger!",
+          },
         },
         {
           speaker: {
@@ -74,6 +118,7 @@ export const lesson1: Lesson = {
           en: "Hello, everyone! Hello, %N!",
           note: "Hallo zusammen greets a whole group at once.",
           saveKey: "U1c",
+          topic: "Greetings",
         },
         {
           speaker: {
@@ -85,6 +130,11 @@ export const lesson1: Lesson = {
           en: "Bye, %N!",
           note: "Tschüss is the friendly goodbye, for teammates and friends.",
           saveKey: "U1d",
+          topic: "Greetings",
+          example: {
+            de: "Tschüss, Jonas!",
+            en: "Bye, Jonas!",
+          },
         },
       ],
     },

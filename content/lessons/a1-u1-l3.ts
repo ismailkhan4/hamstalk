@@ -20,6 +20,32 @@ export const lesson3: Lesson = {
     en: "Lunch at the team table. Everyone says their name once, quickly. This lesson helps you catch theirs and say yours.",
   },
   phrases: ["Ich bin …", "Ich heiße …", "Und du?"],
+  vocabulary: [
+    {
+      word: "Ich bin …",
+      en: "I’m … (your name)",
+      example: {
+        de: "Ich bin Lena.",
+        en: "I’m Lena.",
+      },
+    },
+    {
+      word: "Ich heiße …",
+      en: "my name is …",
+      example: {
+        de: "Ich heiße Jonas.",
+        en: "My name is Jonas.",
+      },
+    },
+    {
+      word: "Und du?",
+      en: "and you?",
+      example: {
+        de: "Ich bin Aylin. Und du?",
+        en: "I’m Aylin. And you?",
+      },
+    },
+  ],
   practised: ["Ich bin …", "Ich heiße …", "Und du?"],
   canDo: [
     "Say your name with Ich bin … or Ich heiße …",
@@ -43,6 +69,7 @@ export const lesson3: Lesson = {
           en: "Hi, I’m Lena.",
           note: "Ich bin + your name.",
           saveKey: "U3a",
+          topic: "Greetings",
         },
         {
           speaker: {
@@ -54,6 +81,11 @@ export const lesson3: Lesson = {
           en: "Hello! My name is Jonas.",
           note: "Ich heiße + your name. Same meaning as Ich bin.",
           saveKey: "U3b",
+          topic: "Greetings",
+          example: {
+            de: "Guten Tag! Ich heiße Jonas.",
+            en: "Hello! My name is Jonas.",
+          },
         },
         {
           speaker: {
@@ -65,6 +97,11 @@ export const lesson3: Lesson = {
           en: "I’m Aylin. And you?",
           note: "Und du? means and you? Now it’s your turn to say your name.",
           saveKey: "U3c",
+          topic: "Greetings",
+          example: {
+            de: "Ich bin Aylin. Und du?",
+            en: "I’m Aylin. And you?",
+          },
         },
         {
           speaker: {

@@ -20,6 +20,56 @@ export const lesson4: Lesson = {
     en: "Small favours happen all day: a badge at reception, help with a laptop, a coffee. This lesson gives you the words for thanks, you’re welcome and sorry.",
   },
   phrases: ["Danke", "Vielen Dank", "Bitte", "Gern", "Entschuldigung"],
+  vocabulary: [
+    {
+      word: "Danke",
+      en: "thanks",
+      example: {
+        de: "Danke, Mia!",
+        en: "Thanks, Mia!",
+      },
+    },
+    {
+      word: "Danke schön",
+      en: "thank you (warmer)",
+      example: {
+        de: "Danke schön, Lena!",
+        en: "Thank you, Lena!",
+      },
+    },
+    {
+      word: "Vielen Dank",
+      en: "thanks a lot",
+      example: {
+        de: "Vielen Dank, Jonas!",
+        en: "Thanks a lot, Jonas!",
+      },
+    },
+    {
+      word: "Bitte",
+      en: "you’re welcome; also please",
+      example: {
+        de: "Danke! – Bitte!",
+        en: "Thanks! – You’re welcome!",
+      },
+    },
+    {
+      word: "Gern",
+      en: "you’re welcome (happy to)",
+      example: {
+        de: "Vielen Dank! – Gern!",
+        en: "Thanks a lot! – Happy to!",
+      },
+    },
+    {
+      word: "Entschuldigung",
+      en: "sorry; excuse me",
+      example: {
+        de: "Entschuldigung! – Kein Problem!",
+        en: "Sorry! – No problem!",
+      },
+    },
+  ],
   practised: [
     "Danke",
     "Danke schön",
@@ -60,6 +110,7 @@ export const lesson4: Lesson = {
           en: "Thanks!",
           note: "The everyday thank you.",
           saveKey: "U4a",
+          topic: "Everyday",
         },
         {
           speaker: {
@@ -71,6 +122,11 @@ export const lesson4: Lesson = {
           en: "You’re welcome!",
           note: "Bitte answers danke.",
           saveKey: "U4b",
+          topic: "Everyday",
+          example: {
+            de: "Danke! – Bitte!",
+            en: "Thanks! – You’re welcome!",
+          },
         },
         {
           speaker: {
@@ -82,6 +138,7 @@ export const lesson4: Lesson = {
           en: "Thanks a lot!",
           note: "A bigger thank you, when someone really helped.",
           saveKey: "U4c",
+          topic: "Everyday",
         },
         {
           speaker: {
@@ -93,6 +150,7 @@ export const lesson4: Lesson = {
           en: "You’re welcome! (happy to)",
           note: "A friendly reply to thanks, common among colleagues.",
           saveKey: "U4d",
+          topic: "Team",
         },
         {
           speaker: {
@@ -104,6 +162,11 @@ export const lesson4: Lesson = {
           en: "Sorry!",
           note: "Sorry. It also means excuse me, to get someone’s attention.",
           saveKey: "U4e",
+          topic: "Everyday",
+          example: {
+            de: "Entschuldigung! – Kein Problem!",
+            en: "Sorry! – No problem!",
+          },
         },
         {
           speaker: {

@@ -25,6 +25,7 @@ export const review: Lesson = {
     "Ich bin …",
     "Danke und bitte",
   ],
+  vocabulary: [],
   practised: [],
   canDo: [],
   exercises: [

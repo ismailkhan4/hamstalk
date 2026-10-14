@@ -63,6 +63,9 @@ const discoverLine = z.object({
   en: z.string().min(1),
   note: z.string().optional(),
   saveKey: z.string().optional(),
+  topic: z.string().optional(),
+  example: z.object({ de: z.string(), en: z.string() }).optional(),
+  article: z.enum(["der", "die", "das"]).optional(),
 })
 
 export const discoverExercise = z.object({
@@ -210,6 +213,13 @@ export const exerciseSchema = z.discriminatedUnion("type", [
   conversationExercise,
 ])
 
+const vocabularyEntry = z.object({
+  article: z.enum(["der", "die", "das"]).optional(),
+  word: z.string().min(1),
+  en: z.string().min(1),
+  example: z.object({ de: z.string(), en: z.string() }),
+})
+
 export const lessonSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]{3,64}$/),
   kind: z.enum(["lesson", "review"]),
@@ -226,6 +236,7 @@ export const lessonSchema = z.object({
     en: z.string(),
   }),
   phrases: z.array(z.string()),
+  vocabulary: z.array(vocabularyEntry),
   practised: z.array(z.string()),
   canDo: z.array(z.string()),
   exercises: z.array(exerciseSchema).min(1).max(12),
@@ -246,6 +257,7 @@ export type ConversationExercise = z.infer<typeof conversationExercise>
 export type ConversationTurn = z.infer<typeof turn>
 export type Exercise = z.infer<typeof exerciseSchema>
 export type Lesson = z.infer<typeof lessonSchema>
+export type VocabularyEntry = z.infer<typeof vocabularyEntry>
 export type GradedExercise =
   ChoiceExercise | MatchExercise | BuildExercise | ConversationExercise
 

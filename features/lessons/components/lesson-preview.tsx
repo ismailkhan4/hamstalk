@@ -69,6 +69,7 @@ const previewLesson = lessonSchema.parse({
   },
   phrases: ["Hallo", "Hallo zusammen", "Tschüss", "Auf Wiedersehen"],
   practised: ["Hallo", "Hallo zusammen", "Tschüss", "Auf Wiedersehen"],
+  vocabulary: [],
   canDo: [
     "Say hello to one person or to a whole group",
     "Say goodbye in a friendly way or a polite way",

@@ -12,6 +12,8 @@ import {
   saveProgressInput,
   savePhraseInput,
 } from "./actions-schema"
+import { lessonVocabularyRows, savedPhraseRow } from "@/features/review/items"
+
 import { initialsOf } from "./initials"
 import { personalise } from "./schema"
 
@@ -82,6 +84,14 @@ export async function completeLessonAction(
     .maybeSingle()
   if (readError) return failure(readError)
   if (existing?.status === "completed") return { ok: true }
+
+  const { error: reviewError } = await ctx.supabase
+    .from("review_items")
+    .upsert(lessonVocabularyRows(ctx.user.id, ctx.lesson, new Date()), {
+      onConflict: "user_id,item_key",
+      ignoreDuplicates: true,
+    })
+  if (reviewError) return failure(reviewError)
 
   const { error } = await ctx.supabase.from("lesson_progress").upsert(
     {
@@ -160,7 +170,12 @@ export async function savePhraseAction(
       .from("saved_phrases")
       .delete()
       .eq("phrase_key", phraseKey)
-    return error ? failure(error) : { ok: true }
+    if (error) return failure(error)
+    const { error: reviewError } = await ctx.supabase
+      .from("review_items")
+      .delete()
+      .eq("item_key", `phrase:${phraseKey}`)
+    return reviewError ? failure(reviewError) : { ok: true }
   }
 
   const learner = {
@@ -177,5 +192,22 @@ export async function savePhraseAction(
     },
     { onConflict: "user_id,phrase_key" }
   )
-  return error ? failure(error) : { ok: true }
+  if (error) return failure(error)
+
+  const { error: reviewError } = await ctx.supabase.from("review_items").upsert(
+    savedPhraseRow(
+      ctx.user.id,
+      parsed.data.lessonId,
+      phraseKey,
+      {
+        de: personalise(line.de, learner),
+        en: personalise(line.en, learner),
+        article: line.article,
+        example: line.example,
+      },
+      new Date()
+    ),
+    { onConflict: "user_id,item_key", ignoreDuplicates: true }
+  )
+  return reviewError ? failure(reviewError) : { ok: true }
 }

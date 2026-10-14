@@ -183,6 +183,18 @@ export function makeLesson(overrides: Partial<Lesson> = {}): Lesson {
     },
     phrases: ["Hallo", "Tschüss"],
     practised: ["Hallo", "Tschüss"],
+    vocabulary: [
+      {
+        word: "Hallo",
+        en: "hello",
+        example: { de: "Hallo, Lena!", en: "Hello, Lena!" },
+      },
+      {
+        word: "Tschüss",
+        en: "bye (friendly)",
+        example: { de: "Tschüss, Jonas!", en: "Bye, Jonas!" },
+      },
+    ],
     canDo: ["Say hello to one person or a whole group"],
     exercises: [discover, mc, match, fill, build, conversation],
     ...overrides,

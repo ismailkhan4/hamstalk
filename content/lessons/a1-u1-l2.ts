@@ -20,6 +20,40 @@ export const lesson2: Lesson = {
     en: "Your second day. At 7:45 Frau Krüger at the bakery says good morning. By the evening, people greet you differently. This lesson shows which greeting fits when.",
   },
   phrases: ["Guten Morgen", "Guten Tag", "Guten Abend", "Gute Nacht"],
+  vocabulary: [
+    {
+      word: "Guten Morgen",
+      en: "good morning",
+      example: {
+        de: "Guten Morgen, zusammen!",
+        en: "Good morning, everyone!",
+      },
+    },
+    {
+      word: "Guten Tag",
+      en: "hello, good day (polite, daytime)",
+      example: {
+        de: "Guten Tag, Herr Schulz!",
+        en: "Hello, Mr Schulz!",
+      },
+    },
+    {
+      word: "Guten Abend",
+      en: "good evening",
+      example: {
+        de: "Guten Abend, Frau Yılmaz!",
+        en: "Good evening, Ms Yılmaz!",
+      },
+    },
+    {
+      word: "Gute Nacht",
+      en: "good night (when leaving late or going to bed)",
+      example: {
+        de: "Gute Nacht, zusammen!",
+        en: "Good night, everyone!",
+      },
+    },
+  ],
   practised: ["Guten Morgen", "Guten Tag", "Guten Abend", "Gute Nacht"],
   canDo: [
     "Greet people in the morning, during the day and in the evening",
@@ -43,6 +77,11 @@ export const lesson2: Lesson = {
           en: "Good morning!",
           note: "In the morning, until about 11.",
           saveKey: "U2a",
+          topic: "Greetings",
+          example: {
+            de: "Guten Morgen, zusammen!",
+            en: "Good morning, everyone!",
+          },
         },
         {
           speaker: {
@@ -64,6 +103,11 @@ export const lesson2: Lesson = {
           en: "Hello! (literally: good day)",
           note: "During the day. A little more formal than Hallo: shops, reception, people you don’t know.",
           saveKey: "U2b",
+          topic: "Greetings",
+          example: {
+            de: "Guten Tag, Herr Schulz!",
+            en: "Hello, Mr Schulz!",
+          },
         },
         {
           speaker: {
@@ -75,6 +119,7 @@ export const lesson2: Lesson = {
           en: "Good evening!",
           note: "From about 6 in the evening.",
           saveKey: "U2c",
+          topic: "Greetings",
         },
         {
           speaker: {
@@ -86,6 +131,7 @@ export const lesson2: Lesson = {
           en: "Good night!",
           note: "Not a greeting: you say it when you leave late or go to bed.",
           saveKey: "U2d",
+          topic: "Greetings",
         },
       ],
     },
