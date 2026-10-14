@@ -53,7 +53,7 @@ export function ChoiceRow({
       />
       {leading}
       <span className="min-w-0 flex-1">
-        <span className="block text-[15.5px] leading-snug font-semibold">
+        <span className="block text-[0.9688rem] leading-snug font-semibold">
           {title}
         </span>
         {description && (

@@ -141,7 +141,7 @@ export function MatchView({
                   />
                   <span
                     className={cn(
-                      "min-w-0 flex-1 text-[17px]",
+                      "min-w-0 flex-1 text-[1.0625rem]",
                       !meaning && "text-muted-foreground italic",
                       exercise.meaningsLanguage === "de" && "font-voice"
                     )}
@@ -177,7 +177,7 @@ export function MatchView({
                   type="button"
                   disabled={!answering}
                   onClick={() => pairWith(meaning)}
-                  className="min-h-11 rounded-lg border-[1.5px] border-border bg-card px-3.5 text-[16px] hover:border-input disabled:opacity-60"
+                  className="min-h-11 rounded-lg border-[1.5px] border-border bg-card px-3.5 text-[1rem] hover:border-input disabled:opacity-60"
                 >
                   {meaning}
                 </button>

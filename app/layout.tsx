@@ -7,6 +7,7 @@ import {
 } from "next/font/google"
 
 import "./globals.css"
+import { AppearanceSync } from "@/components/appearance-sync"
 import { OfflineBanner } from "@/components/pwa/offline-banner"
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -78,6 +79,7 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
         <ServiceWorkerRegister />
+        <AppearanceSync />
       </body>
     </html>
   )

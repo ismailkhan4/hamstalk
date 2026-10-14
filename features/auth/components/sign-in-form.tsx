@@ -18,7 +18,11 @@ type SignInFormProps = {
   action: AuthAction<SignInValues>
   defaultEmail?: string
   notice?:
-    "password-updated" | "session-expired" | "signed-out" | "link-invalid"
+    | "password-updated"
+    | "session-expired"
+    | "signed-out"
+    | "link-invalid"
+    | "account-deleted"
 }
 
 const notices = {
@@ -36,6 +40,12 @@ const notices = {
     tone: "success",
     title: "You’re signed out",
     message: "See you at the next standup.",
+  },
+  "account-deleted": {
+    tone: "success",
+    title: "Your account is deleted",
+    message:
+      "Your progress, words and notes were removed. Thanks for learning with us.",
   },
   "link-invalid": {
     tone: "error",
@@ -136,7 +146,7 @@ export function SignInForm({
       >
         Sign in
       </Button>
-      <p className="mt-5 text-center text-[15px] text-secondary-text">
+      <p className="mt-5 text-center text-[0.9375rem] text-secondary-text">
         New to Klarlingo?{" "}
         <Link
           href="/signup"

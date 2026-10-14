@@ -122,7 +122,7 @@ export function VerifyEmail({
         >
           {showExpired ? "Send a new link" : "Resend email"}
         </Button>
-        <p className="mt-5 text-center text-[15px] text-secondary-text">
+        <p className="mt-5 text-center text-[0.9375rem] text-secondary-text">
           Wrong address?{" "}
           <Link
             href={changeHref}

@@ -90,7 +90,7 @@ export function ReviewScreen({
           id="main"
           className="mx-auto w-full max-w-(--lesson-max) flex-1 px-[clamp(20px,4vw,32px)] py-10 pb-44"
         >
-          <p className="flex items-center gap-2 text-[13.5px] font-semibold text-primary-text">
+          <p className="flex items-center gap-2 text-[0.8438rem] font-semibold text-primary-text">
             <Repeat aria-hidden="true" className="size-4" />
             Vocabulary review
           </p>
@@ -201,7 +201,7 @@ export function ReviewScreen({
           </div>
           <dl className="mt-10 grid grid-cols-3 gap-4 border-y border-border py-4">
             <div>
-              <dt className="text-[13px] text-muted-foreground">
+              <dt className="text-[0.8125rem] text-muted-foreground">
                 Words reviewed
               </dt>
               <dd className="mt-1 font-display text-3xl font-bold">
@@ -209,13 +209,15 @@ export function ReviewScreen({
               </dd>
             </div>
             <div>
-              <dt className="text-[13px] text-muted-foreground">Remembered</dt>
+              <dt className="text-[0.8125rem] text-muted-foreground">
+                Remembered
+              </dt>
               <dd className="mt-1 font-display text-3xl font-bold">
                 {results.length - again.length}
               </dd>
             </div>
             <div>
-              <dt className="text-[13px] text-muted-foreground">
+              <dt className="text-[0.8125rem] text-muted-foreground">
                 Need more practice
               </dt>
               <dd className="mt-1 font-display text-3xl font-bold">
@@ -324,7 +326,9 @@ export function ReviewScreen({
           <>
             <dl className="mt-8 grid grid-cols-3 gap-4 border-y border-border py-4">
               <div>
-                <dt className="text-[13px] text-muted-foreground">Due now</dt>
+                <dt className="text-[0.8125rem] text-muted-foreground">
+                  Due now
+                </dt>
                 <dd className="mt-1 font-display text-3xl font-bold">
                   {dueCount}{" "}
                   <span className="text-sm font-normal text-muted-foreground">
@@ -333,7 +337,7 @@ export function ReviewScreen({
                 </dd>
               </div>
               <div>
-                <dt className="text-[13px] text-muted-foreground">
+                <dt className="text-[0.8125rem] text-muted-foreground">
                   Need more practice
                 </dt>
                 <dd className="mt-1 font-display text-3xl font-bold">
@@ -344,7 +348,7 @@ export function ReviewScreen({
                 </dd>
               </div>
               <div>
-                <dt className="text-[13px] text-muted-foreground">
+                <dt className="text-[0.8125rem] text-muted-foreground">
                   Words in review
                 </dt>
                 <dd className="mt-1 font-display text-3xl font-bold">

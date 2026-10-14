@@ -30,6 +30,11 @@ export const signUpSchema = z.object({
   password: newPassword,
 })
 
+export const profileSchema = z.object({
+  fullName: signUpSchema.shape.fullName,
+  email,
+})
+
 export const signInSchema = z.object({
   email,
   password: z.string().min(1, "Enter your password."),
@@ -50,6 +55,7 @@ export const resetPasswordSchema = z
   })
 
 export type SignUpValues = z.infer<typeof signUpSchema>
+export type ProfileValues = z.infer<typeof profileSchema>
 export type SignInValues = z.infer<typeof signInSchema>
 export type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>
 export type ResetPasswordValues = z.infer<typeof resetPasswordSchema>

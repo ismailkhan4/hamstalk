@@ -171,7 +171,7 @@ export function PlacementCheck({
           id="main"
           className="mx-auto max-w-(--lesson-max) px-[clamp(20px,4vw,32px)] py-12"
         >
-          <p className="flex items-center gap-2 text-[13.5px] font-semibold text-primary-text">
+          <p className="flex items-center gap-2 text-[0.8438rem] font-semibold text-primary-text">
             <i aria-hidden="true" className="size-2 rounded-full bg-spark" />
             Your suggestion
           </p>
@@ -277,7 +277,7 @@ export function PlacementCheck({
           id="main"
           className="mx-auto w-full max-w-(--lesson-max) flex-1 px-[clamp(20px,4vw,32px)] py-12 pb-32"
         >
-          <p className="flex items-center gap-2 text-[13.5px] font-semibold text-primary-text">
+          <p className="flex items-center gap-2 text-[0.8438rem] font-semibold text-primary-text">
             <i aria-hidden="true" className="size-2 rounded-full bg-spark" />
             Optional · about 6 minutes
           </p>
@@ -301,7 +301,9 @@ export function PlacementCheck({
               ["Not checked", "Speaking and writing"],
             ].map(([label, value]) => (
               <div key={label}>
-                <dt className="text-[13px] text-muted-foreground">{label}</dt>
+                <dt className="text-[0.8125rem] text-muted-foreground">
+                  {label}
+                </dt>
                 <dd className="mt-1 font-semibold">{value}</dd>
               </div>
             ))}
@@ -347,7 +349,7 @@ export function PlacementCheck({
         id="main"
         className="mx-auto w-full max-w-(--lesson-max) flex-1 px-[clamp(20px,4vw,32px)] py-10 pb-32"
       >
-        <p className="flex items-center gap-3 text-[13.5px] font-semibold text-primary-text">
+        <p className="flex items-center gap-3 text-[0.8438rem] font-semibold text-primary-text">
           {question.skill}
           <span className="rounded-sm bg-primary-subtle px-1.5 py-0.5 text-xs">
             {question.level}

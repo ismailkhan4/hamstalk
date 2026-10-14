@@ -84,7 +84,7 @@ export function BuildView({
               disabled={!answering}
               onClick={() => setPlaced(placed.filter((value) => value !== i))}
               aria-label={`${tile(i)}, word ${position + 1}${answering ? ". Press to remove." : ""}`}
-              className="min-h-12 rounded-lg border-[1.5px] border-primary bg-primary-subtle px-4 font-voice text-[21px]"
+              className="min-h-12 rounded-lg border-[1.5px] border-primary bg-primary-subtle px-4 font-voice text-[1.3125rem]"
             >
               <span lang="de">{tile(i)}</span>
             </button>
@@ -98,7 +98,7 @@ export function BuildView({
                 type="button"
                 disabled={!answering}
                 onClick={() => setPlaced([...placed, i])}
-                className="min-h-12 rounded-lg border-[1.5px] border-border bg-card px-4 font-voice text-[21px] hover:border-input disabled:opacity-60"
+                className="min-h-12 rounded-lg border-[1.5px] border-border bg-card px-4 font-voice text-[1.3125rem] hover:border-input disabled:opacity-60"
               >
                 <span lang="de">{tile(i)}</span>
               </button>

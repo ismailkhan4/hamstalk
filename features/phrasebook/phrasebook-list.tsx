@@ -202,12 +202,12 @@ export function PhrasebookList({
                           {phrase.de}
                         </GermanText>
                       )}
-                      <p className="text-[15px] text-secondary-text">
+                      <p className="text-[0.9375rem] text-secondary-text">
                         {phrase.en}
                       </p>
                       {phrase.example && (
                         <div className="mt-2.5">
-                          <GermanText as="p" className="text-[17px]">
+                          <GermanText as="p" className="text-[1.0625rem]">
                             {phrase.example.de}
                           </GermanText>
                           <p className="text-sm text-muted-foreground">

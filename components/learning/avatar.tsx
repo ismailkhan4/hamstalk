@@ -16,7 +16,7 @@ const personStyles: Record<Person, string> = {
 
 const sizes = {
   sm: "size-8 text-xs",
-  md: "size-9 text-[12.5px]",
+  md: "size-9 text-[0.7812rem]",
   lg: "size-11 text-sm",
   xl: "size-14 text-base",
 }

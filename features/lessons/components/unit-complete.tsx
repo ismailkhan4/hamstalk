@@ -52,7 +52,7 @@ export function UnitComplete({
 
       <dl className="mt-10 grid grid-cols-2 gap-4 border-y border-border py-4 sm:grid-cols-4">
         <div>
-          <dt className="text-[13px] text-muted-foreground">
+          <dt className="text-[0.8125rem] text-muted-foreground">
             XP from Unit {unit.number}
           </dt>
           <dd className="mt-1 font-display text-3xl font-bold text-reward-text">
@@ -60,7 +60,7 @@ export function UnitComplete({
           </dd>
         </div>
         <div>
-          <dt className="text-[13px] text-muted-foreground">Lessons</dt>
+          <dt className="text-[0.8125rem] text-muted-foreground">Lessons</dt>
           <dd className="mt-1 font-display text-3xl font-bold">
             {lessons.length}{" "}
             <span className="text-sm font-normal text-muted-foreground">
@@ -69,11 +69,13 @@ export function UnitComplete({
           </dd>
         </div>
         <div>
-          <dt className="text-[13px] text-muted-foreground">Unit review</dt>
+          <dt className="text-[0.8125rem] text-muted-foreground">
+            Unit review
+          </dt>
           <dd className="mt-1 font-display text-3xl font-bold">Done</dd>
         </div>
         <div>
-          <dt className="text-[13px] text-muted-foreground">
+          <dt className="text-[0.8125rem] text-muted-foreground">
             Phrases practised
           </dt>
           <dd className="mt-1 font-display text-3xl font-bold">{phrases}</dd>
@@ -154,7 +156,7 @@ export function UnitComplete({
               <GermanText as="p" className="text-2xl">
                 {milestone.standup.de}
               </GermanText>
-              <p className="text-[15px] text-muted-foreground">
+              <p className="text-[0.9375rem] text-muted-foreground">
                 {milestone.standup.en} Each unit adds one more line you can say
                 at the standup.
               </p>

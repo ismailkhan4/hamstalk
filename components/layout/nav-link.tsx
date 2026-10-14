@@ -26,7 +26,7 @@ export function SidebarLink({ item, count }: CountProps) {
       href={item.href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "relative flex min-h-11 items-center gap-3 rounded-lg px-3 text-[15px] font-medium text-secondary-text hover:bg-accent hover:text-foreground",
+        "relative flex min-h-11 items-center gap-3 rounded-lg px-3 text-[0.9375rem] font-medium text-secondary-text hover:bg-accent hover:text-foreground",
         active &&
           "bg-card font-semibold text-foreground shadow-sm before:absolute before:top-2 before:bottom-2 before:-left-4 before:w-1 before:rounded-r-full before:bg-spark"
       )}
@@ -54,7 +54,7 @@ export function BottomNavLink({ item, count }: CountProps) {
     <Link
       href={item.href}
       aria-current={active ? "page" : undefined}
-      className="flex min-h-14 flex-col items-center justify-center gap-1 text-[11px] font-semibold text-muted-foreground aria-[current=page]:text-foreground"
+      className="flex min-h-14 flex-col items-center justify-center gap-1 text-[0.6875rem] font-semibold text-muted-foreground aria-[current=page]:text-foreground"
     >
       <span
         className={cn(
@@ -64,7 +64,7 @@ export function BottomNavLink({ item, count }: CountProps) {
       >
         <span className="[&>svg]:size-5">{item.icon}</span>
         {shown && (
-          <span className="absolute top-0 right-2 min-w-4 rounded-full bg-spark px-1 text-[10px] leading-4 text-primary-foreground dark:text-background">
+          <span className="absolute top-0 right-2 min-w-4 rounded-full bg-spark px-1 text-[0.625rem] leading-4 text-primary-foreground dark:text-background">
             {shown}
           </span>
         )}

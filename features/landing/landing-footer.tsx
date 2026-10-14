@@ -17,7 +17,7 @@ export function LandingFooter() {
       <div className={`${styles.wrap} ${styles["foot-in"]}`}>
         <div>
           <Logo symbolClassName="size-[26px]" />
-          <p className="mt-3.5 max-w-[48ch] text-[15px] text-secondary-text">
+          <p className="mt-3.5 max-w-[48ch] text-[0.9375rem] text-secondary-text">
             Learn German. Join the team. An open-source German course for
             software engineers, from A1 towards B2.
           </p>

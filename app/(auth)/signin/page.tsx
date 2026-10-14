@@ -11,6 +11,7 @@ const NOTICES = [
   "session-expired",
   "signed-out",
   "link-invalid",
+  "account-deleted",
 ] as const
 type Notice = (typeof NOTICES)[number]
 

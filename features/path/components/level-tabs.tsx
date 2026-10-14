@@ -36,7 +36,7 @@ export function LevelTabs({ selected, home, basePath }: LevelTabsProps) {
                 </>
               )}
               {level.code === home && (
-                <span className="rounded-sm bg-spark-subtle px-1.5 py-0.5 text-[11px] font-semibold text-spark-text">
+                <span className="rounded-sm bg-spark-subtle px-1.5 py-0.5 text-[0.6875rem] font-semibold text-spark-text">
                   You are here
                 </span>
               )}

@@ -115,7 +115,7 @@ export function StandupSession({
         id="main"
         className="mx-auto w-full max-w-(--lesson-max) flex-1 px-[clamp(20px,4vw,32px)] py-8 pb-48"
       >
-        <p className="rounded-lg bg-muted px-3 py-2 text-[13.5px] text-secondary-text">
+        <p className="rounded-lg bg-muted px-3 py-2 text-[0.8438rem] text-secondary-text">
           Educational simulation. Lena and the team are fictional, and nothing
           you choose here is sent to anyone.
         </p>
@@ -156,7 +156,7 @@ export function StandupSession({
                 <Avatar person="me" initials={initials} />
               )}
               <div className="min-w-0">
-                <p className="text-[13px] font-semibold text-muted-foreground">
+                <p className="text-[0.8125rem] font-semibold text-muted-foreground">
                   {line.who === "lena" ? "Lena" : "You"}
                 </p>
                 <GermanText

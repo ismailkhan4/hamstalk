@@ -110,7 +110,7 @@ export function SignUpForm({
       >
         Create account
       </Button>
-      <p className="mt-5 text-center text-[15px] text-secondary-text">
+      <p className="mt-5 text-center text-[0.9375rem] text-secondary-text">
         Already have an account?{" "}
         <Link
           href="/signin"

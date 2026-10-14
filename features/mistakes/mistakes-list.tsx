@@ -60,7 +60,7 @@ function Card({
       <GermanText as="p" className="mt-2 text-2xl leading-snug">
         {mistake.prompt}
       </GermanText>
-      <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[15px]">
+      <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[0.9375rem]">
         <dt className="text-muted-foreground">You answered</dt>
         <dd className="text-danger-text line-through decoration-1">
           {mistake.learnerAnswer}
@@ -70,7 +70,7 @@ function Card({
           {mistake.correctAnswer}
         </dd>
       </dl>
-      <p className="mt-3 max-w-[64ch] text-[15px] text-secondary-text">
+      <p className="mt-3 max-w-[64ch] text-[0.9375rem] text-secondary-text">
         {mistake.reason}
       </p>
 
@@ -245,7 +245,7 @@ export function MistakesList({
                   ? "1 answer to look at again"
                   : `${open.length} answers to look at again`}
               </b>
-              <span className="text-[15px] text-secondary-text">
+              <span className="text-[0.9375rem] text-secondary-text">
                 Mistakes are where the learning happens. Answer one right and
                 it’s marked as learned.
               </span>

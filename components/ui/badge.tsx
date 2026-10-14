@@ -19,7 +19,7 @@ const badgeVariants = cva(
       },
       appearance: { subtle: "", solid: "", outline: "border bg-card" },
       size: {
-        sm: "h-5 px-2 text-[11px] leading-4 [&_svg]:size-3",
+        sm: "h-5 px-2 text-[0.6875rem] leading-4 [&_svg]:size-3",
         md: "h-6 px-2.5 text-xs leading-4 [&_svg]:size-3.5",
       },
     },

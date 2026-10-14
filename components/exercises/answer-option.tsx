@@ -69,7 +69,7 @@ function AnswerOption({
       data-state={state}
       onClick={locked ? undefined : onSelect}
       className={cn(
-        "flex min-h-14 w-full items-center gap-3.5 rounded-lg border-[1.5px] border-border bg-card px-4 py-3 text-left text-[17px] leading-[1.35] font-medium text-foreground transition-[border-color,background-color,box-shadow] duration-(--duration-fast) ease-out",
+        "flex min-h-14 w-full items-center gap-3.5 rounded-lg border-[1.5px] border-border bg-card px-4 py-3 text-left text-[1.0625rem] leading-[1.35] font-medium text-foreground transition-[border-color,background-color,box-shadow] duration-(--duration-fast) ease-out",
         !locked && "cursor-pointer hover:border-input",
         locked && "cursor-default",
         state === "selected" &&
@@ -85,7 +85,7 @@ function AnswerOption({
       <span
         aria-hidden="true"
         className={cn(
-          "grid size-[30px] shrink-0 place-items-center rounded-md text-[13px] font-semibold text-muted-foreground shadow-[inset_0_0_0_1.5px_var(--border)]",
+          "grid size-[30px] shrink-0 place-items-center rounded-md text-[0.8125rem] font-semibold text-muted-foreground shadow-[inset_0_0_0_1.5px_var(--border)]",
           state === "selected" &&
             "bg-primary text-primary-foreground shadow-none",
           isPositive && "bg-success text-success-foreground shadow-none",
@@ -113,7 +113,7 @@ function AnswerOption({
       {label && (
         <span
           className={cn(
-            "inline-flex shrink-0 items-center gap-1.5 text-[13.5px] font-semibold whitespace-nowrap",
+            "inline-flex shrink-0 items-center gap-1.5 text-[0.8438rem] font-semibold whitespace-nowrap",
             isPositive && "text-success-text",
             isNegative && "text-danger-text"
           )}

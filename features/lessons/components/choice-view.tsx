@@ -103,7 +103,7 @@ export function ChoiceView({
                 <GermanText as="p" className="text-xl">
                   „{personalise(exercise.listening.clip, learner)}“
                 </GermanText>
-                <p className="text-[15px] text-muted-foreground">
+                <p className="text-[0.9375rem] text-muted-foreground">
                   {personalise(exercise.listening.translation, learner)}
                 </p>
               </div>

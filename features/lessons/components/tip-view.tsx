@@ -55,7 +55,7 @@ export function TipView({ exercise, learner, onDone }: TipViewProps) {
                   {row.map((cell, c) => (
                     <td key={c} className="px-3 py-3 align-top sm:px-4">
                       {c === 0 ? (
-                        <span className="text-[15px] text-secondary-text">
+                        <span className="text-[0.9375rem] text-secondary-text">
                           {cell}
                         </span>
                       ) : (
@@ -76,13 +76,13 @@ export function TipView({ exercise, learner, onDone }: TipViewProps) {
               <GermanText as="p" className="text-xl">
                 {personalise(example.de, learner)}
               </GermanText>
-              <p className="text-[15px] text-muted-foreground">
+              <p className="text-[0.9375rem] text-muted-foreground">
                 {personalise(example.en, learner)}
               </p>
             </li>
           ))}
         </ul>
-        <p className="mt-6 flex gap-3 rounded-xl bg-reward-subtle p-4 text-[15px] text-reward-text">
+        <p className="mt-6 flex gap-3 rounded-xl bg-reward-subtle p-4 text-[0.9375rem] text-reward-text">
           <Lightbulb
             aria-hidden="true"
             className="mt-0.5 size-[18px] shrink-0"

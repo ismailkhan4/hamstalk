@@ -358,6 +358,26 @@
   --bottom-nav-height: 64px;
 }
 
+html[data-text-size="large"] {
+  font-size: 112.5%;
+}
+
+/* The learner's own choice, for people whose device setting doesn't match what they want here. */
+html[data-motion="reduce"] {
+  --duration-fast: 0ms;
+  --duration-base: 0ms;
+  --duration-slow: 120ms;
+  --duration-slower: 0ms;
+}
+html[data-motion="reduce"] *,
+html[data-motion="reduce"] *::before,
+html[data-motion="reduce"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --duration-fast: 0ms;
@@ -579,7 +599,7 @@
     scroll-padding-bottom: 6rem;
   }
   body {
-    @apply bg-background font-sans text-[15px] leading-normal text-foreground antialiased;
+    @apply bg-background font-sans text-[0.9375rem] leading-normal text-foreground antialiased;
   }
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ring;

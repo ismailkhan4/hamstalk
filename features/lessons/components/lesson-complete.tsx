@@ -101,7 +101,7 @@ export function LessonComplete({
 
       <dl className="mt-10 grid grid-cols-2 gap-4 border-y border-border py-4 sm:grid-cols-4">
         <div>
-          <dt className="text-[13px] text-muted-foreground">
+          <dt className="text-[0.8125rem] text-muted-foreground">
             XP for this session
           </dt>
           <dd className="mt-1 font-display text-3xl font-bold text-reward-text">
@@ -110,7 +110,7 @@ export function LessonComplete({
           </dd>
         </div>
         <div>
-          <dt className="text-[13px] text-muted-foreground">
+          <dt className="text-[0.8125rem] text-muted-foreground">
             Right first time
           </dt>
           <dd className="mt-1 font-display text-3xl font-bold">
@@ -121,7 +121,7 @@ export function LessonComplete({
           </dd>
         </div>
         <div>
-          <dt className="text-[13px] text-muted-foreground">Time</dt>
+          <dt className="text-[0.8125rem] text-muted-foreground">Time</dt>
           <dd className="mt-1 font-display text-3xl font-bold">
             {minutes}{" "}
             <span className="text-sm font-normal text-muted-foreground">
@@ -130,7 +130,7 @@ export function LessonComplete({
           </dd>
         </div>
         <div>
-          <dt className="text-[13px] text-muted-foreground">
+          <dt className="text-[0.8125rem] text-muted-foreground">
             {review ? "Lessons revisited" : "Phrases"}
           </dt>
           <dd className="mt-1 font-display text-3xl font-bold">
@@ -216,7 +216,7 @@ export function LessonComplete({
       )}
 
       {mistakeCount > 0 && (
-        <p className="mt-6 flex items-center gap-2 text-[15px] text-secondary-text">
+        <p className="mt-6 flex items-center gap-2 text-[0.9375rem] text-secondary-text">
           <NotebookPen
             aria-hidden="true"
             className="size-4 text-muted-foreground"

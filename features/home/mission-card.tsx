@@ -43,7 +43,7 @@ export function MissionCard({
       aria-labelledby="mission-title"
       className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6"
     >
-      <p className="flex items-center gap-2 text-[13.5px] font-semibold text-primary-text">
+      <p className="flex items-center gap-2 text-[0.8438rem] font-semibold text-primary-text">
         <i aria-hidden="true" className="size-2 rounded-full bg-spark" />
         {kicker}
       </p>
@@ -53,14 +53,14 @@ export function MissionCard({
         className={cn(
           "mt-2",
           lesson.titleIsGerman
-            ? "font-voice text-[40px] leading-tight"
+            ? "font-voice text-[2.5rem] leading-tight"
             : "font-display text-h2 font-bold"
         )}
       >
         {lesson.title}
       </h2>
       {lesson.goal && (
-        <p className="text-[15px] text-muted-foreground">{lesson.goal}</p>
+        <p className="text-[0.9375rem] text-muted-foreground">{lesson.goal}</p>
       )}
       {lesson.mission && (
         <p className="mt-3 max-w-[56ch] text-body text-secondary-text">

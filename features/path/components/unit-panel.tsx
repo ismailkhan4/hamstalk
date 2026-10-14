@@ -72,7 +72,7 @@ export function UnitPanel({
       aria-labelledby={`unit-${unit.id}`}
       className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6"
     >
-      <p className="flex items-center gap-2 text-[13px] font-semibold text-primary-text">
+      <p className="flex items-center gap-2 text-[0.8125rem] font-semibold text-primary-text">
         <i aria-hidden="true" className="size-2 rounded-full bg-spark" />
         Unit {unit.number} · {unit.level} · {unitStatusLabel[status]}
       </p>
@@ -103,7 +103,7 @@ export function UnitPanel({
           </h3>
           <ul className="mt-2 flex flex-col gap-1.5">
             {unit.canDo.map((item) => (
-              <li key={item} className="flex gap-2.5 text-[15px]">
+              <li key={item} className="flex gap-2.5 text-[0.9375rem]">
                 <Check
                   aria-hidden="true"
                   className="mt-1 size-4 shrink-0 text-primary-text"
@@ -129,10 +129,10 @@ export function UnitPanel({
                   <ArticleWord
                     article={word.article}
                     word={word.word}
-                    className="text-[16.5px]"
+                    className="text-[1.0312rem]"
                   />
                 ) : (
-                  <span lang="de" className="font-voice text-[16.5px]">
+                  <span lang="de" className="font-voice text-[1.0312rem]">
                     {word.word}
                   </span>
                 )}
@@ -146,7 +146,7 @@ export function UnitPanel({
           <h3 className="mt-5 text-sm font-semibold text-secondary-text">
             Grammar
           </h3>
-          <p className="mt-1 text-[15px]">
+          <p className="mt-1 text-[0.9375rem]">
             {unit.grammar.replaceAll("%N", firstName)}
           </p>
         </>
@@ -210,7 +210,7 @@ export function UnitPanel({
                       i + 1
                     )}
                   </span>
-                  <span className="min-w-0 flex-1 text-[15px]">
+                  <span className="min-w-0 flex-1 text-[0.9375rem]">
                     {state === "open" || isNext ? (
                       <Link
                         href={`/learn/${lesson.id}`}

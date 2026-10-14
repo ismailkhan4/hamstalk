@@ -51,7 +51,7 @@ export function FocusHeader({
             </p>
           </>
         ) : (
-          <p className="truncate text-[14.5px] font-semibold text-secondary-text">
+          <p className="truncate text-[0.9062rem] font-semibold text-secondary-text">
             {title}
           </p>
         )}

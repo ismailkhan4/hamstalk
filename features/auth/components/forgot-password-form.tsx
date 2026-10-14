@@ -55,7 +55,7 @@ export function ForgotPasswordForm({
           If an account exists for <b className="text-foreground">{sentTo}</b>,
           a reset link is on its way. It works for one hour.
         </p>
-        <p className="mt-6 text-[15px] text-secondary-text">
+        <p className="mt-6 text-[0.9375rem] text-secondary-text">
           Didn’t get it? Check spam, or{" "}
           <button
             type="button"

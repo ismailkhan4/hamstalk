@@ -32,7 +32,7 @@ export function LessonIntro({
         id="main"
         className="mx-auto w-full max-w-(--lesson-max) flex-1 px-[clamp(20px,4vw,32px)] py-10 pb-36"
       >
-        <p className="flex items-center gap-2 text-[13.5px] font-semibold text-primary-text">
+        <p className="flex items-center gap-2 text-[0.8438rem] font-semibold text-primary-text">
           <i aria-hidden="true" className="size-2 rounded-full bg-spark" />
           {kicker}
         </p>
@@ -61,7 +61,7 @@ export function LessonIntro({
             <GermanText as="p" className="text-2xl">
               {personalise(lesson.intro.de, learner)}
             </GermanText>
-            <p className="mt-1 text-[15px] text-muted-foreground">
+            <p className="mt-1 text-[0.9375rem] text-muted-foreground">
               {personalise(lesson.intro.en, learner)}
             </p>
           </div>
@@ -69,7 +69,7 @@ export function LessonIntro({
 
         <dl className="mt-8 grid gap-4 border-y border-border py-4 sm:grid-cols-3">
           <div>
-            <dt className="text-[13px] text-muted-foreground">
+            <dt className="text-[0.8125rem] text-muted-foreground">
               Estimated time
             </dt>
             <dd className="mt-1 font-semibold">
@@ -77,13 +77,15 @@ export function LessonIntro({
             </dd>
           </div>
           <div>
-            <dt className="text-[13px] text-muted-foreground">Exercises</dt>
+            <dt className="text-[0.8125rem] text-muted-foreground">
+              Exercises
+            </dt>
             <dd className="mt-1 font-semibold">
               {lesson.exercises.length} exercises
             </dd>
           </div>
           <div>
-            <dt className="text-[13px] text-muted-foreground">Focus</dt>
+            <dt className="text-[0.8125rem] text-muted-foreground">Focus</dt>
             <dd className="mt-1 font-semibold">{lesson.focus}</dd>
           </div>
         </dl>

@@ -9,7 +9,7 @@ export function ExerciseHeading({
 }) {
   return (
     <>
-      <p className="text-[13.5px] font-semibold text-primary-text">{kind}</p>
+      <p className="text-[0.8438rem] font-semibold text-primary-text">{kind}</p>
       <h1 className="mt-1 font-display text-h2 font-bold text-balance">
         {title}
       </h1>

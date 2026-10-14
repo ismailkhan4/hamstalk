@@ -93,10 +93,13 @@ export function DiscoverView({
                   <p className="text-xs text-muted-foreground">
                     {personalise(line.speaker.label, learner)}
                   </p>
-                  <GermanText as="p" className="mt-1 text-[22px] leading-snug">
+                  <GermanText
+                    as="p"
+                    className="mt-1 text-[1.375rem] leading-snug"
+                  >
                     {de}
                   </GermanText>
-                  <p className="text-[15px] text-muted-foreground">
+                  <p className="text-[0.9375rem] text-muted-foreground">
                     {personalise(line.en, learner)}
                   </p>
                   {line.note && (

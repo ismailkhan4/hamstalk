@@ -65,7 +65,7 @@ export function LevelStep({ value, firstName, onChange }: LevelStepProps) {
                 leading={
                   <span
                     className={cn(
-                      "grid h-9 w-12 shrink-0 place-items-center rounded-md text-[13px] font-bold",
+                      "grid h-9 w-12 shrink-0 place-items-center rounded-md text-[0.8125rem] font-bold",
                       codeStyles[level]
                     )}
                   >
@@ -80,7 +80,7 @@ export function LevelStep({ value, firstName, onChange }: LevelStepProps) {
       {value && (
         <p
           role="status"
-          className="mt-5 flex gap-3 rounded-xl border border-border bg-card p-4 text-[15px]"
+          className="mt-5 flex gap-3 rounded-xl border border-border bg-card p-4 text-[0.9375rem]"
         >
           <Sparkles
             aria-hidden="true"
@@ -91,7 +91,7 @@ export function LevelStep({ value, firstName, onChange }: LevelStepProps) {
             {value === "beginner" && (
               <>
                 {" "}
-                <GermanText className="text-[17px]">
+                <GermanText className="text-[1.0625rem]">
                   Ich heiße {firstName}.
                 </GermanText>
               </>

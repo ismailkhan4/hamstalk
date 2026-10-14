@@ -45,7 +45,7 @@ export function WelcomeStep({
               initials={member.initials}
               size="xl"
             />
-            <p className="mt-3 text-[15px] font-semibold">{member.name}</p>
+            <p className="mt-3 text-[0.9375rem] font-semibold">{member.name}</p>
             <p className="text-sm text-muted-foreground">{member.role}</p>
           </li>
         ))}
@@ -56,7 +56,7 @@ export function WelcomeStep({
             size="xl"
             className="shadow-[0_0_0_3px_var(--background),0_0_0_5px_var(--spark)]"
           />
-          <p className="mt-3 text-[15px] font-semibold text-spark-text">
+          <p className="mt-3 text-[0.9375rem] font-semibold text-spark-text">
             {firstName} (you)
           </p>
           <p className="text-sm text-muted-foreground">Frontend, from today</p>

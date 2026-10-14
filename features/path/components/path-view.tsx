@@ -134,7 +134,7 @@ export function PathView({
             >
               <Link
                 href={`${basePath}?level=${selectedLevel.toLowerCase()}`}
-                className="mb-4 inline-flex min-h-11 items-center gap-2 text-[15px] font-semibold text-secondary-text hover:text-foreground lg:hidden"
+                className="mb-4 inline-flex min-h-11 items-center gap-2 text-[0.9375rem] font-semibold text-secondary-text hover:text-foreground lg:hidden"
               >
                 <ArrowLeft aria-hidden="true" className="size-[18px]" />
                 Learning path

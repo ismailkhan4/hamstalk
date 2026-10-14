@@ -66,7 +66,7 @@ export function PlanStep({
       <dl className="mt-8 grid grid-cols-2 border-y border-border sm:grid-cols-4">
         {facts.map(([label, value]) => (
           <div key={label} className="py-3.5 pr-4">
-            <dt className="text-[13px] text-muted-foreground">{label}</dt>
+            <dt className="text-[0.8125rem] text-muted-foreground">{label}</dt>
             <dd className="mt-1 font-semibold">{value}</dd>
           </div>
         ))}
@@ -128,7 +128,7 @@ export function PlanStep({
                 >
                   {mission.title}
                 </p>
-                <p lang="de" className="font-voice text-[17px]">
+                <p lang="de" className="font-voice text-[1.0625rem]">
                   {mission.de}
                 </p>
                 <p className="text-sm text-muted-foreground">{mission.en}</p>

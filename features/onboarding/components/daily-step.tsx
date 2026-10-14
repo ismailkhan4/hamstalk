@@ -59,7 +59,7 @@ export function DailyStep({
                   className="sr-only"
                 />
                 <span className="flex items-start justify-between">
-                  <span className="font-display text-[40px] leading-none font-bold tracking-tight">
+                  <span className="font-display text-[2.5rem] leading-none font-bold tracking-tight">
                     {value}
                     <span className="ml-1 font-sans text-sm font-normal text-muted-foreground">
                       min
@@ -77,7 +77,7 @@ export function DailyStep({
                   </span>
                 </span>
                 {option.tag && (
-                  <span className="mt-3 w-fit rounded-sm bg-reward-subtle px-1.5 py-0.5 text-[11.5px] font-semibold text-reward-text">
+                  <span className="mt-3 w-fit rounded-sm bg-reward-subtle px-1.5 py-0.5 text-[0.7188rem] font-semibold text-reward-text">
                     {option.tag}
                   </span>
                 )}

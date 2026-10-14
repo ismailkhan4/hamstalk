@@ -31,6 +31,15 @@ const messages: Record<string, AuthError> = {
     message:
       "New accounts can’t be created at the moment. Please try again later.",
   },
+  email_exists: {
+    title: "That email already has an account",
+    message: "Use a different address, or sign in with that one.",
+  },
+  reauthentication_needed: {
+    title: "Please sign in again first",
+    message:
+      "For your security, this change needs a recent sign-in. Sign out, sign back in, then try again.",
+  },
   email_address_invalid: {
     title: "We can’t use this email address",
     message: "Check the address, or use a different one.",

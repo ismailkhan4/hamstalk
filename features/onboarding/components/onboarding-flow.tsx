@@ -172,7 +172,7 @@ export function OnboardingFlow({
           )}
         </div>
         <aside className="hidden xl:sticky xl:top-28 xl:flex xl:flex-col xl:gap-3.5 xl:self-start">
-          <p className="max-w-[30ch] text-[13.5px] text-muted-foreground">
+          <p className="max-w-[30ch] text-[0.8438rem] text-muted-foreground">
             {isPlan
               ? "Your badge is complete. You can edit it any time from your profile."
               : "Your team badge fills in as you answer."}
@@ -205,7 +205,7 @@ export function OnboardingFlow({
             id="step-help"
             aria-live="polite"
             className={cn(
-              "min-w-0 flex-1 text-[13px] leading-snug text-muted-foreground sm:text-sm",
+              "min-w-0 flex-1 text-[0.8125rem] leading-snug text-muted-foreground sm:text-sm",
               need && "text-secondary-text"
             )}
           >

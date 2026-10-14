@@ -40,7 +40,7 @@ function Wordmark({ className }: { className?: string }) {
     <span
       aria-hidden="true"
       className={cn(
-        "inline-flex items-baseline font-display text-[23px] leading-none font-[650] tracking-[-0.04em] text-foreground",
+        "inline-flex items-baseline font-display text-[1.4375rem] leading-none font-[650] tracking-[-0.04em] text-foreground",
         className
       )}
     >

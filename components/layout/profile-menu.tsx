@@ -1,7 +1,7 @@
 "use client"
 
 import { Menu } from "@base-ui/react/menu"
-import { ChevronUp, History, ListChecks, LogOut } from "lucide-react"
+import { ChevronUp, History, ListChecks, LogOut, Settings } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTransition } from "react"
 
@@ -17,7 +17,7 @@ type ProfileMenuProps = {
 }
 
 const itemClass =
-  "flex min-h-11 cursor-pointer items-center gap-3 rounded-md px-3 text-[15px] outline-none data-highlighted:bg-accent"
+  "flex min-h-11 cursor-pointer items-center gap-3 rounded-md px-3 text-[0.9375rem] outline-none data-highlighted:bg-accent"
 
 export function ProfileMenu({
   name,
@@ -68,6 +68,16 @@ export function ProfileMenu({
               <p className="truncate text-xs text-muted-foreground">{email}</p>
             </div>
             <Menu.Separator className="my-1 h-px bg-border-subtle" />
+            <Menu.Item
+              className={itemClass}
+              onClick={() => router.push("/settings")}
+            >
+              <Settings
+                aria-hidden="true"
+                className="size-[18px] text-muted-foreground"
+              />
+              Profile and settings
+            </Menu.Item>
             <Menu.Item
               className={itemClass}
               onClick={() => router.push("/activity")}

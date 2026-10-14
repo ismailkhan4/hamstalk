@@ -74,12 +74,16 @@ export function HowSection() {
                 </div>
               </div>
               <p
-                className={cn(styles.say, styles.de, "mt-[18px] text-[22px]")}
+                className={cn(
+                  styles.say,
+                  styles.de,
+                  "mt-[18px] text-[1.375rem]"
+                )}
                 lang="de"
               >
                 Hallo, ich bin neu im Team.
               </p>
-              <p className={cn(styles.en, "text-[15px]")}>
+              <p className={cn(styles.en, "text-[0.9375rem]")}>
                 Hi, I’m new on the team.
               </p>
             </Step>
@@ -108,7 +112,7 @@ export function HowSection() {
                   </span>
                 ))}
               </div>
-              <p className="mt-4 text-[15px] text-secondary-text">
+              <p className="mt-4 text-[0.9375rem] text-secondary-text">
                 Today I’m working on the sign-in. In German, the verb always
                 takes position two.
               </p>
@@ -124,7 +128,7 @@ export function HowSection() {
                   Passwort-Reset-E-Mail kommt nicht an
                 </span>
                 <span />
-                <span className={cn(styles.en, "text-[15px]")}>
+                <span className={cn(styles.en, "text-[0.9375rem]")}>
                   Password reset email doesn’t arrive
                 </span>
                 <p className={styles.ask}>
@@ -143,7 +147,9 @@ export function HowSection() {
                     <b className="font-semibold text-article-die">die</b>{" "}
                     Anmeldung
                   </p>
-                  <p className={cn(styles.en, "text-[14.5px]")}>the sign-in</p>
+                  <p className={cn(styles.en, "text-[0.9062rem]")}>
+                    the sign-in
+                  </p>
                 </div>
                 <div className={styles.rates} aria-hidden="true">
                   {[
@@ -183,7 +189,7 @@ export function HowSection() {
                 <em className={styles.d} />
                 <i className={styles.lock} />
               </div>
-              <p className="mt-4 text-[15px] text-secondary-text">
+              <p className="mt-4 text-[0.9375rem] text-secondary-text">
                 <span
                   className={cn(styles.de, "text-lg text-foreground")}
                   lang="de"

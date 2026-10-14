@@ -31,7 +31,7 @@ export function TeamBadge({ name, rows, footer, className }: TeamBadgeProps) {
         className
       )}
     >
-      <p className="flex items-center justify-between text-[12.5px] leading-none font-semibold text-muted-foreground">
+      <p className="flex items-center justify-between text-[0.7812rem] leading-none font-semibold text-muted-foreground">
         Kaffeesatz GmbH · Berlin
         <i aria-hidden="true" className="size-2.5 rounded-full bg-spark" />
       </p>
@@ -39,7 +39,7 @@ export function TeamBadge({ name, rows, footer, className }: TeamBadgeProps) {
         <span
           aria-hidden="true"
           className={cn(
-            "grid size-[58px] shrink-0 place-items-center rounded-full text-[19px] leading-none font-bold",
+            "grid size-[58px] shrink-0 place-items-center rounded-full text-[1.1875rem] leading-none font-bold",
             trimmed
               ? "bg-(--person-me) text-(--person-me-foreground) shadow-[0_0_0_4px_var(--spark-subtle)]"
               : "bg-background-subtle font-semibold text-muted-foreground shadow-[inset_0_0_0_1.5px_var(--border)]"
@@ -50,21 +50,21 @@ export function TeamBadge({ name, rows, footer, className }: TeamBadgeProps) {
         <div className="min-w-0">
           <p
             className={cn(
-              "font-display text-[21px] leading-[1.15] font-[650] tracking-[-0.02em] break-words",
+              "font-display text-[1.3125rem] leading-[1.15] font-[650] tracking-[-0.02em] break-words",
               !trimmed && "text-placeholder"
             )}
           >
             {trimmed || "Your name"}
           </p>
-          <p className="mt-[3px] font-voice text-[15px] leading-[1.3] text-primary-text italic">
+          <p className="mt-[3px] font-voice text-[0.9375rem] leading-[1.3] text-primary-text italic">
             <span lang="de">Neu im Team</span>{" "}
-            <span className="font-sans text-[12.5px] text-muted-foreground not-italic">
+            <span className="font-sans text-[0.7812rem] text-muted-foreground not-italic">
               · new on the team
             </span>
           </p>
         </div>
       </div>
-      <dl className="mt-[18px] border-t border-dashed border-border text-[13.5px]">
+      <dl className="mt-[18px] border-t border-dashed border-border text-[0.8438rem]">
         {rows.map((row) => (
           <div
             key={row.label}
@@ -85,7 +85,7 @@ export function TeamBadge({ name, rows, footer, className }: TeamBadgeProps) {
       {footer && (
         <p
           className={cn(
-            "mt-2.5 flex items-center gap-2 text-[12.5px] text-muted-foreground",
+            "mt-2.5 flex items-center gap-2 text-[0.7812rem] text-muted-foreground",
             footer.ready && "font-semibold text-success-text"
           )}
         >

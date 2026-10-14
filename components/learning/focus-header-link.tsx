@@ -21,7 +21,7 @@ export function FocusHeaderLink({
         >
           <X aria-hidden="true" className="size-5" />
         </Link>
-        <p className="truncate text-[14.5px] font-semibold text-secondary-text">
+        <p className="truncate text-[0.9062rem] font-semibold text-secondary-text">
           {title}
         </p>
       </div>

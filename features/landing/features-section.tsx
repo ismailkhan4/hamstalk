@@ -108,7 +108,7 @@ export function FeaturesSection() {
                     />
                   ))}
                 </span>
-                <span className="text-[13.5px] text-muted-foreground">
+                <span className="text-[0.8438rem] text-muted-foreground">
                   0.75×
                 </span>
               </div>

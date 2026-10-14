@@ -83,7 +83,7 @@ export function AuthShell({
           )}
           {panelExtra}
         </div>
-        <p className="max-w-[40ch] text-[13.5px] leading-normal text-deep-muted">
+        <p className="max-w-[40ch] text-[0.8438rem] leading-normal text-deep-muted">
           Kaffeesatz GmbH and its team are fictional. The German you learn there
           is real.
         </p>
@@ -107,7 +107,7 @@ export function AuthShell({
           <p lang="de" className="font-voice text-2xl leading-tight">
             {greeting.de}
           </p>
-          <span className="mt-1 block text-[14.5px] text-deep-muted">
+          <span className="mt-1 block text-[0.9062rem] text-deep-muted">
             {greeting.en.split(".")[0]}.
           </span>
         </div>

@@ -171,13 +171,13 @@ export function ConversationView({
                 <GermanText
                   as="p"
                   className={cn(
-                    "text-[22px] leading-snug",
+                    "text-[1.375rem] leading-snug",
                     said.person === "me" && "text-primary-text"
                   )}
                 >
                   {personalise(said.de, learner)}
                 </GermanText>
-                <p className="text-[15px] text-muted-foreground">
+                <p className="text-[0.9375rem] text-muted-foreground">
                   {personalise(said.en, learner)}
                 </p>
               </div>

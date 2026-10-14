@@ -61,17 +61,17 @@ function ExerciseFeedback({
           <div className="min-w-0">
             <p
               className={cn(
-                "text-[17px] leading-[1.3] font-bold",
+                "text-[1.0625rem] leading-[1.3] font-bold",
                 result === "correct" ? "text-success-text" : "text-danger-text"
               )}
             >
               <span lang={titleLang}>{title}</span>
             </p>
-            <div className="mt-0.5 text-[15px] leading-normal text-secondary-text">
+            <div className="mt-0.5 text-[0.9375rem] leading-normal text-secondary-text">
               {children}
             </div>
             {savedToMistakes && (
-              <p className="mt-1.5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-muted-foreground">
+              <p className="mt-1.5 inline-flex items-center gap-1.5 text-[0.8125rem] font-semibold text-muted-foreground">
                 <NotebookPen aria-hidden="true" className="size-[15px]" />
                 Saved to your mistakes notebook
               </p>
