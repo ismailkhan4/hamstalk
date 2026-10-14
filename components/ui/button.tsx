@@ -1,57 +1,109 @@
+"use client"
+
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "cn"
+
+import { Spinner } from "@/components/ui/spinner"
+import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "relative inline-flex shrink-0 items-center justify-center gap-2 font-semibold tracking-[-0.005em] whitespace-nowrap transition-[background-color,color,box-shadow,transform] duration-(--duration-fast) ease-out select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:translate-y-px disabled:pointer-events-none disabled:bg-disabled disabled:text-disabled-foreground disabled:shadow-none data-[loading]:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/80",
-        outline:
-          "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+        primary:
+          "bg-primary text-primary-foreground shadow-[inset_0_-2px_0_rgb(0_0_0/0.18)] hover:bg-primary-hover active:bg-primary-active active:shadow-none data-[loading]:bg-primary-active",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
-        ghost:
-          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
-        destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground hover:bg-secondary-hover",
+        outline:
+          "bg-card text-foreground shadow-[inset_0_0_0_1.5px_var(--border)] hover:bg-background-subtle hover:shadow-[inset_0_0_0_1.5px_var(--input)]",
+        ghost: "text-secondary-text hover:bg-accent hover:text-foreground",
+        danger:
+          "bg-danger text-danger-foreground shadow-[inset_0_-2px_0_rgb(0_0_0/0.16)] hover:bg-danger-hover active:bg-danger-active active:shadow-none",
+        success:
+          "bg-success text-success-foreground shadow-[inset_0_-2px_0_rgb(0_0_0/0.16)] hover:bg-success-hover active:shadow-none",
+        reward:
+          "bg-reward text-reward-foreground shadow-[inset_0_-2px_0_rgb(0_0_0/0.12)] hover:bg-reward-hover active:shadow-none",
+        link: "h-auto px-0 text-primary-text underline decoration-1 underline-offset-[3px] hover:decoration-2 active:translate-y-0",
+        inverse:
+          "bg-deep-foreground text-deep shadow-[inset_0_-2px_0_rgb(0_0_0/0.12)] hover:bg-card",
       },
       size: {
-        default:
-          "h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
-        xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-        lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
-        icon: "size-8",
-        "icon-xs":
-          "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
-        "icon-sm":
-          "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
-        "icon-lg": "size-9",
+        xs: "h-7 rounded-sm px-2.5 text-[13px] [&_svg]:size-3.5",
+        sm: "h-8 rounded-sm px-3 text-sm [&_svg]:size-4",
+        md: "h-10 rounded-md px-4 text-[15px] [&_svg]:size-[18px]",
+        lg: "h-12 rounded-lg px-5 text-base [&_svg]:size-5",
+        xl: "h-14 rounded-lg px-7 text-[17px] [&_svg]:size-5",
       },
+      iconOnly: { true: "aspect-square px-0" },
+      fullWidth: { true: "w-full" },
     },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
+    compoundVariants: [{ variant: "link", className: "h-auto px-0" }],
+    defaultVariants: { variant: "primary", size: "md" },
   }
 )
 
+type ButtonProps = Omit<ButtonPrimitive.Props, "className"> &
+  Omit<VariantProps<typeof buttonVariants>, "iconOnly"> & {
+    className?: string
+    /** A rendered icon element, so Server Components can pass it across the client boundary. */
+    iconLeft?: React.ReactElement
+    iconRight?: React.ReactElement
+    /** Shows a spinner, keeps the button's width and accessible name, and blocks presses. */
+    loading?: boolean
+  }
+
 function Button({
   className,
-  variant = "default",
-  size = "default",
+  variant,
+  size,
+  fullWidth,
+  iconLeft,
+  iconRight,
+  loading = false,
+  children,
+  onClick,
   ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: ButtonProps) {
+  const iconOnly = !children && Boolean(iconLeft ?? iconRight)
+
   return (
     <ButtonPrimitive
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      data-loading={loading || undefined}
+      aria-busy={loading || undefined}
+      aria-disabled={loading || undefined}
+      className={cn(
+        buttonVariants({ variant, size, fullWidth, iconOnly }),
+        className
+      )}
+      onClick={(event) => {
+        if (loading) {
+          event.preventDefault()
+          return
+        }
+        onClick?.(event)
+      }}
       {...props}
-    />
+    >
+      <span
+        className={cn(
+          "inline-flex items-center justify-center gap-[inherit]",
+          loading && "opacity-0"
+        )}
+      >
+        {iconLeft}
+        {children}
+        {iconRight}
+      </span>
+      {loading && (
+        <span className="absolute inset-0 grid place-items-center">
+          <Spinner />
+        </span>
+      )}
+    </ButtonPrimitive>
   )
 }
 
 export { Button, buttonVariants }
+export type { ButtonProps }
