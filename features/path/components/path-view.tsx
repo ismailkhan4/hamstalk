@@ -15,6 +15,7 @@ type PathViewProps = Pick<
   "name" | "firstName" | "preferences" | "progress"
 > & {
   email: string
+  counts?: Learner["counts"]
   params: { level?: string | string[]; unit?: string | string[] }
   /** Where the path lives, so links stay inside development previews. */
   basePath?: string
@@ -26,6 +27,7 @@ export function PathView({
   email,
   preferences,
   progress,
+  counts,
   params,
   basePath = "/path",
 }: PathViewProps) {
@@ -52,7 +54,7 @@ export function PathView({
   const doneUnits = completedUnitCount(selectedLevel, progress)
 
   return (
-    <AppShell name={name} email={email}>
+    <AppShell name={name} email={email} counts={counts}>
       <main
         id="main"
         className="mx-auto max-w-(--content-max) px-4 py-8 sm:px-6 lg:px-10"

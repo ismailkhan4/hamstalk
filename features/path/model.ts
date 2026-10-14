@@ -44,6 +44,10 @@ function byId(progress: LessonProgress[]) {
   return new Map(progress.map((entry) => [entry.lessonId, entry]))
 }
 
+export function isUnitCompleted(unit: Unit, progress: LessonProgress[]) {
+  return unitCompleted(unit, byId(progress))
+}
+
 export function unitHasOpenLessons(unit: Unit) {
   return unit.lessons.some((lesson) => isLessonAvailable(lesson.id))
 }

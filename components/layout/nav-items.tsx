@@ -1,10 +1,13 @@
-import { House, Route } from "lucide-react"
+import { BookMarked, House, NotebookPen, Repeat, Route, Users, } from "lucide-react"
+
+import type { NotebookCounts } from "@/features/review/data"
 
 export type NavItem = {
   href: string
   label: string
   shortLabel: string
   icon: React.ReactElement
+  count?: keyof NotebookCounts
 }
 
 /**
@@ -25,4 +28,36 @@ export const primaryNav: NavItem[] = [
     shortLabel: "Path",
     icon: <Route aria-hidden="true" />,
   },
+{
+    href: "/review",
+    label: "Review",
+    shortLabel: "Review",
+    icon: <Repeat aria-hidden="true" />,
+    count: "due",
+  },
+  {
+    href: "/team",
+    label: "Team",
+    shortLabel: "Team",
+    icon: <Users aria-hidden="true" />,
+  },
 ]
+
+export const notesNav: NavItem[] = [
+  {
+    href: "/phrasebook",
+    label: "Phrasebook",
+    shortLabel: "Phrases",
+    icon: <BookMarked aria-hidden="true" />,
+    count: "phrases",
+  },
+  {
+    href: "/mistakes",
+    label: "Mistakes",
+    shortLabel: "Mistakes",
+    icon: <NotebookPen aria-hidden="true" />,
+    count: "mistakes",
+  },
+]
+
+export const allNav = [...primaryNav, ...notesNav]

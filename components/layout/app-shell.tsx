@@ -3,14 +3,21 @@ import Link from "next/link"
 import { Logo } from "@/components/brand/logo"
 import { initialsFor } from "@/components/learning/team-badge"
 
-import { primaryNav } from "./nav-items"
+import type { NotebookCounts } from "@/features/review/data"
+
+import { allNav, notesNav, primaryNav } from "./nav-items"
 import { BottomNavLink, SidebarLink } from "./nav-link"
 import { ProfileMenu } from "./profile-menu"
 
-type AppShellProps = { name: string; email: string; children: React.ReactNode }
+type AppShellProps = {
+  name: string
+  email: string
+  counts?: NotebookCounts
+  children: React.ReactNode
+}
 
 /** Sidebar from 1024 px; below that a top bar and a bottom nav, as the prototype does (audit C3). */
-export function AppShell({ name, email, children }: AppShellProps) {
+export function AppShell({ name, email, counts, children }: AppShellProps) {
   const initials = initialsFor(name) || "?"
 
   return (
@@ -28,7 +35,23 @@ export function AppShell({ name, email, children }: AppShellProps) {
         </Link>
         <nav aria-label="Main" className="mt-8 flex flex-col gap-1">
           {primaryNav.map((item) => (
-            <SidebarLink key={item.href} item={item} />
+            <SidebarLink
+              key={item.href}
+              item={item}
+              count={item.count ? counts?.[item.count] : undefined}
+            />
+          ))}
+        </nav>
+        <p className="mt-8 px-3 text-xs font-semibold text-muted-foreground">
+          Your notes
+        </p>
+        <nav aria-label="Your notes" className="mt-2 flex flex-col gap-1">
+          {notesNav.map((item) => (
+            <SidebarLink
+              key={item.href}
+              item={item}
+              count={item.count ? counts?.[item.count] : undefined}
+            />
           ))}
         </nav>
         <div className="mt-auto">
@@ -51,11 +74,15 @@ export function AppShell({ name, email, children }: AppShellProps) {
         aria-label="Main"
         className="fixed inset-x-0 bottom-0 z-(--z-sticky) grid border-t border-border-subtle bg-card pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_-16px_rgb(20_33_28/0.25)] lg:hidden"
         style={{
-          gridTemplateColumns: `repeat(${primaryNav.length}, minmax(0, 1fr))`,
+          gridTemplateColumns: `repeat(${allNav.length}, minmax(0, 1fr))`,
         }}
       >
-        {primaryNav.map((item) => (
-          <BottomNavLink key={item.href} item={item} />
+        {allNav.map((item) => (
+          <BottomNavLink
+            key={item.href}
+            item={item}
+            count={item.count ? counts?.[item.count] : undefined}
+          />
         ))}
       </nav>
     </div>

@@ -12,8 +12,15 @@ export function useIsActive(href: string) {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
-export function SidebarLink({ item }: { item: NavItem }) {
+type CountProps = { item: NavItem; count: number | undefined }
+
+function countLabel(count: number | undefined) {
+  return count && count > 0 ? String(count) : null
+}
+
+export function SidebarLink({ item, count }: CountProps) {
   const active = useIsActive(item.href)
+  const shown = countLabel(count)
   return (
     <Link
       href={item.href}
@@ -25,13 +32,24 @@ export function SidebarLink({ item }: { item: NavItem }) {
       )}
     >
       <span className="[&>svg]:size-[18px]">{item.icon}</span>
-      {item.label}
+      <span className="flex-1">{item.label}</span>
+      {shown && (
+        <span className="text-xs font-semibold text-muted-foreground tabular-nums">
+          <span className="sr-only">, </span>
+          {shown}
+          <span className="sr-only">
+            {" "}
+            {item.count === "due" ? "due" : "saved"}
+          </span>
+        </span>
+      )}
     </Link>
   )
 }
 
-export function BottomNavLink({ item }: { item: NavItem }) {
+export function BottomNavLink({ item, count }: CountProps) {
   const active = useIsActive(item.href)
+  const shown = countLabel(count)
   return (
     <Link
       href={item.href}
@@ -40,13 +58,19 @@ export function BottomNavLink({ item }: { item: NavItem }) {
     >
       <span
         className={cn(
-          "grid h-7 w-14 place-items-center rounded-full",
+          "relative grid h-7 w-14 place-items-center rounded-full",
           active && "bg-primary-subtle text-primary-text"
         )}
       >
         <span className="[&>svg]:size-5">{item.icon}</span>
+        {shown && (
+          <span className="absolute top-0 right-2 min-w-4 rounded-full bg-spark px-1 text-[10px] leading-4 text-primary-foreground dark:text-background">
+            {shown}
+          </span>
+        )}
       </span>
       {item.shortLabel}
+      {shown && <span className="sr-only">, {shown}</span>}
     </Link>
   )
 }

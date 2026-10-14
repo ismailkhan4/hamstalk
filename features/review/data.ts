@@ -88,3 +88,70 @@ export async function loadNotebookCounts(
     due: due.count ?? 0,
   }
 }
+
+export type ReviewOverview = {
+  due: ReviewCard[]
+  /** Words with a review behind them that were last rated "Need more practice". */
+  needsPractice: number
+  /** Every word in the learner's reviews, due or not. */
+  total: number
+  /** When the next word comes due, if none is due now. */
+  nextDue: string | null
+}
+
+export async function loadReviewOverview(
+  supabase: Supabase,
+  now = new Date()
+): Promise<ReviewOverview> {
+  const head = { count: "exact" as const, head: true }
+  const [due, total, weak, next] = await Promise.all([
+    supabase
+      .from("review_items")
+      .select(
+        "item_key, article, word, en, example_de, example_en, strength, lesson_id"
+      )
+      .lte("due_at", now.toISOString())
+      .order("due_at", { ascending: true })
+      .limit(50),
+    supabase.from("review_items").select("id", head),
+    supabase
+      .from("review_items")
+      .select("id", head)
+      .eq("strength", 1)
+      .gt("review_count", 0),
+    supabase
+      .from("review_items")
+      .select("due_at")
+      .gt("due_at", now.toISOString())
+      .order("due_at", { ascending: true })
+      .limit(1),
+  ])
+  for (const result of [due, total, weak, next]) {
+    if (isMissingTable(result.error))
+      return { due: [], needsPractice: 0, total: 0, nextDue: null }
+    if (result.error)
+      throw new Error(
+        `Could not load the review (${result.error.code ?? "unknown"})`
+      )
+  }
+  return {
+    due: z
+      .array(rowSchema)
+      .parse(due.data)
+      .map((row) => ({
+        itemKey: row.item_key,
+        article: row.article,
+        word: row.word,
+        en: row.en,
+        exampleDe: row.example_de,
+        exampleEn: row.example_en,
+        strength: row.strength,
+        lessonId: row.lesson_id,
+      })),
+    needsPractice: weak.count ?? 0,
+    total: total.count ?? 0,
+    nextDue:
+      z.array(z.object({ due_at: z.string() })).parse(next.data)[0]?.due_at ??
+      null,
+  }
+}

@@ -10,7 +10,7 @@ import { currentUnitNumber, homeLevel, nextLesson } from "@/features/path/model"
 type HomeViewProps = Pick<
   Learner,
   "name" | "firstName" | "preferences" | "progress"
-> & { email: string }
+> & { email: string; counts?: Learner["counts"] }
 
 export function HomeView({
   name,
@@ -18,6 +18,7 @@ export function HomeView({
   email,
   preferences,
   progress,
+  counts,
 }: HomeViewProps) {
   const next = nextLesson(preferences.startLevel, progress)
   const currentUnit = currentUnitNumber(preferences.startLevel, progress)
@@ -39,7 +40,7 @@ export function HomeView({
           : `Next: ${next.lesson.goal.charAt(0).toLowerCase()}${next.lesson.goal.slice(1)}.`
 
   return (
-    <AppShell name={name} email={email}>
+    <AppShell name={name} email={email} counts={counts}>
       <main
         id="main"
         className="mx-auto grid max-w-(--content-max) gap-10 px-4 py-8 sm:px-6 lg:px-10 xl:grid-cols-[minmax(0,1fr)_300px] xl:gap-12"

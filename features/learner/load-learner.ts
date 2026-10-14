@@ -8,6 +8,7 @@ import {
 } from "@/features/onboarding/data"
 import type { Preferences } from "@/features/onboarding/options"
 import { loadLessonProgress } from "@/features/path/data"
+import { loadNotebookCounts, type NotebookCounts } from "@/features/review/data"
 import type { LessonProgress } from "@/features/path/model"
 import { requireUser, type SessionUser } from "@/lib/auth/session"
 import { firstName } from "@/lib/auth/user-name"
@@ -19,6 +20,7 @@ export type Learner = {
   firstName: string
   preferences: Preferences
   progress: LessonProgress[]
+  counts: NotebookCounts
 }
 
 /**
@@ -32,10 +34,12 @@ export async function loadLearner(
   const supabase = await createClient()
   let preferences: Preferences
   let progress: LessonProgress[]
+  let counts: NotebookCounts
   try {
-    ;[preferences, progress] = await Promise.all([
+    ;[preferences, progress, counts] = await Promise.all([
       loadPreferences(supabase, user.id),
       loadLessonProgress(supabase),
+      loadNotebookCounts(supabase),
     ])
   } catch (error) {
     if (error instanceof DatabaseNotReadyError) return "database-not-ready"
@@ -50,5 +54,6 @@ export async function loadLearner(
     firstName: first,
     preferences,
     progress,
+    counts,
   }
 }
