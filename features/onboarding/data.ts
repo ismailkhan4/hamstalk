@@ -27,6 +27,7 @@ const rowSchema = z.object({
   reminder_time: z.string().nullable(),
   onboarding_step: z.enum(ONBOARDING_STEPS),
   onboarded_at: z.string().nullable(),
+  created_at: z.string(),
 })
 
 export class DatabaseNotReadyError extends Error {
@@ -54,7 +55,7 @@ export async function loadPreferences(
   const { data, error } = await supabase
     .from("learner_preferences")
     .select(
-      "goal, start_level, contexts, daily_minutes, reminder_enabled, reminder_time, onboarding_step, onboarded_at"
+      "goal, start_level, contexts, daily_minutes, reminder_enabled, reminder_time, onboarding_step, onboarded_at, created_at"
     )
     .eq("user_id", userId)
     .maybeSingle()
@@ -72,6 +73,7 @@ export async function loadPreferences(
     reminderEnabled: row.reminder_enabled,
     reminderTime: toReminderTime(row.reminder_time),
     onboardedAt: row.onboarded_at,
+    startedAt: row.created_at,
     step: row.onboarding_step,
   }
 }

@@ -193,6 +193,7 @@ export const preferencesSchema = z.object({
 
 export type Preferences = z.infer<typeof preferencesSchema> & {
   onboardedAt: string | null
+  startedAt: string | null
   step: OnboardingStep
 }
 
@@ -223,6 +224,7 @@ export const emptyPreferences: Preferences = {
   reminderEnabled: false,
   reminderTime: null,
   onboardedAt: null,
+  startedAt: null,
   step: "welcome",
 }
 
