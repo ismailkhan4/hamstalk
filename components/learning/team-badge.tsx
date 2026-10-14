@@ -11,13 +11,8 @@ type TeamBadgeProps = {
   className?: string
 }
 
-export function initialsFor(name: string) {
-  const words = name.trim().split(/\s+/).filter(Boolean)
-  return words
-    .slice(0, 2)
-    .map((word) => word[0]?.toLocaleUpperCase("de-DE"))
-    .join("")
-}
+import { initialsOf as initialsFor } from "@/features/lessons/initials"
+export { initialsFor }
 
 /**
  * The onboarding's memory: it previews the learner's name on sign-up, fills in row by row

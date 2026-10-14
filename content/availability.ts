@@ -1,5 +1,5 @@
-const AVAILABLE_LESSONS = new Set<string>([])
+import { getLesson } from "./lessons/registry"
 
 export function isLessonAvailable(lessonId: string) {
-  return AVAILABLE_LESSONS.has(lessonId)
+  return getLesson(lessonId) !== null
 }

@@ -35,7 +35,7 @@ export async function loadLearner(
   try {
     ;[preferences, progress] = await Promise.all([
       loadPreferences(supabase, user.id),
-      loadLessonProgress(),
+      loadLessonProgress(supabase),
     ])
   } catch (error) {
     if (error instanceof DatabaseNotReadyError) return "database-not-ready"

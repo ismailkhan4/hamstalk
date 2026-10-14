@@ -1,11 +1,38 @@
 import "server-only"
 
+import { z } from "zod"
+
+import { createClient } from "@/lib/supabase/server"
+
+
 import type { LessonProgress } from "./model"
 
-/**
- * Lesson progress for the signed-in learner. No lesson can be completed until the first lessons
- * ship, so nothing is stored yet; this becomes a query when lesson progress gets its table.
- */
-export async function loadLessonProgress(): Promise<LessonProgress[]> {
-  return []
+type Supabase = Awaited<ReturnType<typeof createClient>>
+
+const rowSchema = z.object({
+  lesson_id: z.string(),
+  status: z.enum(["in_progress", "completed"]),
+  step: z.number().int().min(0),
+})
+
+export async function loadLessonProgress(
+  supabase: Supabase
+): Promise<LessonProgress[]> {
+  const { data, error } = await supabase
+    .from("lesson_progress")
+    .select("lesson_id, status, step")
+  if (error) {
+    if (error.code === "PGRST205" || error.code === "42P01") return []
+    throw new Error(
+      `Could not load lesson progress (${error.code ?? "unknown"})`
+    )
+  }
+  return z
+    .array(rowSchema)
+    .parse(data)
+    .map((row) => ({
+      lessonId: row.lesson_id,
+      status: row.status,
+      step: row.step,
+    }))
 }
