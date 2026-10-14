@@ -15,11 +15,15 @@ import type { AuthAction, AuthError } from "../types"
 import { BackToSignIn } from "./back-to-sign-in"
 import { ResultStamp } from "./result-stamp"
 
+type ForgotPasswordFormProps = {
+  action: AuthAction<ForgotPasswordValues>
+  linkExpired?: boolean
+}
+
 export function ForgotPasswordForm({
   action,
-}: {
-  action: AuthAction<ForgotPasswordValues>
-}) {
+  linkExpired = false,
+}: ForgotPasswordFormProps) {
   const [sentTo, setSentTo] = useState<string | null>(null)
   const [serverError, setServerError] = useState<AuthError | null>(null)
   const {
@@ -77,6 +81,16 @@ export function ForgotPasswordForm({
         Enter the email you signed up with. We’ll send you a link to choose a
         new password.
       </p>
+      {linkExpired && !serverError && (
+        <Alert
+          tone="warning"
+          title="That reset link has expired"
+          className="mt-6"
+        >
+          Reset links work for one hour, and only the newest one counts. Send
+          yourself a new one.
+        </Alert>
+      )}
       {serverError && (
         <Alert tone="error" title={serverError.title} className="mt-6">
           {serverError.message}

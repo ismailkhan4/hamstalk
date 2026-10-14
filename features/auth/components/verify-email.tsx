@@ -5,13 +5,17 @@ import Link from "next/link"
 import { useState } from "react"
 
 import { Alert } from "@/components/feedback/alert"
+import { Field } from "@/components/forms/field"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+
+import { resendSchema } from "../schemas"
 
 import type { AuthAction, AuthError } from "../types"
 import { ResultStamp } from "./result-stamp"
 
 type VerifyEmailProps = {
-  email: string
+  email: string | null
   expired?: boolean
   resend: AuthAction<{ email: string }>
 }
@@ -23,11 +27,22 @@ export function VerifyEmail({
 }: VerifyEmailProps) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle")
   const [error, setError] = useState<AuthError | null>(null)
+  const [typedEmail, setTypedEmail] = useState("")
+  const [emailError, setEmailError] = useState<string | undefined>()
+  const address = email ?? typedEmail.trim()
 
   async function onResend() {
+    if (!email) {
+      const parsed = resendSchema.safeParse({ email: typedEmail })
+      if (!parsed.success) {
+        setEmailError(parsed.error.issues[0]?.message)
+        return
+      }
+      setEmailError(undefined)
+    }
     setStatus("sending")
     setError(null)
-    const result = await resend({ email })
+    const result = await resend({ email: address })
     if (result.ok) setStatus("sent")
     else {
       setStatus("idle")
@@ -35,7 +50,9 @@ export function VerifyEmail({
     }
   }
 
-  const changeHref = `/signup?email=${encodeURIComponent(email)}`
+  const changeHref = address
+    ? `/signup?email=${encodeURIComponent(address)}`
+    : "/signup"
   const showExpired = expired && status !== "sent"
 
   return (
@@ -69,6 +86,21 @@ export function VerifyEmail({
         <Alert tone="error" title={error.title} className="mt-6">
           {error.message}
         </Alert>
+      )}
+
+      {!email && (
+        <div className="mt-6">
+          <Field label="Email" error={emailError}>
+            <Input
+              type="email"
+              autoComplete="email"
+              inputMode="email"
+              placeholder="you@example.com"
+              value={typedEmail}
+              onChange={(event) => setTypedEmail(event.target.value)}
+            />
+          </Field>
+        </div>
       )}
 
       <div className="mt-8 border-t border-border-subtle pt-6">
