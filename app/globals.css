@@ -210,6 +210,23 @@
   --deep-line: #1d5a49;
   --deep-raise: #0f4536;
   --mint: #8ed9bc;
+  --neutral-border: var(--paper-300);
+  --person-lf: #d4e8df;
+  --person-lf-foreground: #08372b;
+  --person-jk: #dbe7fb;
+  --person-jk-foreground: #1c407d;
+  --person-ao: #eae4fb;
+  --person-ao-foreground: #452d8b;
+  --person-aw: #fbe4f4;
+  --person-aw-foreground: #7a2560;
+  --person-mb: #d6ecee;
+  --person-mb-foreground: #0f4a50;
+  --person-bk: #ece6d0;
+  --person-bk-foreground: #4f4210;
+  --person-cm: #fde7d2;
+  --person-cm-foreground: #7a3a0c;
+  --person-me: var(--coral-600);
+  --person-me-foreground: #ffffff;
   --shadow-color: 150 6% 10%;
   --highlight: inset 0 0 0 0 transparent;
 }
@@ -309,6 +326,9 @@
   --deep-line: #1f5c49;
   --deep-raise: #123329;
   --mint: var(--spruce-d300);
+  --neutral-border: var(--ink-600);
+  --person-me: var(--coral-d400);
+  --person-me-foreground: #2a0e06;
   --shadow-color: 0 0% 0%;
   --highlight: inset 0 1px 0 rgb(255 255 255 / 0.05);
 }
@@ -451,6 +471,7 @@
   --color-deep-line: var(--deep-line);
   --color-deep-raise: var(--deep-raise);
   --color-mint: var(--mint);
+  --color-neutral-border: var(--neutral-border);
 
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
   --font-sans:

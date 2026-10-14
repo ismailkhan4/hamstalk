@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils"
 
 type SymbolProps = { className?: string; title?: string }
 
-/** The Branch-K: a K drawn as a commit graph. The coral node is "you", the newest commit. */
 function LogoSymbol({ className, title }: SymbolProps) {
   return (
     <svg
@@ -36,15 +35,33 @@ function LogoSymbol({ className, title }: SymbolProps) {
 
 type LogoProps = { className?: string; symbolClassName?: string }
 
-function Logo({ className, symbolClassName }: LogoProps) {
+function Wordmark({ className }: { className?: string }) {
   return (
-    <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <LogoSymbol className={symbolClassName} />
-      <span className="font-display text-[22px] leading-none font-bold tracking-[-0.03em] text-foreground">
-        klarlingo
+    <span
+      aria-hidden="true"
+      className={cn(
+        "inline-flex items-baseline font-display text-[23px] leading-none font-[650] tracking-[-0.04em] text-foreground",
+        className
+      )}
+    >
+      klarl
+      <span className="relative inline-block">
+        ı
+        <b className="absolute top-[0.02em] left-1/2 ml-[-0.1em] size-[0.2em] rounded-full bg-spark" />
       </span>
+      ngo
     </span>
   )
 }
 
-export { Logo, LogoSymbol }
+function Logo({ className, symbolClassName }: LogoProps) {
+  return (
+    <span className={cn("inline-flex items-center gap-2.5", className)}>
+      <LogoSymbol className={symbolClassName} />
+      <Wordmark />
+      <span className="sr-only">Klarlingo</span>
+    </span>
+  )
+}
+
+export { Logo, LogoSymbol, Wordmark }
