@@ -55,7 +55,7 @@ export function OnboardingHeader({ step }: { step: OnboardingStep }) {
             </span>
           </p>
         </div>
-        <p className="ml-auto shrink-0 text-sm text-muted-foreground sm:ml-0">
+        <p className="ml-auto min-w-0 text-right text-sm text-muted-foreground sm:ml-0 sm:shrink-0">
           <span className="sm:hidden">
             {isPlan ? "All set · " : `Step ${index + 1} of 5 · `}
           </span>
