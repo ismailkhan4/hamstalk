@@ -15,7 +15,7 @@ function withCompleted(
 ): LessonProgress[] {
   return [
     ...progress.filter((entry) => entry.lessonId !== lessonId),
-    { lessonId, status: "completed", step: 0 },
+    { lessonId, status: "completed", step: 0, xp: 0 },
   ]
 }
 
@@ -25,9 +25,27 @@ export function upNextAfter(
   progress: LessonProgress[],
   lessonId: string
 ): UpNext | null {
-  const next = nextLesson(level, withCompleted(progress, lessonId))
+  const after = withCompleted(progress, lessonId)
+  const next = nextLesson(level, after)
   const current = findLesson(lessonId)
-  if (!next || !current || next.lesson.id === lessonId) return null
+    if (!current) return null
+
+  const unitDone = current.unit.lessons.every((lesson) =>
+    after.some(
+      (entry) => entry.lessonId === lesson.id && entry.status === "completed"
+    )
+  )
+  if (unitDone && current.unit.milestone) {
+    return {
+      href: `/unit-complete/${current.unit.id}`,
+      kicker: "Next",
+      title: `Your Unit ${current.unit.number} milestone`,
+      titleIsGerman: false,
+      minutes: null,
+      ctaLabel: `See your Unit ${current.unit.number} milestone`,
+    }
+  }
+  if (!next || next.lesson.id === lessonId) return null
 
   const open = isLessonAvailable(next.lesson.id)
   const sameUnit = next.unit.id === current.unit.id

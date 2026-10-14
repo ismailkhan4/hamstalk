@@ -13,6 +13,7 @@ export type LessonProgress = {
   status: "in_progress" | "completed"
   /** Index of the exercise to resume at, for lessons in progress. */
   step: number
+  xp: number
 }
 
 export type UnitStatus =

@@ -36,6 +36,11 @@ export type Unit = {
   grammar?: string
   skills?: Skill[]
   lessons: LessonMeta[]
+  milestone?: {
+    summary: string
+    canDo: string[]
+    standup: { de: string; en: string }
+  }
 }
 
 export type Level = {
@@ -94,6 +99,16 @@ const a1Units: Unit[] = [
     grammar:
       "Fixed phrases with ich: Ich bin %N. Ich heiße %N. Learned as phrases; conjugation comes in Unit 3.",
     skills: ["Listening", "Speaking", "Vocabulary"],
+    milestone: {
+      summary:
+        "You can greet people, say your name and thank someone without switching to English.",
+      canDo: [
+        "Greet people and say goodbye at the right time of day",
+        "Say your name and catch someone else’s",
+        "Thank someone, reply to thanks and say sorry",
+      ],
+      standup: { de: "Guten Morgen, zusammen!", en: "Good morning, everyone!" },
+    },
     lessons: [
       {
         id: "a1-u1-l1",

@@ -4,7 +4,6 @@ import { z } from "zod"
 
 import { createClient } from "@/lib/supabase/server"
 
-
 import type { LessonProgress } from "./model"
 
 type Supabase = Awaited<ReturnType<typeof createClient>>
@@ -13,6 +12,7 @@ const rowSchema = z.object({
   lesson_id: z.string(),
   status: z.enum(["in_progress", "completed"]),
   step: z.number().int().min(0),
+  xp: z.number().int().min(0),
 })
 
 export async function loadLessonProgress(
@@ -20,7 +20,7 @@ export async function loadLessonProgress(
 ): Promise<LessonProgress[]> {
   const { data, error } = await supabase
     .from("lesson_progress")
-    .select("lesson_id, status, step")
+    .select("lesson_id, status, step, xp")
   if (error) {
     if (error.code === "PGRST205" || error.code === "42P01") return []
     throw new Error(
@@ -34,5 +34,6 @@ export async function loadLessonProgress(
       lessonId: row.lesson_id,
       status: row.status,
       step: row.step,
+      xp: row.xp,
     }))
 }

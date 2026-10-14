@@ -9,6 +9,8 @@ import {
   match,
   mc,
 } from "../engine/fixtures"
+import { getLesson } from "@/content/lessons/registry"
+
 import { LessonRunner, type LessonActions } from "./lesson-runner"
 
 const listening = exerciseSchema.parse({
@@ -74,14 +76,21 @@ const previewLesson = lessonSchema.parse({
   exercises: [discover, tip, listening, match, mc, fill, build, conversation],
 })
 
-type PreviewProps = { failSaves?: boolean; replay?: boolean; resume?: boolean }
+type PreviewProps = {
+  failSaves?: boolean
+  replay?: boolean
+  resume?: boolean
+  lessonId?: string
+}
 
 /** Development only: the real runner with stand-in actions, so every state can be checked without an account. */
 export function LessonPreview({
   failSaves = false,
   replay = false,
   resume = false,
+  lessonId,
 }: PreviewProps) {
+  const lesson = (lessonId ? getLesson(lessonId) : null) ?? previewLesson
   const result = failSaves
     ? {
         ok: false as const,
@@ -97,8 +106,12 @@ export function LessonPreview({
   }
   return (
     <LessonRunner
-      lesson={previewLesson}
-      kicker="Unit 1 · Lesson 1"
+      lesson={lesson}
+      kicker={
+        lesson.kind === "review"
+          ? "Unit 1 · Review"
+          : `Unit 1 · ${lesson.title}`
+      }
       learner={{ firstName: "Sam", initials: "SH" }}
       initial={{
         step: resume ? 4 : 0,

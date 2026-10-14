@@ -6,6 +6,7 @@ const PROTECTED_PREFIXES = [
   "/placement",
   "/path",
   "/learn",
+  "/unit-complete",
   "/review",
   "/practice",
   "/phrasebook",
