@@ -129,6 +129,73 @@ export const standups: Standup[] = [
       },
     ],
   },
+  {
+    unitId: "a1-u3",
+    line: {
+      de: "Heute arbeite ich an einer neuen Funktion.",
+      en: "Today I’m working on a new feature.",
+    },
+    prompts: [
+      {
+        task: "Answer the check-in",
+        ask: {
+          de: "Guten Morgen, %N! Wie geht’s dir?",
+          en: "Good morning, %N! How are you?",
+        },
+        options: [
+          { de: "Gut, danke. Und dir?", en: "Fine, thanks. And you?" },
+          {
+            de: "Gut, danke. Und Ihnen?",
+            en: "Fine, thanks. And you? (formal)",
+          },
+          { de: "Ich heiße %N.", en: "My name is %N." },
+        ],
+        correct: 0,
+        right: "A teammate, so du: Und dir? Short and friendly.",
+        wrong: {
+          1: "Und Ihnen? is the Sie form, for visitors. Lena is your teammate: Und dir?",
+          2: "Ich heiße … gives your name. Lena asked how you are: Gut, danke.",
+        },
+        react: { de: "Gut, danke!", en: "Fine, thanks!" },
+        phrases: [
+          { de: "Gut, danke. Und dir?", en: "Fine, thanks. And you?" },
+          { de: "Es geht. Und dir?", en: "So-so. And you?" },
+        ],
+      },
+      {
+        task: "Say what you’re working on today",
+        options: [
+          {
+            de: "Heute arbeite ich an einer neuen Funktion.",
+            en: "Today I’m working on a new feature.",
+          },
+          {
+            de: "Heute ich arbeite an einer neuen Funktion.",
+            en: "Today I’m working on a new feature.",
+          },
+          {
+            de: "Heute bin ich an einer neuen Funktion.",
+            en: "Today I am at a new feature.",
+          },
+        ],
+        correct: 0,
+        right:
+          "Heute takes position one, so the verb arbeite comes second and ich follows it. Verb second.",
+        wrong: {
+          1: "After Heute the verb comes next, then ich: Heute arbeite ich …",
+          2: "bin says who you are. To say what you do, use arbeiten: Heute arbeite ich …",
+        },
+        react: { de: "Danke, %N!", en: "Thanks, %N!" },
+        phrases: [
+          {
+            de: "Heute arbeite ich an einer neuen Funktion.",
+            en: "Today I’m working on a new feature.",
+          },
+          { de: "Ich bin neu im Team.", en: "I’m new on the team." },
+        ],
+      },
+    ],
+  },
 ]
 
 export function getStandup(unitId: string) {

@@ -27,6 +27,7 @@ import {
 } from "../engine/session"
 import type { Lesson } from "../schema"
 import { BuildView } from "./build-view"
+import { TranslateView } from "./translate-view"
 import { ChoiceView } from "./choice-view"
 import { ConversationView } from "./conversation-view"
 import { DiscoverView } from "./discover-view"
@@ -309,6 +310,14 @@ export function LessonRunner({
       )}
       {exercise?.type === "build" && (
         <BuildView
+          key={index}
+          {...common}
+          exercise={exercise}
+          onDone={onDone}
+        />
+      )}
+      {exercise?.type === "translate" && (
+        <TranslateView
           key={index}
           {...common}
           exercise={exercise}

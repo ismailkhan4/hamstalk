@@ -360,12 +360,116 @@ const a1Units: Unit[] = [
     grammar:
       "sein and heißen: ich bin, du bist · ich heiße, du heißt. No article before jobs. First look at verb second: Heute arbeite ich …",
     skills: ["Speaking", "Listening", "Reading", "Vocabulary"],
-    lessons: lessonsPlanned("a1-u3", [
-      ["Wie heißt du?", true],
-      ["Jobs on the team", false],
-      ["Meet your team", false],
-      ["Woher kommst du?", true],
-    ]),
+        milestone: {
+      summary:
+        "You can introduce yourself with your name, your job and where you’re from, and ask a colleague the same.",
+      canDo: [
+        "Ask someone’s name with du or Sie",
+        "Say what you do and what a teammate does",
+        "Say where you’re from and which languages you speak",
+      ],
+      standup: {
+        de: "Heute arbeite ich an einer neuen Funktion.",
+        en: "Today I’m working on a new feature.",
+      },
+    },
+    lessons: [
+      {
+        id: "a1-u3-l1",
+        title: "Wie heißt du?",
+        titleIsGerman: true,
+        goal: "Ask someone’s name and give yours, with du and with Sie",
+        minutes: 7,
+        exercises: 8,
+        kind: "lesson",
+        mission: {
+          description:
+            "Wie heißt du? and Wie heißen Sie? in eight short exercises: three people ask your name on day one.",
+          quote: {
+            person: "cm",
+            initials: "CM",
+            de: "Hallo! Wie heißt du?",
+            en: "Clara at the coffee machine.",
+          },
+        },
+      },
+      {
+        id: "a1-u3-l2",
+        title: "Jobs on the team",
+        titleIsGerman: false,
+        goal: "Say what you do, and say what a teammate does",
+        minutes: 7,
+        exercises: 8,
+        kind: "lesson",
+        mission: {
+          description:
+            "Ich bin … and Er ist … in eight short exercises: who does what on the team.",
+          quote: {
+            person: "lf",
+            initials: "LF",
+            de: "Ich bin Teamleiterin.",
+            en: "Lena, at the kick-off.",
+          },
+        },
+      },
+      {
+        id: "a1-u3-l3",
+        title: "Meet your team",
+        titleIsGerman: false,
+        goal: "Introduce yourself, say what you do and say where you are from",
+        minutes: 7,
+        exercises: 8,
+        kind: "lesson",
+        mission: {
+          description:
+            "Introduce yourself the way Anna does: your name, your job and what you’re working on today, in eight short exercises.",
+          quote: {
+            person: "aw",
+            initials: "AW",
+            de: "Hallo! Ich heiße Anna. Ich bin Softwareentwicklerin.",
+            en: "Anna, on her first day.",
+          },
+        },
+      },
+      {
+        id: "a1-u3-l4",
+        title: "Woher kommst du?",
+        titleIsGerman: true,
+        goal: "Ask where someone is from, say where you’re from and talk about the languages you speak",
+        minutes: 10,
+        exercises: 10,
+        kind: "lesson",
+        mission: {
+          description:
+            "Woher kommst du?, sprechen and lernen in ten short exercises, ending with a conversation with Clara from the design team.",
+          quote: {
+            person: "cm",
+            initials: "CM",
+            de: "Hallo! Ich bin Clara, ich bin neu im Team.",
+            en: "Clara Martin starts in the design team today.",
+          },
+        },
+      },
+      {
+        id: "a1-u3-review",
+        title: "Unit review",
+        titleIsGerman: false,
+        goal: "Introduce yourself to the whole team: name, job, where you’re from and what you speak",
+        minutes: 8,
+        exercises: 8,
+        kind: "review",
+        mission: {
+          description:
+            "Eight exercises that bring back Lessons 1 to 4 at your first team meeting. Nothing new; it shows what to practise next.",
+          quote: {
+            person: "lf",
+            initials: "LF",
+            de: "Willkommen im Team!",
+            en: "Lena, at your first team meeting.",
+          },
+        },
+      },
+    ],
   },
   {
     id: "a1-u4",

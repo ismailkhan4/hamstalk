@@ -4,6 +4,7 @@ import type {
   ConversationExercise,
   ConversationTurn,
   MatchExercise,
+  TranslateExercise,
 } from "../schema"
 import { buildText, choiceNote, gradeMatch, type Assignments } from "./grading"
 
@@ -107,5 +108,21 @@ export function turnMistake(
     learnerAnswer: turn.options[selection]?.de ?? "",
     correctAnswer: turn.options[turn.correct]?.de ?? "",
     reason: choiceNote(turn, selection),
+  })
+}
+
+export function translateMistake(
+  lessonId: string,
+  index: number,
+  exercise: TranslateExercise,
+  answer: string
+) {
+  return finish({
+    itemKey: `${lessonId}:${index}`,
+    topic: exercise.topic ?? null,
+    prompt: `${exercise.prompt} „${exercise.source}“`,
+    learnerAnswer: answer.trim(),
+    correctAnswer: exercise.accept[0] ?? "",
+    reason: exercise.feedback.wrong,
   })
 }

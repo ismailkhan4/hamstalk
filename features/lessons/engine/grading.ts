@@ -3,6 +3,7 @@ import type {
   ChoiceExercise,
   ConversationTurn,
   MatchExercise,
+  TranslateExercise,
 } from "../schema"
 import type { Verdict } from "./attempt"
 
@@ -81,4 +82,36 @@ export function gradeBuild(exercise: BuildExercise, placed: number[]): Verdict {
 
 export function buildText(exercise: BuildExercise, tiles: number[]) {
   return tiles.map((index) => exercise.tiles[index]).join(" ")
+}
+
+const CONTRACTIONS: [RegExp, string][] = [
+  [/\bi'm\b/g, "i am"],
+  [/\bit's\b/g, "it is"],
+  [/\b(he|she)'s\b/g, "$1 is"],
+  [/\b(you|we|they)'re\b/g, "$1 are"],
+  [/\bthat's\b/g, "that is"],
+  [/\bwhat's\b/g, "what is"],
+  [/\bdon't\b/g, "do not"],
+]
+
+/** Lower case, straight apostrophes, contractions written out, punctuation and extra spaces dropped. */
+export function normaliseAnswer(text: string) {
+  let value = text.toLocaleLowerCase("en").replaceAll("’", "'").trim()
+  for (const [pattern, replacement] of CONTRACTIONS)
+    value = value.replace(pattern, replacement)
+  return value
+    .replace(/[^\p{L}\p{N}\s]/gu, "")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+export function gradeTranslate(
+  exercise: TranslateExercise,
+  answer: string
+): Verdict {
+  const given = normaliseAnswer(answer)
+  if (!given) return "wrong"
+  return exercise.accept.some((option) => normaliseAnswer(option) === given)
+    ? "correct"
+    : "wrong"
 }

@@ -10,6 +10,11 @@ import { lesson2 as u2lesson2 } from "./a1-u2-l2"
 import { lesson3 as u2lesson3 } from "./a1-u2-l3"
 import { lesson4 as u2lesson4 } from "./a1-u2-l4"
 import { review as u2review } from "./a1-u2-review"
+import { lesson1 as u3lesson1 } from "./a1-u3-l1"
+import { lesson2 as u3lesson2 } from "./a1-u3-l2"
+import { lesson3 as u3lesson3 } from "./a1-u3-l3"
+import { lesson4 as u3lesson4 } from "./a1-u3-l4"
+import { review as u3review } from "./a1-u3-review"
 
 export const lessons: Lesson[] = [
   lesson1,
@@ -22,6 +27,11 @@ export const lessons: Lesson[] = [
   u2lesson3,
   u2lesson4,
   u2review,
+  u3lesson1,
+  u3lesson2,
+  u3lesson3,
+  u3lesson4,
+  u3review,
 ]
 
 export function getLesson(lessonId: string) {

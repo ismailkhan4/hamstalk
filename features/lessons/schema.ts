@@ -177,6 +177,17 @@ export const buildExercise = z
     }
   })
 
+export const translateExercise = z.object({
+  type: z.literal("translate"),
+  kind: z.string(),
+  prompt: z.string(),
+  source: z.string().min(1),
+  accept: z.array(z.string().min(1)).min(1),
+  feedback: z.object({ right: z.string(), wrong: z.string() }),
+  topic: z.string().optional(),
+  revisits: z.number().int().min(0).optional(),
+})
+
 const turn = z
   .object({
     speaker: voice,
@@ -210,6 +221,7 @@ export const exerciseSchema = z.discriminatedUnion("type", [
   choiceExercise,
   matchExercise,
   buildExercise,
+  translateExercise,
   conversationExercise,
 ])
 
@@ -255,11 +267,16 @@ export type MatchExercise = z.infer<typeof matchExercise>
 export type BuildExercise = z.infer<typeof buildExercise>
 export type ConversationExercise = z.infer<typeof conversationExercise>
 export type ConversationTurn = z.infer<typeof turn>
+export type TranslateExercise = z.infer<typeof translateExercise>
 export type Exercise = z.infer<typeof exerciseSchema>
 export type Lesson = z.infer<typeof lessonSchema>
 export type VocabularyEntry = z.infer<typeof vocabularyEntry>
 export type GradedExercise =
-  ChoiceExercise | MatchExercise | BuildExercise | ConversationExercise
+  | ChoiceExercise
+  | MatchExercise
+  | BuildExercise
+  | ConversationExercise
+  | TranslateExercise
 
 export function isGraded(exercise: Exercise): exercise is GradedExercise {
   return exercise.type !== "discover" && exercise.type !== "tip"

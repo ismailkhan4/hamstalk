@@ -4,6 +4,7 @@ import {
   type Lesson,
   type MatchExercise,
   type BuildExercise,
+  type TranslateExercise,
   type ConversationExercise,
 } from "../schema"
 
@@ -26,6 +27,24 @@ export const mc: ChoiceExercise = {
     },
   },
   topic: "Greetings",
+}
+
+export const translate: TranslateExercise = {
+  type: "translate",
+  kind: "Translate",
+  prompt: "What does this sentence mean?",
+  source: "Ich bin neu im Team.",
+  accept: [
+    "I am new on the team",
+    "I am new to the team",
+    "I am new in the team",
+  ],
+  feedback: {
+    right: "neu means new and im Team means on the team.",
+    wrong:
+      "neu means new and im Team means on the team. Try: I’m new on the team.",
+  },
+  topic: "Team",
 }
 
 export const fill: ChoiceExercise = {
