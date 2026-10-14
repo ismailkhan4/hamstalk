@@ -41,6 +41,7 @@ type AnswerOptionProps = {
   onSelect?: () => void
   children: React.ReactNode
   translation?: string
+  keyLabel?: string
 }
 
 /** One choice in a radiogroup. Every state pairs colour with a border change, an icon and a word. */
@@ -52,8 +53,9 @@ function AnswerOption({
   onSelect,
   children,
   translation,
+  keyLabel,
 }: AnswerOptionProps) {
-  const key = String.fromCharCode(65 + index)
+  const key = keyLabel ?? String.fromCharCode(65 + index)
   const label = statusLabel[state]
   const isPositive = positive.has(state)
   const isNegative = negative.has(state)

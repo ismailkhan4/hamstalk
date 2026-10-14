@@ -1,16 +1,34 @@
 import { LogOut } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
 import { Logo } from "@/components/brand/logo"
 import { Button } from "@/components/ui/button"
 import { signOutAction } from "@/features/auth/actions"
-import { firstName, requireUser } from "@/lib/auth/session"
+import {
+  DatabaseNotReadyError,
+  loadPreferences,
+} from "@/features/onboarding/data"
+import { DatabaseNotReady } from "@/features/onboarding/database-not-ready"
+import { requireUser } from "@/lib/auth/session"
+import { firstName } from "@/lib/auth/user-name"
+import { createClient } from "@/lib/supabase/server"
+
 
 export const metadata: Metadata = { title: "Home" }
 
 export default async function HomePage() {
   const user = await requireUser("/home")
+  const supabase = await createClient()
+  let preferences
+  try {
+    preferences = await loadPreferences(supabase, user.id)
+  } catch (error) {
+    if (error instanceof DatabaseNotReadyError) return <DatabaseNotReady />
+    throw error
+  }
+  if (!preferences.onboardedAt) redirect(`/onboarding/${preferences.step}`)
 
   return (
     <div className="flex min-h-svh flex-col bg-deep px-[clamp(20px,5vw,112px)] py-6 text-deep-foreground">
