@@ -2,6 +2,7 @@ import { Menu, X } from "lucide-react"
 import Link from "next/link"
 
 import { Logo } from "@/components/brand/logo"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { buttonVariants } from "@/components/ui/button-variants"
 import { cn } from "@/lib/utils"
 
@@ -23,6 +24,7 @@ export function LandingHeader() {
           ))}
         </nav>
         <div className={cn(styles.navcta, "flex items-center gap-2")}>
+          <ThemeToggle />
           <Link
             href="/signin"
             className={buttonVariants({ variant: "ghost", size: "md" })}
@@ -33,6 +35,7 @@ export function LandingHeader() {
             Get started
           </Link>
         </div>
+        <ThemeToggle className={styles.mtheme} />
         <details className={styles.mnav}>
           <summary aria-label="Menu">
             <Menu aria-hidden="true" className={cn(styles.icon, styles.bars)} />

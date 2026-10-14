@@ -2,6 +2,7 @@ import { Bell, Search } from "lucide-react"
 import Link from "next/link"
 
 import { Logo } from "@/components/brand/logo"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { initialsFor } from "@/components/learning/team-badge"
 
 import type { NotebookCounts } from "@/features/review/data"
@@ -82,8 +83,9 @@ export function AppShell({ name, email, counts, children }: AppShellProps) {
             />
           ))}
         </nav>
-        <div className="mt-auto">
+        <div className="mt-auto flex items-center justify-between gap-2">
           <ProfileMenu name={name} email={email} initials={initials} />
+          <ThemeToggle className="shrink-0" />
         </div>
       </aside>
 
@@ -92,6 +94,7 @@ export function AppShell({ name, email, counts, children }: AppShellProps) {
           <Logo symbolClassName="size-[30px]" />
         </Link>
         <div className="flex items-center gap-1">
+          <ThemeToggle />
           <Link
             href="/notifications"
             aria-label="Notifications"
