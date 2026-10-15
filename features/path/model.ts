@@ -1,11 +1,11 @@
-import { isLessonAvailable } from "@/content/availability"
+import { isLessonAvailable } from "@/content/courses/de/availability"
 import {
   getLevel,
   levels,
   type CefrLevel,
   type LessonMeta,
   type Unit,
-} from "@/content/curriculum"
+} from "@/content/courses/de/curriculum"
 import type { StartLevel } from "@/features/onboarding/options"
 
 export type LessonProgress = {

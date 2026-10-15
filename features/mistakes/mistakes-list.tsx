@@ -6,9 +6,11 @@ import { useState } from "react"
 
 import { AnswerOption } from "@/components/exercises/answer-option"
 import { EmptyState } from "@/components/feedback/empty-state"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button-variants"
+import { ACTIVE_COURSE, TARGET_LANG } from "@/content/courses"
+import { optionOrder } from "@/features/lessons/engine/shuffle"
 import { cn } from "@/lib/utils"
 
 import type { Mistake } from "./data"
@@ -57,9 +59,9 @@ function Card({
             : `Missed ${mistake.missCount} times`}
         </span>
       </p>
-      <GermanText as="p" className="mt-2 text-2xl leading-snug">
+      <TargetText as="p" className="mt-2 text-2xl leading-snug">
         {mistake.prompt}
-      </GermanText>
+      </TargetText>
       <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[0.9375rem]">
         <dt className="text-muted-foreground">You answered</dt>
         <dd className="text-danger-text line-through decoration-1">
@@ -109,7 +111,7 @@ function Card({
                 Try it again:
               </p>
               {mistake.retry?.fill && (
-                <p lang="de" className="mt-2 font-voice text-xl">
+                <p lang={TARGET_LANG} className="mt-2 font-voice text-xl">
                   {mistake.retry.fill.before} … {mistake.retry.fill.after}
                 </p>
               )}
@@ -118,19 +120,26 @@ function Card({
                 aria-label="Answers"
                 className="mt-3 flex flex-col gap-2"
               >
-                {mistake.retry?.options.map((option, i) => (
-                  <AnswerOption
-                    key={option.de}
-                    index={i}
-                    lang={mistake.retry?.optionsLanguage ?? "en"}
-                    {...(option.en ? { translation: option.en } : {})}
-                    state="idle"
-                    locked={state.pending}
-                    onSelect={() => onPick(i)}
-                  >
-                    {option.de}
-                  </AnswerOption>
-                ))}
+                {(mistake.retry
+                  ? optionOrder(mistake.retry.options.length, mistake.itemKey)
+                  : []
+                ).map((i, position) => {
+                  const option = mistake.retry?.options[i]
+                  if (!option) return null
+                  return (
+                    <AnswerOption
+                      key={option.target}
+                      index={position}
+                      language={mistake.retry?.optionsLanguage ?? "native"}
+                      {...(option.native ? { translation: option.native } : {})}
+                      state="idle"
+                      locked={state.pending}
+                      onSelect={() => onPick(i)}
+                    >
+                      {option.target}
+                    </AnswerOption>
+                  )
+                })}
               </div>
               <p
                 role="status"
@@ -144,7 +153,7 @@ function Card({
               >
                 {state.error ??
                   (state.result
-                    ? `${state.result.correct ? "Richtig! " : "Not quite. "}${state.result.note}`
+                    ? `${state.result.correct ? `${ACTIVE_COURSE.phrases.right[0]} ` : "Not quite. "}${state.result.note}`
                     : "")}
               </p>
             </div>

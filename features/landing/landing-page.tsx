@@ -1,33 +1,28 @@
+import { BuddySection } from "./buddy-section"
 import { ClosingSection } from "./closing-section"
 import { FaqSection } from "./faq-section"
-import { FeaturesSection } from "./features-section"
-import { HowSection } from "./how-section"
+import { GrowthSection } from "./growth-section"
 import { Hero } from "./hero"
-import { JourneySection } from "./journey-section"
-import styles from "./landing.module.css"
 import { LandingFooter } from "./landing-footer"
 import { LandingHeader } from "./landing-header"
-import { OpenSourceSection } from "./open-source-section"
-import { PhrasebookSection } from "./phrasebook-section"
-import { TeamSection } from "./team-section"
-import { WhySection } from "./why-section"
+import { WeekStory } from "./week-story"
 
+/** One story, top to bottom: Monday morning, the week, the weeks after, your buddy, the invite. */
 export function LandingPage() {
   return (
-    <div className={styles.root}>
-      <a className={styles.skip} href="#main">
+    <div className="min-h-svh bg-background text-foreground">
+      <a
+        href="#main"
+        className="sr-only z-(--z-toast) rounded-md bg-card px-3 py-2 shadow-lg focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+      >
         Skip to content
       </a>
       <LandingHeader />
       <main id="main">
         <Hero />
-        <WhySection />
-        <HowSection />
-        <TeamSection />
-        <JourneySection />
-        <FeaturesSection />
-        <PhrasebookSection />
-        <OpenSourceSection />
+        <WeekStory />
+        <GrowthSection />
+        <BuddySection />
         <FaqSection />
         <ClosingSection />
       </main>

@@ -1,6 +1,6 @@
-import { levels } from "@/content/curriculum"
-import { isLessonAvailable } from "@/content/availability"
-import { lessons } from "@/content/lessons/registry"
+import { levels } from "@/content/courses/de/curriculum"
+import { isLessonAvailable } from "@/content/courses/de/availability"
+import { lessons } from "@/content/courses/de/lessons/registry"
 import { matchesQuery, type Phrase } from "@/features/phrasebook/search"
 
 export const MAX_QUERY_LENGTH = 80
@@ -8,7 +8,7 @@ export const MAX_QUERY_LENGTH = 80
 export type LessonHit = {
   id: string
   title: string
-  titleIsGerman: boolean
+  titleInTarget: boolean
   detail: string
   href: string
   available: boolean
@@ -17,11 +17,16 @@ export type WordHit = {
   key: string
   article: "der" | "die" | "das" | null
   word: string
-  en: string
+  native: string
   detail: string
   href: string
 }
-export type PhraseHit = { key: string; de: string; en: string; detail: string }
+export type PhraseHit = {
+  key: string
+  target: string
+  native: string
+  detail: string
+}
 
 export type SearchResults = {
   lessons: LessonHit[]
@@ -60,7 +65,7 @@ export function searchAll(
           {
             id: lesson.id,
             title: lesson.title,
-            titleIsGerman: lesson.kind === "lesson" && lesson.titleIsGerman,
+            titleInTarget: lesson.kind === "lesson" && lesson.titleInTarget,
             detail: `Unit ${unit.number} · ${unit.title}${available ? "" : " · planned"}`,
             href: available ? `/learn/${lesson.id}` : `/path?unit=${unit.id}`,
             available,
@@ -74,7 +79,12 @@ export function searchAll(
     lesson.vocabulary.flatMap((entry) => {
       const key = `${entry.article ?? ""} ${entry.word}`
       if (seen.has(key)) return []
-      if (!matchesQuery(`${entry.word} ${entry.en} ${entry.example.de}`, query))
+      if (
+        !matchesQuery(
+          `${entry.word} ${entry.native} ${entry.example.target}`,
+          query
+        )
+      )
         return []
       seen.add(key)
       return [
@@ -82,8 +92,8 @@ export function searchAll(
           key: `${lesson.id}:${entry.word}`,
           article: entry.article ?? null,
           word: entry.word,
-          en: entry.en,
-          detail: `${entry.en} · from “${lesson.title}”`,
+          native: entry.native,
+          detail: `${entry.native} · from “${lesson.title}”`,
           href: `/learn/${lesson.id}`,
         },
       ]
@@ -93,14 +103,14 @@ export function searchAll(
   const phraseHits = savedPhrases
     .filter((phrase) =>
       matchesQuery(
-        `${phrase.de} ${phrase.en} ${phrase.example?.de ?? ""}`,
+        `${phrase.target} ${phrase.native} ${phrase.example?.target ?? ""}`,
         query
       )
     )
     .map((phrase) => ({
       key: phrase.key,
-      de: phrase.de,
-      en: phrase.en,
+      target: phrase.target,
+      native: phrase.native,
       detail: `Phrasebook · ${phrase.topic}`,
     }))
 

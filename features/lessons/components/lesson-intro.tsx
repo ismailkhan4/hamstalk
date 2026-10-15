@@ -1,5 +1,6 @@
+import { TARGET_LANG } from "@/content/courses"
 import { Avatar } from "@/components/learning/avatar"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
 
 import { personalise, type Lesson } from "../schema"
@@ -37,9 +38,9 @@ export function LessonIntro({
           {kicker}
         </p>
         <h1
-          lang={lesson.titleIsGerman ? "de" : undefined}
+          lang={lesson.titleInTarget ? TARGET_LANG : undefined}
           className={
-            lesson.titleIsGerman
+            lesson.titleInTarget
               ? "mt-2 font-voice text-[clamp(40px,6vw,56px)] leading-tight"
               : "mt-2 font-display text-h1 font-bold"
           }
@@ -58,11 +59,11 @@ export function LessonIntro({
             size="xl"
           />
           <div>
-            <GermanText as="p" className="text-2xl">
-              {personalise(lesson.intro.de, learner)}
-            </GermanText>
+            <TargetText as="p" className="text-2xl">
+              {personalise(lesson.intro.target, learner)}
+            </TargetText>
             <p className="mt-1 text-[0.9375rem] text-muted-foreground">
-              {personalise(lesson.intro.en, learner)}
+              {personalise(lesson.intro.native, learner)}
             </p>
           </div>
         </div>
@@ -99,7 +100,7 @@ export function LessonIntro({
               key={phrase}
               className="rounded-lg bg-card px-3 py-1.5 shadow-[inset_0_0_0_1px_var(--border)]"
             >
-              <GermanText className="text-lg">{phrase}</GermanText>
+              <TargetText className="text-lg">{phrase}</TargetText>
             </li>
           ))}
         </ul>

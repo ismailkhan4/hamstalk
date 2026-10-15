@@ -5,7 +5,7 @@ import { notFound } from "next/navigation"
 
 import { EmptyState } from "@/components/feedback/empty-state"
 import { buttonVariants } from "@/components/ui/button-variants"
-import { findLesson } from "@/content/curriculum"
+import { findLesson } from "@/content/courses/de/curriculum"
 import { loadLearner } from "@/features/learner/load-learner"
 import { LessonRunner } from "@/features/lessons/components/lesson-runner"
 import { loadLessonState } from "@/features/lessons/data"

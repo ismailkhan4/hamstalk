@@ -1,6 +1,8 @@
+import { ACTIVE_COURSE } from "@/content/courses"
+
 export function fold(text: string) {
   return text
-    .toLocaleLowerCase("de-DE")
+    .toLocaleLowerCase(ACTIVE_COURSE.locale)
     .replaceAll("ß", "ss")
     .normalize("NFD")
     .replace(/\p{M}/gu, "")
@@ -12,7 +14,7 @@ function withUmlauts(query: string) {
 }
 
 export function matchesQuery(text: string, query: string) {
-  const needle = query.trim().toLocaleLowerCase("de-DE")
+  const needle = query.trim().toLocaleLowerCase(ACTIVE_COURSE.locale)
   if (!needle) return true
   const haystack = fold(text)
   return (
@@ -23,10 +25,10 @@ export function matchesQuery(text: string, query: string) {
 
 export type Phrase = {
   key: string
-  de: string
-  en: string
+  target: string
+  native: string
   article: "der" | "die" | "das" | null
-  example: { de: string; en: string } | null
+  example: { target: string; native: string } | null
   topic: string
   lessonId: string
   savedAt: string
@@ -41,7 +43,7 @@ export function filterPhrases(
     (phrase) =>
       (topic === null || phrase.topic === topic) &&
       matchesQuery(
-        `${phrase.de} ${phrase.en} ${phrase.example?.de ?? ""} ${phrase.example?.en ?? ""}`,
+        `${phrase.target} ${phrase.native} ${phrase.example?.target ?? ""} ${phrase.example?.native ?? ""}`,
         query
       )
   )

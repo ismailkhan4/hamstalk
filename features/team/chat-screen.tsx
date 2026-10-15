@@ -4,12 +4,13 @@ import { ArrowLeft, Check, Languages, X } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
+import { TARGET_LANG } from "@/content/courses"
 import { AnswerOption } from "@/components/exercises/answer-option"
 import { AppShell } from "@/components/layout/app-shell"
 import { Avatar } from "@/components/learning/avatar"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
-import { chat } from "@/content/team-tasks"
+import { chat } from "@/content/courses/de/team-tasks"
 import { ListenButton } from "@/features/lessons/components/listen-button"
 import type { NotebookCounts } from "@/features/review/data"
 import { cn } from "@/lib/utils"
@@ -29,7 +30,7 @@ export function ChatScreen({ shell, firstName }: Props) {
   const [draft, setDraft] = useState("")
   const [compared, setCompared] = useState(false)
 
-  const message = personalise(chat.message.de, firstName)
+  const message = personalise(chat.message.target, firstName)
   const chosen = picked === null ? null : chat.replies[picked]
   const right = chosen?.correct === true
 
@@ -81,12 +82,12 @@ export function ChatScreen({ shell, firstName }: Props) {
                 <span className="text-muted-foreground">{chat.from.time}</span>
               </p>
               <div className="mt-1 rounded-2xl rounded-tl-sm border border-border bg-card p-4">
-                <GermanText as="p" className="text-xl leading-relaxed">
+                <TargetText as="p" className="text-xl leading-relaxed">
                   {message}
-                </GermanText>
+                </TargetText>
                 {translation && (
                   <p className="mt-3 border-t border-dashed border-border pt-3 text-secondary-text">
-                    {personalise(chat.message.en, firstName)}
+                    {personalise(chat.message.native, firstName)}
                   </p>
                 )}
               </div>
@@ -111,8 +112,8 @@ export function ChatScreen({ shell, firstName }: Props) {
                     key={chip.word}
                     className="rounded-lg bg-inset px-3 py-1.5 text-sm"
                   >
-                    <GermanText className="text-base">{chip.word}</GermanText>{" "}
-                    <span className="text-muted-foreground">{chip.en}</span>
+                    <TargetText className="text-base">{chip.word}</TargetText>{" "}
+                    <span className="text-muted-foreground">{chip.native}</span>
                   </li>
                 ))}
               </ul>
@@ -146,10 +147,10 @@ export function ChatScreen({ shell, firstName }: Props) {
                 >
                   {chat.replies.map((reply, i) => (
                     <AnswerOption
-                      key={reply.de}
+                      key={reply.target}
                       index={i}
-                      lang="de"
-                      translation={reply.en}
+                      language="target"
+                      translation={reply.native}
                       locked={checked && right}
                       state={
                         checked && picked === i
@@ -165,7 +166,7 @@ export function ChatScreen({ shell, firstName }: Props) {
                         setChecked(false)
                       }}
                     >
-                      {reply.de}
+                      {reply.target}
                     </AnswerOption>
                   ))}
                 </div>
@@ -237,7 +238,7 @@ export function ChatScreen({ shell, firstName }: Props) {
                 </label>
                 <textarea
                   id="own-reply"
-                  lang="de"
+                  lang={TARGET_LANG}
                   rows={3}
                   value={draft}
                   onChange={(event) => setDraft(event.target.value)}
@@ -258,7 +259,7 @@ export function ChatScreen({ shell, firstName }: Props) {
                     <ul className="mt-2 space-y-1">
                       {chat.modelReplies.map((reply) => (
                         <li key={reply}>
-                          <GermanText className="text-lg">{reply}</GermanText>
+                          <TargetText className="text-lg">{reply}</TargetText>
                         </li>
                       ))}
                     </ul>
@@ -272,7 +273,7 @@ export function ChatScreen({ shell, firstName }: Props) {
                           <span>
                             {item.text}{" "}
                             {item.example && (
-                              <GermanText>{item.example}</GermanText>
+                              <TargetText>{item.example}</TargetText>
                             )}
                           </span>
                         </li>

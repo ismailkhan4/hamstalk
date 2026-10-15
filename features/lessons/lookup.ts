@@ -1,4 +1,4 @@
-import { getLesson } from "@/content/lessons/registry"
+import { getLesson } from "@/content/courses/de/lessons/registry"
 
 import { gradeChoice } from "./engine/grading"
 import type { ChoiceExercise, ConversationTurn, Lesson } from "./schema"
@@ -16,8 +16,8 @@ export function parseItemKey(itemKey: string) {
 
 export type RetryQuestion = {
   prompt: string
-  options: { de: string; en?: string }[]
-  optionsLanguage: "de" | "en"
+  options: { target: string; native?: string }[]
+  optionsLanguage: "target" | "native"
   /** A fill-in sentence, with the blank. */
   fill?: { before: string; after: string }
   item: Pick<
@@ -42,7 +42,7 @@ export function retryQuestion(itemKey: string): RetryQuestion | null {
       prompt: exercise.listening
         ? `${exercise.prompt} (“${exercise.listening.clip}”)`
         : exercise.prompt,
-      options: exercise.options.map((de) => ({ de })),
+      options: exercise.options.map((target) => ({ target })),
       optionsLanguage: exercise.optionsLanguage,
       ...(exercise.fill ? { fill: exercise.fill } : {}),
       item: exercise,
@@ -54,7 +54,7 @@ export function retryQuestion(itemKey: string): RetryQuestion | null {
     return {
       prompt: `${turn.speaker.label}: „${turn.line}“ — ${turn.task}`,
       options: turn.options,
-      optionsLanguage: "de",
+      optionsLanguage: "target",
       item: turn,
     }
   }

@@ -11,7 +11,7 @@ export type ActivityEntry = {
   id: string
   at: string
   title: string
-  titleIsGerman: boolean
+  titleInTarget: boolean
   detail: string
   status: "in_progress" | "completed"
   href: string

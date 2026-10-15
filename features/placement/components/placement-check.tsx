@@ -8,7 +8,7 @@ import { useState, useTransition } from "react"
 import { AnswerOption } from "@/components/exercises/answer-option"
 import { Alert } from "@/components/feedback/alert"
 import { FocusHeader } from "@/components/learning/focus-header"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button-variants"
 import {
@@ -34,6 +34,7 @@ import {
   type PlacementLevel,
 } from "../scoring"
 import { ListeningPlayer } from "./listening-player"
+import { optionOrder } from "@/features/lessons/engine/shuffle"
 
 const TOTAL = placementQuestions.length
 
@@ -359,26 +360,26 @@ export function PlacementCheck({
           {question.prompt}
         </h1>
         {question.german && (
-          <GermanText as="p" className="mt-4 text-2xl">
+          <TargetText as="p" className="mt-4 text-2xl">
             {question.german}
-          </GermanText>
+          </TargetText>
         )}
         {question.sign && (
-          <GermanText
+          <TargetText
             as="p"
             className="mt-5 w-fit rounded-xl border-2 border-foreground bg-card px-8 py-4 text-center text-xl font-semibold whitespace-pre-line"
           >
             {question.sign}
-          </GermanText>
+          </TargetText>
         )}
         {question.mail && (
           <div className="mt-5 rounded-xl border border-border bg-card p-4">
             <p className="text-sm text-muted-foreground">
               {question.mail.from}
             </p>
-            <GermanText as="p" className="mt-2 text-lg">
+            <TargetText as="p" className="mt-2 text-lg">
               {question.mail.text}
-            </GermanText>
+            </TargetText>
           </div>
         )}
         {question.listening && (
@@ -401,21 +402,26 @@ export function PlacementCheck({
           aria-label="Answers"
           className="mt-6 flex flex-col gap-3"
         >
-          {options.map((option, optionIndex) => {
-            const isIdk = optionIndex === IDK
-            return (
-              <AnswerOption
-                key={option}
-                index={optionIndex}
-                keyLabel={isIdk ? "?" : undefined}
-                lang={question.germanOptions && !isIdk ? "de" : "en"}
-                state={selected === optionIndex ? "selected" : "idle"}
-                onSelect={() => choose(optionIndex)}
-              >
-                {option}
-              </AnswerOption>
-            )
-          })}
+          {[...optionOrder(IDK, `placement:${index}`), IDK].map(
+            (optionIndex, position) => {
+              const option = options[optionIndex] ?? ""
+              const isIdk = optionIndex === IDK
+              return (
+                <AnswerOption
+                  key={option}
+                  index={position}
+                  keyLabel={isIdk ? "?" : undefined}
+                  language={
+                    question.optionsInTarget && !isIdk ? "target" : "native"
+                  }
+                  state={selected === optionIndex ? "selected" : "idle"}
+                  onSelect={() => choose(optionIndex)}
+                >
+                  {option}
+                </AnswerOption>
+              )
+            }
+          )}
         </div>
         {error && (
           <Alert tone="error" title="Not saved yet" className="mt-6">

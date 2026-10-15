@@ -3,7 +3,12 @@ import Link from "next/link"
 
 import { cn } from "@/lib/utils"
 import { AppShell } from "@/components/layout/app-shell"
-import { getLevel, getUnit, levels, type CefrLevel } from "@/content/curriculum"
+import {
+  getLevel,
+  getUnit,
+  levels,
+  type CefrLevel,
+} from "@/content/courses/de/curriculum"
 import type { Learner } from "@/features/learner/load-learner"
 import { LevelTabs } from "./level-tabs"
 import { PathList } from "./path-list"

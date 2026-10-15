@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 
+import { TARGET_LANG } from "@/content/courses"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -66,7 +67,7 @@ export function BuildView({
         <div
           aria-label="Your sentence"
           className={cn(
-            "mt-8 flex min-h-20 flex-wrap items-center gap-2 rounded-xl border-[1.5px] border-dashed border-input p-3",
+            "mt-8 flex min-h-20 flex-wrap items-center gap-2 rounded-2xl border-2 border-dashed border-input p-3",
             slotState === "ok" &&
               "border-solid border-success bg-success-subtle",
             slotState === "bad" && "border-solid border-danger bg-danger-subtle"
@@ -84,9 +85,9 @@ export function BuildView({
               disabled={!answering}
               onClick={() => setPlaced(placed.filter((value) => value !== i))}
               aria-label={`${tile(i)}, word ${position + 1}${answering ? ". Press to remove." : ""}`}
-              className="min-h-12 rounded-lg border-[1.5px] border-primary bg-primary-subtle px-4 font-voice text-[1.3125rem]"
+              className="min-h-12 rounded-xl border-2 border-selected-border bg-selected px-4 font-voice text-[1.3125rem] font-semibold text-selected-text transition-transform duration-(--duration-instant) active:scale-[0.97] motion-safe:animate-bump"
             >
-              <span lang="de">{tile(i)}</span>
+              <span lang={TARGET_LANG}>{tile(i)}</span>
             </button>
           ))}
         </div>
@@ -98,9 +99,9 @@ export function BuildView({
                 type="button"
                 disabled={!answering}
                 onClick={() => setPlaced([...placed, i])}
-                className="min-h-12 rounded-lg border-[1.5px] border-border bg-card px-4 font-voice text-[1.3125rem] hover:border-input disabled:opacity-60"
+                className="min-h-12 rounded-xl border-2 border-border bg-card px-4 font-voice text-[1.3125rem] font-semibold transition-[transform,background-color,border-color] duration-(--duration-instant) hover:border-input hover:bg-background-subtle active:scale-[0.97] disabled:opacity-60"
               >
-                <span lang="de">{tile(i)}</span>
+                <span lang={TARGET_LANG}>{tile(i)}</span>
               </button>
             </li>
           ))}
@@ -130,7 +131,7 @@ export function BuildView({
         <FeedbackFooter
           result="correct"
           title={rightTitle(index)}
-          titleLang="de"
+          titleLang={TARGET_LANG}
           action={
             <Button
               size="lg"

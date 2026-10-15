@@ -105,8 +105,8 @@ export function turnMistake(
     itemKey: `${lessonId}:${index}.${turnIndex}`,
     topic: exercise.topic ?? null,
     prompt: `${turn.speaker.label}: „${turn.line}“ — ${turn.task}`,
-    learnerAnswer: turn.options[selection]?.de ?? "",
-    correctAnswer: turn.options[turn.correct]?.de ?? "",
+    learnerAnswer: turn.options[selection]?.target ?? "",
+    correctAnswer: turn.options[turn.correct]?.target ?? "",
     reason: choiceNote(turn, selection),
   })
 }

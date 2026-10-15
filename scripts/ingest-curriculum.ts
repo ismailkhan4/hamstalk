@@ -13,7 +13,7 @@
 import { spawnSync } from "node:child_process"
 import { writeFileSync } from "node:fs"
 
-import { lessons } from "@/content/lessons/registry"
+import { lessons } from "@/content/courses/de/lessons/registry"
 import {
   buildPoolRecords,
   parityReport,

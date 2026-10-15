@@ -1,5 +1,5 @@
-import { isLessonAvailable } from "@/content/availability"
-import { findLesson } from "@/content/curriculum"
+import { isLessonAvailable } from "@/content/courses/de/availability"
+import { findLesson } from "@/content/courses/de/curriculum"
 import type { StartLevel } from "@/features/onboarding/options"
 import {
   completedLessonCount,
@@ -28,7 +28,7 @@ export function upNextAfter(
   const after = withCompleted(progress, lessonId)
   const next = nextLesson(level, after)
   const current = findLesson(lessonId)
-    if (!current) return null
+  if (!current) return null
 
   const unitDone = current.unit.lessons.every((lesson) =>
     after.some(
@@ -40,7 +40,7 @@ export function upNextAfter(
       href: `/unit-complete/${current.unit.id}`,
       kicker: "Next",
       title: `Your Unit ${current.unit.number} milestone`,
-      titleIsGerman: false,
+      titleInTarget: false,
       minutes: null,
       ctaLabel: `See your Unit ${current.unit.number} milestone`,
     }
@@ -58,7 +58,7 @@ export function upNextAfter(
     href: open ? `/learn/${next.lesson.id}` : null,
     kicker,
     title: sameUnit ? next.lesson.title : next.unit.title,
-    titleIsGerman: sameUnit ? next.lesson.titleIsGerman : false,
+    titleInTarget: sameUnit ? next.lesson.titleInTarget : false,
     minutes: sameUnit && open ? next.lesson.minutes : null,
     ctaLabel:
       next.lesson.kind === "review"

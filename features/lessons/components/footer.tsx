@@ -1,4 +1,5 @@
 import { ExerciseFeedback } from "@/components/exercises/exercise-feedback"
+import { ACTIVE_COURSE } from "@/content/courses"
 
 type ActionFooterProps = {
   hint?: string
@@ -36,9 +37,8 @@ export function FeedbackFooter(props: FeedbackFooterProps) {
   )
 }
 
-const RIGHT_TITLES = ["Richtig!", "Genau!", "Sehr gut!"]
-
-/** Rotates the German confirmations so repeated right answers don't all say the same word. */
+/** Rotates the course's confirmations so repeated right answers don't all say the same word. */
 export function rightTitle(seed: number) {
-  return RIGHT_TITLES[seed % RIGHT_TITLES.length] ?? "Richtig!"
+  const titles = ACTIVE_COURSE.phrases.right
+  return titles[seed % titles.length] ?? titles[0] ?? ""
 }

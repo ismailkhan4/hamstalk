@@ -9,12 +9,12 @@ import {
 import Link from "next/link"
 
 import { Avatar, type Person } from "@/components/learning/avatar"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { AppShell } from "@/components/layout/app-shell"
 import { buttonVariants } from "@/components/ui/button-variants"
-import { getLevel, getUnit } from "@/content/curriculum"
-import { TICKET_UNIT_ID } from "@/content/team-tasks"
-import { getStandup, standups } from "@/content/standup"
+import { getLevel, getUnit } from "@/content/courses/de/curriculum"
+import { TICKET_UNIT_ID } from "@/content/courses/de/team-tasks"
+import { getStandup, standups } from "@/content/courses/de/standup"
 import { dayAtCompany } from "@/features/learner/day-at-company"
 import type { NotebookCounts } from "@/features/review/data"
 import { isUnitCompleted, type LessonProgress } from "@/features/path/model"
@@ -146,9 +146,9 @@ export function TeamView({
                   {featured.prompts.length} short prompts, using only the German
                   from Unit {featuredUnit.number}.
                 </p>
-                <GermanText as="p" className="mt-3 text-xl">
-                  {featured.line.de}
-                </GermanText>
+                <TargetText as="p" className="mt-3 text-xl">
+                  {featured.line.target}
+                </TargetText>
                 <div className="mt-4">
                   {featuredState === "locked" && (
                     <p className="flex items-center gap-2 text-sm text-secondary-text">

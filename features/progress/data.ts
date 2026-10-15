@@ -12,6 +12,7 @@ type Supabase = Awaited<ReturnType<typeof createClient>>
 export type ProgressFacts = {
   /** When lessons were finished, newest first, for the weekly chart. */
   completedAt: string[]
+  /** XP earned from every activity, from the XP ledger's daily totals; lesson XP until it exists. */
   xp: number
   strengths: StrengthCounts
   mistakesLearned: number
@@ -47,6 +48,7 @@ export async function loadProgressFacts(
     supabase.from("mistakes").select("id", head).not("learned_at", "is", null),
     supabase.from("standup_completions").select("unit_id", head),
   ])
+  const days = await supabase.from("daily_activity").select("xp")
   const results = [lessons, weak, medium, strong, learned, standups]
   if (results.some((result) => isMissingTable(result.error))) return empty
   const failed = results.find((result) => result.error)
@@ -60,7 +62,9 @@ export async function loadProgressFacts(
     completedAt: rows.flatMap((row) =>
       row.completed_at ? [row.completed_at] : []
     ),
-    xp: rows.reduce((sum, row) => sum + row.xp, 0),
+    xp: days.error
+      ? rows.reduce((sum, row) => sum + row.xp, 0)
+      : (days.data ?? []).reduce((sum, day) => sum + Number(day.xp), 0),
     strengths: {
       weak: weak.count ?? 0,
       medium: medium.count ?? 0,

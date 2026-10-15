@@ -2,7 +2,7 @@ import "server-only"
 
 import { z } from "zod"
 
-import { getLesson } from "@/content/lessons/registry"
+import { getLesson } from "@/content/courses/de/lessons/registry"
 import { isMissingTable } from "@/features/onboarding/data"
 import type { createClient } from "@/lib/supabase/server"
 
@@ -42,8 +42,8 @@ export async function loadPhrasebook(supabase: Supabase): Promise<Phrase[]> {
         .find((candidate) => candidate.saveKey === saveKey)
       return {
         key: row.phrase_key,
-        de: row.de,
-        en: row.en,
+        target: row.de,
+        native: row.en,
         article: line?.article ?? null,
         example: line?.example ?? null,
         topic: line?.topic ?? "Other",

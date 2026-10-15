@@ -1,19 +1,21 @@
 "use client"
 
 import { FileText } from "lucide-react"
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 import {
   AnswerOption,
   type AnswerOptionState,
 } from "@/components/exercises/answer-option"
-import { GermanText } from "@/components/learning/german-text"
+import { TARGET_LANG } from "@/content/courses"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 import { check, retry, startAttempt, type Attempt } from "../engine/attempt"
 import { choiceNote, gradeChoice } from "../engine/grading"
 import { choiceMistake } from "../engine/mistakes"
+import { optionOrder } from "../engine/shuffle"
 import { personalise, type ChoiceExercise } from "../schema"
 import { ExerciseHeading } from "./exercise-heading"
 import { ActionFooter, FeedbackFooter, rightTitle } from "./footer"
@@ -37,10 +39,22 @@ export function ChoiceView({
   const [transcriptOpen, setTranscriptOpen] = useState(false)
 
   const answering = attempt.phase === "answering"
-  const german = exercise.optionsLanguage === "de"
+  const german = exercise.optionsLanguage === "target"
 
+  // Selection, grading and feedback all use authored option indexes; only the screen is shuffled.
+  const order = useMemo(
+    () => optionOrder(exercise.options.length, `${lessonId}:${index}`),
+    [exercise.options.length, lessonId, index]
+  )
   const pick = useCallback((option: number) => setSelection(option), [])
-  useDigitKeys(exercise.options.length, answering, pick)
+  const pickShown = useCallback(
+    (position: number) => {
+      const option = order[position]
+      if (option !== undefined) setSelection(option)
+    },
+    [order]
+  )
+  useDigitKeys(exercise.options.length, answering, pickShown)
 
   function onCheck() {
     if (selection === null) return
@@ -100,9 +114,9 @@ export function ChoiceView({
                 <p className="text-xs font-semibold text-muted-foreground">
                   Transcript
                 </p>
-                <GermanText as="p" className="text-xl">
+                <TargetText as="p" className="text-xl">
                   „{personalise(exercise.listening.clip, learner)}“
-                </GermanText>
+                </TargetText>
                 <p className="text-[0.9375rem] text-muted-foreground">
                   {personalise(exercise.listening.translation, learner)}
                 </p>
@@ -122,7 +136,7 @@ export function ChoiceView({
 
         {exercise.fill && (
           <p
-            lang="de"
+            lang={TARGET_LANG}
             className="mt-6 rounded-xl bg-inset px-5 py-4 font-voice text-2xl"
             aria-label={`${exercise.fill.before} blank ${exercise.fill.after}`}
           >
@@ -145,16 +159,16 @@ export function ChoiceView({
           aria-label="Answers"
           className="mt-6 flex flex-col gap-3"
         >
-          {exercise.options.map((option, i) => (
+          {order.map((option, position) => (
             <AnswerOption
               key={option}
-              index={i}
-              lang={german ? "de" : "en"}
-              state={optionState(i)}
+              index={position}
+              language={german ? "target" : "native"}
+              state={optionState(option)}
               locked={!answering}
-              onSelect={() => pick(i)}
+              onSelect={() => pick(option)}
             >
-              {personalise(option, learner)}
+              {personalise(exercise.options[option] ?? "", learner)}
             </AnswerOption>
           ))}
         </div>
@@ -176,7 +190,7 @@ export function ChoiceView({
         <FeedbackFooter
           result="correct"
           title={rightTitle(index)}
-          titleLang="de"
+          titleLang={TARGET_LANG}
           action={
             <Button
               size="lg"

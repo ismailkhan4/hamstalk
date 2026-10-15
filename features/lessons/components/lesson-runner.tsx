@@ -1,8 +1,9 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
+import { TARGET_LANG } from "@/content/courses"
 import { Alert } from "@/components/feedback/alert"
 import { FocusHeader } from "@/components/learning/focus-header"
 import { Button } from "@/components/ui/button"
@@ -13,6 +14,14 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  comboMilestone,
+  nextCombo,
+  type ComboMilestone,
+} from "@/features/celebrations/combo"
+import { ComboToast } from "@/features/celebrations/combo-toast"
+import { playFeedback } from "@/features/celebrations/feedback"
+import type { Rewards } from "@/features/rewards/payload"
 import { track } from "@/lib/analytics/client"
 
 import type { Outcome } from "../engine/attempt"
@@ -26,7 +35,8 @@ import {
   summarise,
   type SessionState,
 } from "../engine/session"
-import type { Lesson } from "../schema"
+import { isGraded, type Lesson } from "../schema"
+import { ticketId } from "../ticket"
 import { BuildView } from "./build-view"
 import { TranslateView } from "./translate-view"
 import { ChoiceView } from "./choice-view"
@@ -39,6 +49,8 @@ import { TipView } from "./tip-view"
 import type { Learner } from "./types"
 
 type SaveResult = { ok: true } | { ok: false; message: string }
+type CompleteResult =
+  { ok: true; rewards?: Rewards | null } | { ok: false; message: string }
 
 /** What the runner needs from the server. The real actions or a stand-in for previews and tests. */
 export type LessonActions = {
@@ -50,7 +62,7 @@ export type LessonActions = {
   complete: (input: {
     lessonId: string
     outcomes: Outcome[]
-  }) => Promise<SaveResult>
+  }) => Promise<CompleteResult>
   recordMistake: (
     input: MistakeRecord & { lessonId: string }
   ) => Promise<SaveResult>
@@ -113,6 +125,17 @@ export function LessonRunner({
   const [completeProblem, setCompleteProblem] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [startedAt, setStartedAt] = useState(() => Date.now())
+  const [rewards, setRewards] = useState<Rewards | null>(null)
+  const [combo, setCombo] = useState(0)
+  const [bestCombo, setBestCombo] = useState(0)
+  const [milestone, setMilestone] = useState<ComboMilestone | null>(null)
+  const milestoneTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(
+    () => () => {
+      if (milestoneTimer.current) clearTimeout(milestoneTimer.current)
+    },
+    []
+  )
   const [finished, setFinished] = useState<{
     state: SessionState
     minutes: number
@@ -134,16 +157,19 @@ export function LessonRunner({
   const outcomesOf = (state: SessionState) =>
     state.outcomes.filter((value): value is Outcome => value !== null)
 
+  // A replay saves no progress, but still earns practice XP and can keep the streak going.
   const finishLesson = useCallback(
     async (state: SessionState) => {
-      if (replay) return
       setSaving(true)
       const result = await actions.complete({
         lessonId: lesson.id,
         outcomes: outcomesOf(state),
       })
       setSaving(false)
-      setCompleteProblem(result.ok ? null : result.message)
+      if (result.ok) {
+        setRewards(result.rewards ?? null)
+        setCompleteProblem(null)
+      } else if (!replay) setCompleteProblem(result.message)
     },
     [actions, lesson.id, replay]
   )
@@ -171,7 +197,22 @@ export function LessonRunner({
     }
   }
 
+  function updateCombo(outcome: Outcome) {
+    if (!exercise) return
+    const next = nextCombo(combo, outcome, isGraded(exercise))
+    if (next === combo) return
+    setCombo(next)
+    setBestCombo((best) => Math.max(best, next))
+    const reached = comboMilestone(next)
+    if (!reached) return
+    setMilestone(reached)
+    playFeedback("combo")
+    if (milestoneTimer.current) clearTimeout(milestoneTimer.current)
+    milestoneTimer.current = setTimeout(() => setMilestone(null), 1900)
+  }
+
   function onDone(outcome: Outcome, turnOutcomes?: Outcome[]) {
+    updateCombo(outcome)
     if (exercise)
       track("exercise_answered", {
         lesson_id: lesson.id,
@@ -210,6 +251,8 @@ export function LessonRunner({
       resumed: fromSaved,
       replay,
     })
+    setCombo(0)
+    setBestCombo(0)
     if (!fromSaved) {
       setIndex(0)
       setSession(startSession(lesson))
@@ -230,7 +273,9 @@ export function LessonRunner({
         <FocusHeader
           closeLabel="Close lesson"
           onClose={() => router.push(exitHref)}
+          ticket={ticketId(lesson.id)}
           title={lesson.title}
+          titleLang={lesson.titleInTarget ? TARGET_LANG : undefined}
         />
         <LessonIntro
           lesson={lesson}
@@ -252,12 +297,17 @@ export function LessonRunner({
         <FocusHeader
           closeLabel="Leave"
           onClose={() => router.push(exitHref)}
+          ticket={ticketId(lesson.id)}
+          title={lesson.title}
+          titleLang={lesson.titleInTarget ? TARGET_LANG : undefined}
           progress={progress}
         />
         <LessonComplete
           lesson={lesson}
           summary={summarise(lesson, state)}
           minutes={minutes}
+          bestCombo={bestCombo}
+          rewards={rewards}
           mistakeCount={mistakes}
           replay={replay}
           upNext={upNext}
@@ -278,8 +328,13 @@ export function LessonRunner({
       <FocusHeader
         closeLabel="Leave lesson"
         onClose={() => setExitOpen(true)}
+        ticket={ticketId(lesson.id)}
+        title={lesson.title}
+        titleLang={lesson.titleInTarget ? TARGET_LANG : undefined}
         progress={progress}
+        combo={combo}
       />
+      <ComboToast milestone={milestone} />
       {warning && (
         <div className="mx-auto w-full max-w-(--lesson-max) px-[clamp(20px,4vw,32px)] pt-4">
           <Alert tone="warning" title="Not saved yet">

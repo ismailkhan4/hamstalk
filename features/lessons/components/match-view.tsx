@@ -3,7 +3,8 @@
 import { Check, ChevronRight, X } from "lucide-react"
 import { useState } from "react"
 
-import { GermanText } from "@/components/learning/german-text"
+import { TARGET_LANG } from "@/content/courses"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -120,21 +121,23 @@ export function MatchView({
                       : `${pair.phrase}. ${exercise.labels.empty}.`
                   }
                   className={cn(
-                    "flex min-h-14 w-full items-center gap-3 rounded-lg border-[1.5px] border-border bg-card px-4 py-2.5 text-left transition-colors duration-(--duration-fast)",
-                    answering && "cursor-pointer hover:border-input",
+                    "flex min-h-14 w-full items-center gap-3 rounded-xl border-2 border-border bg-card px-4 py-2.5 text-left transition-[transform,background-color,border-color] duration-(--duration-instant)",
+                    answering &&
+                      "cursor-pointer hover:border-input hover:bg-background-subtle active:scale-[0.99]",
                     answering &&
                       active === i &&
-                      "border-primary bg-primary-subtle shadow-[inset_0_0_0_1px_var(--primary)]",
-                    right === true && "border-success bg-success-subtle",
+                      "border-selected-border bg-selected hover:bg-selected",
+                    right === true &&
+                      "border-success bg-success-subtle motion-safe:animate-bump",
                     right === false &&
                       !shown &&
-                      "border-danger bg-danger-subtle",
+                      "border-danger bg-danger-subtle motion-safe:animate-shake",
                     shown && "border-success bg-success-subtle"
                   )}
                 >
-                  <GermanText className="min-w-0 flex-1 text-xl">
+                  <TargetText className="min-w-0 flex-1 text-xl">
                     {pair.phrase}
-                  </GermanText>
+                  </TargetText>
                   <ChevronRight
                     aria-hidden="true"
                     className="size-4 shrink-0 text-muted-foreground"
@@ -143,7 +146,7 @@ export function MatchView({
                     className={cn(
                       "min-w-0 flex-1 text-[1.0625rem]",
                       !meaning && "text-muted-foreground italic",
-                      exercise.meaningsLanguage === "de" && "font-voice"
+                      exercise.meaningsLanguage === "target" && "font-voice"
                     )}
                   >
                     {meaning ?? exercise.labels.empty}
@@ -177,7 +180,7 @@ export function MatchView({
                   type="button"
                   disabled={!answering}
                   onClick={() => pairWith(meaning)}
-                  className="min-h-11 rounded-lg border-[1.5px] border-border bg-card px-3.5 text-[1rem] hover:border-input disabled:opacity-60"
+                  className="min-h-11 rounded-xl border-2 border-border bg-card px-3.5 text-[1rem] font-semibold transition-[transform,background-color,border-color] duration-(--duration-instant) hover:border-input hover:bg-background-subtle active:scale-[0.97] disabled:opacity-60"
                 >
                   {meaning}
                 </button>
@@ -211,7 +214,7 @@ export function MatchView({
         <FeedbackFooter
           result="correct"
           title={rightTitle(index)}
-          titleLang="de"
+          titleLang={TARGET_LANG}
           action={
             <Button
               size="lg"

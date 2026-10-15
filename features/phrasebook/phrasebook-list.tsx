@@ -6,7 +6,7 @@ import { useMemo, useState } from "react"
 
 import { EmptyState } from "@/components/feedback/empty-state"
 import { ArticleWord } from "@/components/learning/article-word"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button-variants"
 import { cn } from "@/lib/utils"
@@ -52,7 +52,7 @@ export function PhrasebookList({
         return next
       })
       setError(
-        `Couldn’t ${save ? "save" : "remove"} “${phrase.de}”. ${problem}`
+        `Couldn’t ${save ? "save" : "remove"} “${phrase.target}”. ${problem}`
       )
     }
   }
@@ -194,24 +194,24 @@ export function PhrasebookList({
                       {phrase.article ? (
                         <ArticleWord
                           article={phrase.article}
-                          word={phrase.de}
+                          word={phrase.target}
                           className="text-2xl"
                         />
                       ) : (
-                        <GermanText as="p" className="text-2xl">
-                          {phrase.de}
-                        </GermanText>
+                        <TargetText as="p" className="text-2xl">
+                          {phrase.target}
+                        </TargetText>
                       )}
                       <p className="text-[0.9375rem] text-secondary-text">
-                        {phrase.en}
+                        {phrase.native}
                       </p>
                       {phrase.example && (
                         <div className="mt-2.5">
-                          <GermanText as="p" className="text-[1.0625rem]">
-                            {phrase.example.de}
-                          </GermanText>
+                          <TargetText as="p" className="text-[1.0625rem]">
+                            {phrase.example.target}
+                          </TargetText>
                           <p className="text-sm text-muted-foreground">
-                            {phrase.example.en}
+                            {phrase.example.native}
                           </p>
                         </div>
                       )}
@@ -224,7 +224,7 @@ export function PhrasebookList({
                         variant="outline"
                         size="sm"
                         aria-pressed={saved}
-                        aria-label={`${saved ? "Saved" : "Save"}: ${phrase.de}`}
+                        aria-label={`${saved ? "Saved" : "Save"}: ${phrase.target}`}
                         iconLeft={saved ? <BookmarkCheck /> : <Bookmark />}
                         className={cn(
                           saved &&

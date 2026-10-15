@@ -4,7 +4,7 @@ import { Bookmark, BookmarkCheck } from "lucide-react"
 import { useState } from "react"
 
 import { Avatar } from "@/components/learning/avatar"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -69,11 +69,11 @@ export function DiscoverView({
         <ul className="mt-8 flex flex-col gap-5">
           {exercise.lines.map((line) => {
             const mine = line.speaker.person === "me"
-            const de = personalise(line.de, learner)
+            const de = personalise(line.target, learner)
             const isSaved = line.saveKey ? saved.has(line.saveKey) : false
             return (
               <li
-                key={line.de + line.speaker.label}
+                key={line.target + line.speaker.label}
                 className={cn(
                   "flex items-start gap-3",
                   mine && "flex-row-reverse"
@@ -93,14 +93,14 @@ export function DiscoverView({
                   <p className="text-xs text-muted-foreground">
                     {personalise(line.speaker.label, learner)}
                   </p>
-                  <GermanText
+                  <TargetText
                     as="p"
                     className="mt-1 text-[1.375rem] leading-snug"
                   >
                     {de}
-                  </GermanText>
+                  </TargetText>
                   <p className="text-[0.9375rem] text-muted-foreground">
-                    {personalise(line.en, learner)}
+                    {personalise(line.native, learner)}
                   </p>
                   {line.note && (
                     <p className="mt-2.5 border-t border-dashed border-border pt-2.5 text-sm font-semibold text-primary-text">

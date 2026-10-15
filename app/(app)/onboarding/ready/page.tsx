@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
+import { TARGET_LANG } from "@/content/courses"
 import { Logo } from "@/components/brand/logo"
 import { Avatar } from "@/components/learning/avatar"
 import { initialsFor } from "@/components/learning/team-badge"
@@ -72,7 +73,7 @@ export default async function ReadyPage() {
           {copy.kicker}
         </p>
         <h1
-          lang="de"
+          lang={TARGET_LANG}
           className="mt-4 max-w-[14ch] font-voice text-[clamp(44px,5.6vw,72px)] leading-[1.04]"
         >
           <TimeGreeting name={name} />

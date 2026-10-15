@@ -4,12 +4,13 @@ import { Repeat } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
+import { TARGET_LANG } from "@/content/courses"
 import { EmptyState } from "@/components/feedback/empty-state"
 import { Alert } from "@/components/feedback/alert"
 import { AppShell } from "@/components/layout/app-shell"
 import { ArticleWord } from "@/components/learning/article-word"
 import { FocusHeader } from "@/components/learning/focus-header"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { LocalTime } from "@/components/learning/local-time"
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button-variants"
@@ -37,7 +38,7 @@ function Word({ card, className }: { card: ReviewCard; className?: string }) {
       className={className}
     />
   ) : (
-    <GermanText className={className}>{card.word}</GermanText>
+    <TargetText className={className}>{card.word}</TargetText>
   )
 }
 
@@ -57,7 +58,9 @@ export function ReviewScreen({
     { card: ReviewCard; rating: Rating }[]
   >([])
 
-  const cards = overview.due.slice(0, sessionSize)
+  // The session's deck is fixed when it starts. Rating a card refreshes the page (for the XP
+  // badges), which drops that card from "due"; a deck derived from props would skip the next one.
+  const [cards] = useState(() => overview.due.slice(0, sessionSize))
   const card = cards[index]
 
   async function rate(rating: Rating) {
@@ -106,16 +109,18 @@ export function ReviewScreen({
               <ListenButton text={card.word} label="Pronunciation" />
               <StrengthBars strength={card.strength} />
             </div>
-            {card.exampleDe && (
-              <GermanText as="p" className="mt-5 text-xl">
-                {card.exampleDe}
-              </GermanText>
+            {card.exampleTarget && (
+              <TargetText as="p" className="mt-5 text-xl">
+                {card.exampleTarget}
+              </TargetText>
             )}
             {revealed && (
               <div className="mt-5 border-t border-dashed border-border pt-5">
-                <p className="text-2xl font-bold">{card.en}</p>
-                {card.exampleEn && (
-                  <p className="mt-1 text-secondary-text">{card.exampleEn}</p>
+                <p className="text-2xl font-bold">{card.native}</p>
+                {card.exampleNative && (
+                  <p className="mt-1 text-secondary-text">
+                    {card.exampleNative}
+                  </p>
                 )}
               </div>
             )}
@@ -190,7 +195,7 @@ export function ReviewScreen({
         >
           <div className="text-center">
             <h1
-              lang="de"
+              lang={TARGET_LANG}
               className="font-voice text-[clamp(40px,6vw,60px)] leading-tight"
             >
               Gut gemacht.
@@ -373,7 +378,7 @@ export function ReviewScreen({
                   >
                     <Word card={item} className="min-w-0 flex-1 text-xl" />
                     <span className="hidden text-sm text-muted-foreground sm:block">
-                      {item.en}
+                      {item.native}
                     </span>
                     <StrengthBars strength={item.strength} />
                   </li>

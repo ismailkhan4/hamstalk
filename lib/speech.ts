@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useSyncExternalStore } from "react"
 
+import { ACTIVE_COURSE } from "@/content/courses"
+
 export type SpeechStatus = "checking" | "ready" | "unavailable"
 
 const VOICE_WAIT_MS = 2500
@@ -13,13 +15,15 @@ function synth() {
     : null
 }
 
-function germanVoice() {
-  const german = (synth()?.getVoices() ?? []).filter((voice) =>
-    voice.lang.toLowerCase().startsWith("de")
+/** A voice for the course's language: a local one for its main locale if there is one. */
+function targetVoice() {
+  const { lang, locale } = ACTIVE_COURSE
+  const matching = (synth()?.getVoices() ?? []).filter((voice) =>
+    voice.lang.toLowerCase().startsWith(lang)
   )
   return (
-    german.find((voice) => voice.lang === "de-DE" && voice.localService) ??
-    german[0] ??
+    matching.find((voice) => voice.lang === locale && voice.localService) ??
+    matching[0] ??
     null
   )
 }
@@ -41,7 +45,7 @@ function subscribe(onChange: () => void) {
 
 function getStatus(): SpeechStatus {
   if (!synth()) return "unavailable"
-  if (germanVoice()) return "ready"
+  if (targetVoice()) return "ready"
   return waitedForVoices ? "unavailable" : "checking"
 }
 
@@ -60,7 +64,7 @@ export function useGermanSpeech() {
 
   const speak = useCallback((text: string, rate = 1) => {
     const speech = synth()
-    const voice = germanVoice()
+    const voice = targetVoice()
     if (!speech || !voice) return Promise.resolve(false)
     speech.cancel()
     return new Promise<boolean>((resolve) => {

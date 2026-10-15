@@ -1,5 +1,6 @@
 import { CircleCheck } from "lucide-react"
 
+import { TARGET_LANG } from "@/content/courses"
 import { cn } from "@/lib/utils"
 
 type BadgeRow = { label: string; value: string | null }
@@ -57,7 +58,7 @@ export function TeamBadge({ name, rows, footer, className }: TeamBadgeProps) {
             {trimmed || "Your name"}
           </p>
           <p className="mt-[3px] font-voice text-[0.9375rem] leading-[1.3] text-primary-text italic">
-            <span lang="de">Neu im Team</span>{" "}
+            <span lang={TARGET_LANG}>Neu im Team</span>{" "}
             <span className="font-sans text-[0.7812rem] text-muted-foreground not-italic">
               · new on the team
             </span>

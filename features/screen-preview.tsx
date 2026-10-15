@@ -1,6 +1,6 @@
 "use client"
 
-import { getUnit } from "@/content/curriculum"
+import { getUnit } from "@/content/courses/de/curriculum"
 import type { LessonProgress } from "@/features/path/model"
 
 import {

@@ -2,7 +2,7 @@ import { Compass, Info, Sparkles } from "lucide-react"
 import Link from "next/link"
 
 import { ChoiceRow } from "@/components/forms/choice-row"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { cn } from "@/lib/utils"
 
 import { LEVELS, levelOptions, type StartLevel } from "../options"
@@ -91,9 +91,9 @@ export function LevelStep({ value, firstName, onChange }: LevelStepProps) {
             {value === "beginner" && (
               <>
                 {" "}
-                <GermanText className="text-[1.0625rem]">
+                <TargetText className="text-[1.0625rem]">
                   Ich heiße {firstName}.
-                </GermanText>
+                </TargetText>
               </>
             )}
           </span>

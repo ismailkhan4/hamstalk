@@ -1,7 +1,8 @@
 import Link from "next/link"
+import { Suspense } from "react"
 
 import { AppShell } from "@/components/layout/app-shell"
-import { getLevel, levels } from "@/content/curriculum"
+import { getLevel, levels } from "@/content/courses/de/curriculum"
 import {
   ActivityList,
   type ActivityEntry,
@@ -14,6 +15,7 @@ import {
   type LessonProgress,
 } from "@/features/path/model"
 import type { NotebookCounts } from "@/features/review/data"
+import { StreakSection } from "@/features/streaks/components/streak-section"
 import { cn } from "@/lib/utils"
 
 import type { ProgressFacts } from "./data"
@@ -164,7 +166,7 @@ export function ProgressView({
               Not assessed yet
             </h2>
             <p className="mt-3 text-secondary-text">
-              Only a checkpoint can change your level, never points, streaks or
+              Only a checkpoint can change your level, never XP, streaks or
               lesson counts. The A1 checkpoint comes after Unit 8, and it isn’t
               built yet, so Klarlingo doesn’t claim a level for you.
             </p>
@@ -185,9 +187,15 @@ export function ProgressView({
             of={`of ${a1.units.length}`}
           />
           <Stat label="Words in review" value={wordTotal} />
-          <Stat label="Points from lessons" value={facts.xp} />
+          <Stat label="Total XP" value={facts.xp} />
           <Stat label="Standups played" value={facts.standups} />
         </dl>
+
+        <Suspense fallback={null}>
+          <div className="mt-10">
+            <StreakSection />
+          </div>
+        </Suspense>
 
         <section aria-labelledby="recent" className="mt-10">
           <div className="flex items-baseline justify-between gap-3">
@@ -213,7 +221,7 @@ export function ProgressView({
               <WeekChart completedAt={facts.completedAt} />
             </div>
             <p className="mt-3 text-sm text-muted-foreground">
-              There are no streaks to keep. Rest days cost you nothing.
+              Lessons finished each day this week.
             </p>
           </section>
 

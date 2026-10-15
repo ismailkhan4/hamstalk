@@ -2,8 +2,8 @@ import "server-only"
 
 import { redirect } from "next/navigation"
 
-import { getUnit } from "@/content/curriculum"
-import { TICKET_UNIT_ID } from "@/content/team-tasks"
+import { getUnit } from "@/content/courses/de/curriculum"
+import { TICKET_UNIT_ID } from "@/content/courses/de/team-tasks"
 import { loadLearner } from "@/features/learner/load-learner"
 import { isUnitCompleted } from "@/features/path/model"
 
