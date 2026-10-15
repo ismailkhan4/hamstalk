@@ -14,11 +14,19 @@
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "typecheck": "tsc --noEmit",
     "format:check": "prettier --check .",
-    "db:types": "UPDATE_DB_TYPES=1 vitest run supabase/tests/database-types.test.ts"
+    "curriculum:check": "bun scripts/ingest-curriculum.ts check",
+    "curriculum:sql": "bun scripts/ingest-curriculum.ts sql",
+    "curriculum:ingest": "bun scripts/ingest-curriculum.ts ingest",
+    "curriculum:verify": "bun scripts/ingest-curriculum.ts verify"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
     "@hookform/resolvers": "^5.9.1",
+    "@opentelemetry/api-logs": "^0.223.0",
+    "@opentelemetry/exporter-logs-otlp-http": "^0.223.0",
+    "@opentelemetry/resources": "^2.12.0",
+    "@opentelemetry/sdk-logs": "^0.223.0",
+    "@sentry/nextjs": "^11.8.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.3",
     "class-variance-authority": "^0.7.1",
@@ -26,6 +34,8 @@
     "lucide-react": "^1.56.0",
     "next": "16.4.0",
     "next-themes": "^0.4.6",
+    "posthog-js": "^1.438.10",
+    "posthog-node": "^5.56.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-hook-form": "^7.90.0",
@@ -34,8 +44,8 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "0.5.8",
     "@tailwindcss/postcss": "^4",
+    "@types/bun": "1.3.14",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

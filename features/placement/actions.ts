@@ -5,6 +5,7 @@ import { z } from "zod"
 
 import { isMissingTable, loadPreferences } from "@/features/onboarding/data"
 import { requireUser } from "@/lib/auth/session"
+import { trackServer } from "@/lib/analytics/server"
 import { createClient } from "@/lib/supabase/server"
 
 import { suggestLevel } from "./scoring"
@@ -54,18 +55,22 @@ export async function completePlacementAction(
   const user = await requireUser("/placement")
   const supabase = await createClient()
 
+  const suggestedLevel = suggestLevel(parsed.data)
   const { error } = await supabase.from("placement_attempts").upsert(
     {
       user_id: user.id,
       answers: parsed.data,
       current_question: 7,
-      suggested_level: suggestLevel(parsed.data),
+      suggested_level: suggestedLevel,
       completed_at: new Date().toISOString(),
     },
     { onConflict: "user_id" }
   )
   if (isMissingTable(error)) return { ok: false, message: DATABASE_NOT_READY }
   if (error) return { ok: false, message: NOT_SAVED }
+  trackServer(user.id, "placement_completed", {
+    suggested_level: suggestedLevel,
+  })
   return { ok: true }
 }
 
@@ -102,5 +107,9 @@ export async function applyPlacementAction(): Promise<PlacementSaveResult> {
     )
   if (saveError) return { ok: false, message: NOT_SAVED }
 
+  trackServer(user.id, "placement_applied", {
+    level: level.data,
+    returning_learner: Boolean(preferences.onboardedAt),
+  })
   redirect(preferences.onboardedAt ? "/home" : "/onboarding/context")
 }

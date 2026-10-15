@@ -6,7 +6,6 @@ import { notFound } from "next/navigation"
 import { EmptyState } from "@/components/feedback/empty-state"
 import { buttonVariants } from "@/components/ui/button-variants"
 import { findLesson } from "@/content/curriculum"
-import { getLesson } from "@/content/lessons/registry"
 import { loadLearner } from "@/features/learner/load-learner"
 import { LessonRunner } from "@/features/lessons/components/lesson-runner"
 import { loadLessonState } from "@/features/lessons/data"
@@ -17,6 +16,7 @@ import {
   savePhraseAction,
 } from "@/features/lessons/actions"
 import { initialsOf } from "@/features/lessons/initials"
+import { loadRunnableLesson } from "@/features/lessons/source"
 import {
   lessonKicker,
   pathHrefFor,
@@ -41,7 +41,8 @@ export default async function LessonPage({ params }: Props) {
   const learner = await loadLearner(`/learn/${lessonId}`)
   if (learner === "database-not-ready") return <DatabaseNotReady />
 
-  const lesson = getLesson(lessonId)
+  const supabase = await createClient()
+  const lesson = (await loadRunnableLesson(supabase, lessonId))?.lesson
   if (!lesson) {
     return (
       <main
@@ -68,7 +69,6 @@ export default async function LessonPage({ params }: Props) {
     )
   }
 
-  const supabase = await createClient()
   const state = await loadLessonState(supabase, lessonId)
 
   return (

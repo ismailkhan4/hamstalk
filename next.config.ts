@@ -1,4 +1,7 @@
+import { withSentryConfig } from "@sentry/nextjs/config"
 import type { NextConfig } from "next"
+
+import { posthogHosts } from "./lib/analytics/hosts"
 
 function supabaseOrigin() {
   try {
@@ -8,16 +11,26 @@ function supabaseOrigin() {
   }
 }
 
+/** Where Sentry sends events: the DSN's host, e.g. https://o1.ingest.de.sentry.io. */
+function sentryOrigin() {
+  try {
+    return new URL(process.env.NEXT_PUBLIC_SENTRY_DSN ?? "").origin
+  } catch {
+    return null
+  }
+}
+
 function contentSecurityPolicy() {
-  const supabase = supabaseOrigin()
+  const connect = [supabaseOrigin(), sentryOrigin()].filter(Boolean)
   return [
     "default-src 'self'",
     "script-src 'self' 'unsafe-inline'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self'",
-    `connect-src 'self'${supabase ? ` ${supabase}` : ""}`,
-    "worker-src 'self'",
+    // PostHog needs no entry: it's proxied through /ingest on our own origin.
+    ["connect-src 'self'", ...connect].join(" "),
+    "worker-src 'self' blob:",
     "manifest-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",
@@ -42,6 +55,24 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // PostHog's API paths end in a slash; redirecting them would break the /ingest proxy.
+  skipTrailingSlashRedirect: true,
+  async rewrites() {
+    const posthog = posthogHosts()
+    if (!posthog) return []
+
+    return [
+      {
+        source: "/ingest/static/:path*",
+        destination: `${posthog.assets}/static/:path*`,
+      },
+      {
+        source: "/ingest/array/:path*",
+        destination: `${posthog.assets}/array/:path*`,
+      },
+      { source: "/ingest/:path*", destination: `${posthog.api}/:path*` },
+    ]
+  },
   turbopack: {
     root: import.meta.dirname,
   },
@@ -76,4 +107,13 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+// Uploads source maps on production builds so stack traces show the original code, then deletes
+// them so they never ship. Skipped silently when SENTRY_AUTH_TOKEN is unset. The release name comes
+// from the Vercel commit SHA.
+export default withSentryConfig(nextConfig, {
+  org: "heyismail",
+  project: "klarlingo",
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  widenClientFileUpload: true,
+  silent: !process.env.CI,
+})

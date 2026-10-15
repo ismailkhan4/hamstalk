@@ -378,6 +378,12 @@ html[data-motion="reduce"] *::after {
   scroll-behavior: auto !important;
 }
 
+/* The light/dark toggle's cross-fade. Only set while that transition runs. */
+html[data-theme-transition]::view-transition-old(root),
+html[data-theme-transition]::view-transition-new(root) {
+  animation-duration: 0.3s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --duration-fast: 0ms;
