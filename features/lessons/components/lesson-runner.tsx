@@ -13,6 +13,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { track } from "@/lib/analytics/client"
 
 import type { Outcome } from "../engine/attempt"
 import type { MistakeRecord } from "../engine/mistakes"
@@ -171,6 +172,13 @@ export function LessonRunner({
   }
 
   function onDone(outcome: Outcome, turnOutcomes?: Outcome[]) {
+    if (exercise)
+      track("exercise_answered", {
+        lesson_id: lesson.id,
+        exercise_type: exercise.type,
+        position: index,
+        outcome,
+      })
     void advance(
       turnOutcomes
         ? recordConversation(session, index, turnOutcomes)
@@ -197,6 +205,11 @@ export function LessonRunner({
   }
 
   function start(fromSaved: boolean) {
+    track("lesson_started", {
+      lesson_id: lesson.id,
+      resumed: fromSaved,
+      replay,
+    })
     if (!fromSaved) {
       setIndex(0)
       setSession(startSession(lesson))

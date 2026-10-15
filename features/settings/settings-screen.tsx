@@ -39,6 +39,7 @@ import {
   TEXT_SIZE_OPTIONS,
   useAppearance,
 } from "@/lib/appearance"
+import { resetAnalytics } from "@/lib/analytics/client"
 import { cn } from "@/lib/utils"
 
 import type { SettingsResult } from "./actions"
@@ -450,7 +451,10 @@ export function SettingsScreen({
               variant="outline"
               size="lg"
               disabled={signingOut}
-              onClick={() => startSignOut(() => actions.signOut())}
+              onClick={() => {
+                resetAnalytics()
+                startSignOut(() => actions.signOut())
+              }}
             >
               <LogOut aria-hidden="true" data-icon="inline-start" />
               {signingOut ? "Signing out…" : "Sign out"}

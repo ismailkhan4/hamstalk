@@ -1,7 +1,7 @@
 "use server"
 
-import { getLesson } from "@/content/lessons/registry"
 import { isMissingTable } from "@/features/onboarding/data"
+import { trackServer } from "@/lib/analytics/server"
 import { requireUser } from "@/lib/auth/session"
 import { firstName } from "@/lib/auth/user-name"
 import { createClient } from "@/lib/supabase/server"
@@ -16,6 +16,7 @@ import { lessonVocabularyRows, savedPhraseRow } from "@/features/review/items"
 
 import { initialsOf } from "./initials"
 import { personalise } from "./schema"
+import { loadRunnableLesson } from "./source"
 
 export type LessonSaveResult = { ok: true } | { ok: false; message: string }
 
@@ -29,11 +30,13 @@ const failure = (error: { code?: string } | null): LessonSaveResult =>
     ? { ok: false, message: NOT_READY }
     : { ok: false, message: FAILED }
 
+/** The same lesson the runner showed, so a step or outcome count can't disagree with what was graded. */
 async function context(lessonId: string) {
-  const lesson = getLesson(lessonId)
-  if (!lesson) return null
   const user = await requireUser(`/learn/${lessonId}`)
-  return { lesson, user, supabase: await createClient() }
+  const supabase = await createClient()
+  const runnable = await loadRunnableLesson(supabase, lessonId)
+  if (!runnable) return null
+  return { ...runnable, user, supabase }
 }
 
 /** Saves where the learner is, so they can leave and resume. A finished lesson stays finished. */
@@ -105,7 +108,16 @@ export async function completeLessonAction(
     },
     { onConflict: "user_id,lesson_id" }
   )
-  return error ? failure(error) : { ok: true }
+  if (error) return failure(error)
+
+  trackServer(ctx.user.id, "lesson_completed", {
+    lesson_id: parsed.data.lessonId,
+    xp: ctx.lesson.xp,
+    exercises: parsed.data.outcomes.length,
+    first_try: parsed.data.outcomes.filter((o) => o === "first_try").length,
+    source: ctx.source,
+  })
+  return { ok: true }
 }
 
 /** A first miss goes to the mistakes notebook. A repeated miss on the same item updates one row. */

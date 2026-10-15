@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 import { z } from "zod"
 
 import { requireUser } from "@/lib/auth/session"
+import { trackServer } from "@/lib/analytics/server"
 import { createClient } from "@/lib/supabase/server"
 import type { Database } from "@/lib/supabase/database.types"
 
@@ -65,5 +66,6 @@ export async function finishOnboardingAction(): Promise<SaveResult> {
     .eq("user_id", user.id)
   if (isMissingTable(error)) return { ok: false, message: DATABASE_NOT_READY }
   if (error) return { ok: false, message: SAVE_FAILED }
+  trackServer(user.id, "onboarding_completed", {})
   redirect("/onboarding/ready")
 }
