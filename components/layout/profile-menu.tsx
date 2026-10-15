@@ -7,6 +7,7 @@ import { useTransition } from "react"
 
 import { Avatar } from "@/components/learning/avatar"
 import { signOutAction } from "@/features/auth/actions"
+import { resetAnalytics } from "@/lib/analytics/client"
 import { cn } from "@/lib/utils"
 
 type ProfileMenuProps = {
@@ -101,7 +102,10 @@ export function ProfileMenu({
             <Menu.Item
               className={itemClass}
               disabled={pending}
-              onClick={() => startTransition(() => signOutAction())}
+              onClick={() => {
+                resetAnalytics()
+                startTransition(() => signOutAction())
+              }}
             >
               <LogOut
                 aria-hidden="true"

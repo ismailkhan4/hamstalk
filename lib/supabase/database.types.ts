@@ -9,6 +9,54 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      exercises_pool: {
+        Row: {
+          id: string
+          source_key: string
+          unit_id: string
+          lesson_id: string
+          lesson_position: number
+          exercise_position: number
+          exercise_type: string
+          concept_tag: string
+          base_difficulty: number
+          content: Json
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          source_key: string
+          unit_id: string
+          lesson_id: string
+          lesson_position: number
+          exercise_position: number
+          exercise_type: string
+          concept_tag: string
+          base_difficulty?: number
+          content: Json
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          source_key?: string
+          unit_id?: string
+          lesson_id?: string
+          lesson_position?: number
+          exercise_position?: number
+          exercise_type?: string
+          concept_tag?: string
+          base_difficulty?: number
+          content?: Json
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       learner_preferences: {
         Row: {
           user_id: string
@@ -20,6 +68,7 @@ export type Database = {
           reminder_time: string | null
           onboarding_step: string
           onboarded_at: string | null
+          timezone: string | null
           created_at: string
           updated_at: string
         }
@@ -33,6 +82,7 @@ export type Database = {
           reminder_time?: string | null
           onboarding_step?: string
           onboarded_at?: string | null
+          timezone?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -46,6 +96,7 @@ export type Database = {
           reminder_time?: string | null
           onboarding_step?: string
           onboarded_at?: string | null
+          timezone?: string | null
           created_at?: string
           updated_at?: string
         }

@@ -8,6 +8,7 @@ import { isMissingTable } from "@/features/onboarding/data"
 import { loadLessonProgress } from "@/features/path/data"
 import { isUnitCompleted } from "@/features/path/model"
 import { requireUser } from "@/lib/auth/session"
+import { trackServer } from "@/lib/analytics/server"
 import { createClient } from "@/lib/supabase/server"
 
 export type StandupResult = { ok: true } | { ok: false; message: string }
@@ -52,5 +53,6 @@ export async function completeStandupAction(
         ? "The database isn’t set up yet."
         : FAILED,
     }
+  trackServer(user.id, "standup_completed", { unit_id: unitId })
   return { ok: true }
 }

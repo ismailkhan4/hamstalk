@@ -1,18 +1,25 @@
 "use client"
 
+import * as Sentry from "@sentry/nextjs"
 import { TriangleAlert } from "lucide-react"
 import Link from "next/link"
+import { useEffect } from "react"
 
 import { EmptyState } from "@/components/feedback/empty-state"
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button-variants"
 
 export default function LessonError({
-  reset,
+  error,
+  retry,
 }: {
-  error: Error
-  reset: () => void
+  error: Error & { digest?: string }
+  retry: () => void
 }) {
+  useEffect(() => {
+    Sentry.captureException(error)
+  }, [error])
+
   return (
     <main
       id="main"
@@ -24,7 +31,7 @@ export default function LessonError({
         title="This lesson didn’t load"
         actions={
           <>
-            <Button size="lg" onClick={reset}>
+            <Button size="lg" onClick={retry}>
               Try again
             </Button>
             <Link

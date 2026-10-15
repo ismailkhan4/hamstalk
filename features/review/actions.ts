@@ -4,6 +4,7 @@ import { z } from "zod"
 
 import { isMissingTable } from "@/features/onboarding/data"
 import { requireUser } from "@/lib/auth/session"
+import { trackServer } from "@/lib/analytics/server"
 import { createClient } from "@/lib/supabase/server"
 
 import { nextDueLabel, rate, type Strength } from "./scheduler"
@@ -24,7 +25,7 @@ const FAILED =
 export async function rateReviewItemAction(raw: unknown): Promise<RateResult> {
   const parsed = input.safeParse(raw)
   if (!parsed.success) return { ok: false, message: FAILED }
-  await requireUser("/review")
+  const user = await requireUser("/review")
   const supabase = await createClient()
 
   const { data, error } = await supabase
@@ -52,6 +53,10 @@ export async function rateReviewItemAction(raw: unknown): Promise<RateResult> {
     })
     .eq("item_key", parsed.data.itemKey)
   if (updateError) return { ok: false, message: FAILED }
+  trackServer(user.id, "review_item_rated", {
+    rating: parsed.data.rating,
+    strength: next.strength,
+  })
   return {
     ok: true,
     strength: next.strength,

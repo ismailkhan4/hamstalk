@@ -8,6 +8,7 @@ import { profileSchema, resetPasswordSchema } from "@/features/auth/schemas"
 import { isMissingTable } from "@/features/onboarding/data"
 import { preferencesSchema } from "@/features/onboarding/options"
 import { requireUser } from "@/lib/auth/session"
+import { trackServer } from "@/lib/analytics/server"
 import { getSiteUrl } from "@/lib/site-url"
 import { createClient } from "@/lib/supabase/server"
 import type { Database } from "@/lib/supabase/database.types"
@@ -47,6 +48,7 @@ export async function savePreferencesAction(
     .update(row, { count: "exact" })
     .eq("user_id", user.id)
   if (error || count === 0) return SAVE_FAILED
+  trackServer(user.id, "preferences_saved", {})
   return { ok: true }
 }
 
@@ -132,6 +134,7 @@ export async function resetProgressAction(): Promise<SettingsResult> {
         ? "Apply the database migrations first."
         : "Some of it may have been cleared. Try again to finish.",
     }
+  trackServer(user.id, "progress_reset", {})
   return {
     ok: true,
     message: "Your progress is reset. Start again from Unit 1.",
@@ -149,7 +152,7 @@ export async function deleteAccountAction(
       title: "Type “delete” to confirm",
       message: "Nothing was deleted.",
     }
-  await requireUser("/settings")
+  const user = await requireUser("/settings")
   const supabase = await createClient()
   const { error } = await supabase.rpc("delete_my_account")
   if (error)
@@ -161,6 +164,7 @@ export async function deleteAccountAction(
           ? "Apply the latest database migration first."
           : "Nothing was removed. Try again in a moment.",
     }
+  trackServer(user.id, "account_deleted", {})
   await supabase.auth.signOut()
   redirect("/signin?notice=account-deleted")
 }
