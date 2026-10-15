@@ -11,19 +11,34 @@ type Props = {
     replay?: string
     screen?: string
     perfect?: string
+    streak?: string
+    frozen?: string
+    earned?: string
+    goal?: string
   }>
 }
 
 /**
  * Development only: any lesson in the real runner, with no account and nothing saved.
- * `?id=a1-u1-l2`, `&replay=1`; `&screen=complete` (with `&perfect=1`) shows just the end screen.
+ * `?id=a1-u1-l2`, `&replay=1`; `&screen=complete` (with `&perfect=1`) shows just the end screen,
+ * and `&streak=7&frozen=1&earned=1&goal=1` fakes what the server would award.
  */
 export default async function DevLessonPage({ searchParams }: Props) {
   if (!devPreviewsEnabled) notFound()
-  const { id, replay, screen, perfect } = await searchParams
+  const params = await searchParams
+  const { id, replay, screen, perfect } = params
   if (screen === "complete")
     return (
-      <CompletePreview lessonId={id ?? "a1-u1-l1"} perfect={perfect === "1"} />
+      <CompletePreview
+        lessonId={id ?? "a1-u1-l1"}
+        perfect={perfect === "1"}
+        rewards={{
+          streak: params.streak ? Number(params.streak) : undefined,
+          frozen: params.frozen ? Number(params.frozen) : undefined,
+          earned: params.earned === "1",
+          goal: params.goal === "1",
+        }}
+      />
     )
   return <LessonPreview lessonId={id} replay={replay === "1"} />
 }

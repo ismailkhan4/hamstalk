@@ -57,7 +57,9 @@ export function ReviewScreen({
     { card: ReviewCard; rating: Rating }[]
   >([])
 
-  const cards = overview.due.slice(0, sessionSize)
+  // The session's deck is fixed when it starts. Rating a card refreshes the page (for the XP
+  // badges), which drops that card from "due"; a deck derived from props would skip the next one.
+  const [cards] = useState(() => overview.due.slice(0, sessionSize))
   const card = cards[index]
 
   async function rate(rating: Rating) {

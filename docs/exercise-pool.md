@@ -71,6 +71,7 @@ order); on an existing project only the last one is new:
 5. `account_controls.sql`
 6. `exercises_pool.sql`
 7. `learner_timezone.sql` (adds `learner_preferences.timezone`; unrelated to the pool)
+8. `habit_loop.sql` (XP, daily goals and streaks; see the README)
 
 The migration only creates the new table, its indexes, trigger and policy. It does not touch any
 existing table. Apply it either way:

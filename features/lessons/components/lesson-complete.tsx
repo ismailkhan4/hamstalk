@@ -1,9 +1,10 @@
 "use client"
 
 import {
-  Check,
+  Check as CheckIcon,
+  CircleCheck,
   Clock,
-  Flame,
+  GitMerge,
   Info,
   NotebookPen,
   Star,
@@ -12,7 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react"
 import Link from "next/link"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { Alert } from "@/components/feedback/alert"
 import { GermanText } from "@/components/learning/german-text"
@@ -23,10 +24,13 @@ import { celebrate } from "@/features/celebrations/confetti"
 import { CountUp } from "@/features/celebrations/count-up"
 import { playFeedback } from "@/features/celebrations/feedback"
 import { Mascot } from "@/features/celebrations/mascot"
+import { isCelebration, type Rewards } from "@/features/rewards/payload"
+import { StreakCelebration } from "@/features/streaks/components/streak-celebration"
 import { cn } from "@/lib/utils"
 
 import type { LessonSummary } from "../engine/session"
 import type { Lesson } from "../schema"
+import { ticketId } from "../ticket"
 
 export type UpNext = {
   href: string | null
@@ -43,6 +47,8 @@ type LessonCompleteProps = {
   minutes: number
   /** The longest run of answers right first time. */
   bestCombo: number
+  /** What the server awarded, once it has answered. Null while saving or if XP couldn't be saved. */
+  rewards: Rewards | null
   mistakeCount: number
   replay: boolean
   /** What happens after this one, decided by the path rules. Null when nothing is next yet. */
@@ -65,6 +71,7 @@ export function LessonComplete({
   summary,
   minutes,
   bestCombo,
+  rewards,
   mistakeCount,
   replay,
   upNext,
@@ -90,6 +97,24 @@ export function LessonComplete({
     celebrate(replay ? "small" : "big")
   }, [perfect, replay])
 
+  // The streak takes over once the summary has had its moment, and Continue hands it back.
+  const [streakOpen, setStreakOpen] = useState(false)
+  const [streakSeen, setStreakSeen] = useState(false)
+  const shownAt = useRef(0)
+  useEffect(() => {
+    shownAt.current = performance.now()
+  }, [])
+  useEffect(() => {
+    if (!isCelebration(rewards) || streakSeen) return
+    const wait = Math.max(0, 1400 - (performance.now() - shownAt.current))
+    const timer = setTimeout(() => setStreakOpen(true), wait)
+    return () => clearTimeout(timer)
+  }, [rewards, streakSeen])
+
+  // Before the server answers, show what this lesson should earn; then exactly what it did.
+  const expectedXp = replay ? 10 : summary.xp + (perfect ? 10 : 0)
+  const xp = rewards?.awarded ?? expectedXp
+
   return (
     <main
       id="main"
@@ -98,26 +123,27 @@ export function LessonComplete({
       <div className="flex flex-col items-center text-center">
         <Mascot
           mood={perfect ? "cheer" : "dance"}
-          size={148}
+          size={132}
           className="motion-safe:animate-pop"
         />
+        <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-primary px-3 py-1 text-sm font-extrabold text-primary-foreground motion-safe:animate-pop">
+          <GitMerge aria-hidden="true" className="size-4" strokeWidth={3} />
+          Merged
+          <span className="font-mono text-xs opacity-80">
+            {ticketId(lesson.id)}
+          </span>
+        </p>
         {/* Entrances are CSS, so reduced motion applies from the first paint, before any script. */}
         <h1
           lang="de"
           style={{ animationDelay: "150ms" }}
-          className="mt-4 font-display text-[clamp(36px,6vw,52px)] leading-tight font-semibold text-primary-text motion-safe:animate-rise"
+          className="mt-3 font-display text-[clamp(36px,6vw,52px)] leading-tight font-semibold text-primary-text motion-safe:animate-rise"
         >
           {review ? "Wiederholung geschafft!" : "Lektion geschafft!"}
         </h1>
         <p className="mt-1 text-lg font-semibold text-secondary-text">
           {review ? "Review complete" : "Lesson complete"}: {lesson.title}
         </p>
-        {perfect && (
-          <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-reward px-3.5 py-1 text-sm font-extrabold text-reward-foreground motion-safe:animate-pop">
-            <Star aria-hidden="true" className="size-4 fill-current" />
-            <span lang="de">Perfekt!</span> Every answer right first time
-          </p>
-        )}
       </div>
 
       {saveProblem && (
@@ -141,28 +167,60 @@ export function LessonComplete({
         </Alert>
       )}
 
-      <dl className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatTile label="Total XP" icon={Zap} tone="reward" index={0}>
-          {replay ? "0" : <CountUp to={summary.xp} prefix="+" />}
-        </StatTile>
-        <StatTile
-          label={perfect ? "Perfect" : "Accuracy"}
-          icon={Target}
-          tone="primary"
-          index={1}
-        >
-          <CountUp to={accuracy} delay={0.35} />%
-        </StatTile>
-        <StatTile label="Time" icon={Clock} tone="info" index={2}>
-          {minutes} min
-        </StatTile>
-        <StatTile label="Best combo" icon={Flame} tone="spark" index={3}>
-          {bestCombo}
-        </StatTile>
-      </dl>
+      <section
+        aria-labelledby="checks-title"
+        className="mt-8 overflow-hidden rounded-3xl border-2 border-border bg-card shadow-[0_4px_0_var(--border)] motion-safe:animate-rise"
+        style={{ animationDelay: "300ms" }}
+      >
+        <header className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b-2 border-border-subtle bg-background-subtle py-2 pr-4 pl-2">
+          <Mascot mood="happy" size={36} />
+          <p className="text-sm">
+            <b className="font-extrabold">Quietschi</b>{" "}
+            <span className="font-semibold text-muted-foreground">
+              approved these changes
+            </span>
+          </p>
+          {perfect && (
+            <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-reward px-2.5 py-0.5 text-xs font-extrabold text-reward-foreground">
+              <Star aria-hidden="true" className="size-3.5 fill-current" />
+              <span lang="de">Perfekt!</span> No changes requested
+            </span>
+          )}
+        </header>
+        <h2 id="checks-title" className="sr-only">
+          Checks
+        </h2>
+        <dl className="divide-y-2 divide-border-subtle">
+          <Check label="XP earned" icon={Zap} tone="reward">
+            <CountUp key={xp} to={xp} prefix="+" /> XP
+            {!replay && perfect && (
+              <span className="ml-2 text-xs font-bold text-muted-foreground">
+                incl. +10 perfect
+              </span>
+            )}
+          </Check>
+          <Check label="Right first time" icon={Target} tone="primary">
+            {summary.firstTry}/{summary.graded}
+            <span className="ml-1.5 text-sm font-bold text-muted-foreground">
+              (<CountUp to={accuracy} delay={0.35} />
+              %)
+            </span>
+          </Check>
+          <Check label="Best build streak" icon={CircleCheck} tone="primary">
+            {bestCombo} green
+          </Check>
+          <Check label="Time" icon={Clock} tone="info">
+            {minutes} min
+          </Check>
+        </dl>
+        <p className="flex items-center gap-2 border-t-2 border-success-border bg-success-subtle px-4 py-2.5 text-sm font-extrabold text-success-text">
+          <CircleCheck aria-hidden="true" className="size-4" strokeWidth={3} />
+          All checks have passed
+        </p>
+      </section>
       {replay && (
         <p className="mt-2 text-sm text-muted-foreground">
-          This was a replay, so it adds no new XP.
+          Replays earn 10 practice XP, once a day per lesson.
         </p>
       )}
 
@@ -210,7 +268,7 @@ export function LessonComplete({
             <ul className="mt-3 flex flex-col gap-2">
               {lesson.canDo.map((item) => (
                 <li key={item} className="flex gap-3">
-                  <Check
+                  <CheckIcon
                     aria-hidden="true"
                     className="mt-1 size-4 shrink-0 text-primary-text"
                   />
@@ -328,61 +386,47 @@ export function LessonComplete({
         XP counts the practice you put in. Your level only changes when you pass
         the A1 checkpoint.
       </p>
+      {streakOpen && rewards && (
+        <StreakCelebration
+          rewards={rewards}
+          onClose={() => {
+            setStreakOpen(false)
+            setStreakSeen(true)
+          }}
+        />
+      )}
     </main>
   )
 }
 
-const TILE_TONES = {
-  reward: "border-reward bg-reward text-reward-foreground",
-  primary: "border-primary bg-primary text-primary-foreground",
-  info: "border-info bg-info text-info-foreground",
-  spark: "border-spark bg-spark text-spark-foreground",
-} as const
-
-const TILE_TEXT = {
+const CHECK_TONES = {
   reward: "text-reward-text",
   primary: "text-primary-text",
   info: "text-info-text",
-  spark: "text-spark-text",
 } as const
 
-/** A stat with a coloured label band, dropping in one after another. */
-function StatTile({
+/** One line of the merge summary: a passed check and its value. */
+function Check({
   label,
   icon: Icon,
   tone,
-  index,
   children,
 }: {
   label: string
   icon: LucideIcon
-  tone: keyof typeof TILE_TONES
-  index: number
+  tone: keyof typeof CHECK_TONES
   children: React.ReactNode
 }) {
   return (
-    <div
-      style={{ animationDelay: `${350 + index * 120}ms` }}
-      className={cn(
-        "overflow-hidden rounded-2xl border-2 motion-safe:animate-rise",
-        TILE_TONES[tone]
-      )}
-    >
-      <dt className="px-2 py-1 text-center text-[0.75rem] font-extrabold tracking-wide uppercase">
-        {label}
-      </dt>
-      <dd
-        className={cn(
-          "m-0.5 flex items-center justify-center gap-1.5 rounded-[14px] bg-card px-2 py-3 font-display text-2xl font-semibold tabular-nums",
-          TILE_TEXT[tone]
-        )}
-      >
-        <Icon
-          aria-hidden="true"
-          className="size-5 shrink-0"
-          strokeWidth={2.6}
-        />
-        <span>{children}</span>
+    <div className="flex items-center gap-3 px-4 py-3">
+      <Icon
+        aria-hidden="true"
+        className={cn("size-5 shrink-0", CHECK_TONES[tone])}
+        strokeWidth={2.6}
+      />
+      <dt className="flex-1 font-bold text-secondary-text">{label}</dt>
+      <dd className="font-display text-xl font-semibold tabular-nums">
+        {children}
       </dd>
     </div>
   )

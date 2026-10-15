@@ -10,6 +10,7 @@ import { isUnitCompleted } from "@/features/path/model"
 import { requireUser } from "@/lib/auth/session"
 import { trackServer } from "@/lib/analytics/server"
 import { createClient } from "@/lib/supabase/server"
+import { awardXp } from "@/features/rewards/award"
 
 export type StandupResult = { ok: true } | { ok: false; message: string }
 
@@ -54,5 +55,8 @@ export async function completeStandupAction(
         : FAILED,
     }
   trackServer(user.id, "standup_completed", { unit_id: unitId })
+  // No refresh here: the standup page re-picks the next standup on render, which would pull the
+  // learner off their finished screen. The badges catch up on the next page.
+  await awardXp(supabase, user.id, "standup", unitId)
   return { ok: true }
 }

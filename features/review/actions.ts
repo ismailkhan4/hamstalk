@@ -1,16 +1,19 @@
 "use server"
 
+import { refresh } from "next/cache"
 import { z } from "zod"
 
 import { isMissingTable } from "@/features/onboarding/data"
 import { requireUser } from "@/lib/auth/session"
 import { trackServer } from "@/lib/analytics/server"
 import { createClient } from "@/lib/supabase/server"
+import { awardXp } from "@/features/rewards/award"
+import type { Rewards } from "@/features/rewards/payload"
 
 import { nextDueLabel, rate, type Strength } from "./scheduler"
 
 export type RateResult =
-  | { ok: true; strength: Strength; label: string }
+  | { ok: true; strength: Strength; label: string; rewards: Rewards | null }
   | { ok: false; message: string }
 
 const input = z.object({
@@ -57,9 +60,18 @@ export async function rateReviewItemAction(raw: unknown): Promise<RateResult> {
     rating: parsed.data.rating,
     strength: next.strength,
   })
+  const rewards = await awardXp(
+    supabase,
+    user.id,
+    "review",
+    parsed.data.itemKey
+  )
+  // XP changed: refresh the page so the shell's streak and goal badges catch up.
+  if (rewards?.awarded) refresh()
   return {
     ok: true,
     strength: next.strength,
     label: nextDueLabel(parsed.data.rating, next.strength),
+    rewards,
   }
 }

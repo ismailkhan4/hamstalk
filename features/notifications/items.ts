@@ -3,11 +3,12 @@ import type { StartLevel } from "@/features/onboarding/options"
 import { nextLesson, type LessonProgress } from "@/features/path/model"
 import { getLesson } from "@/content/lessons/registry"
 import { standups } from "@/content/standup"
+import type { StreakState } from "@/features/streaks/model"
 import { standupState } from "@/features/team/model"
 
 export type Notification = {
   id: string
-  kind: "review" | "lesson" | "standup"
+  kind: "streak" | "review" | "lesson" | "standup"
   title: string
   text: string
   href: string
@@ -19,6 +20,8 @@ type Input = {
   startLevel: StartLevel | null
   progress: LessonProgress[]
   completedStandups: string[]
+  /** Null when the habit tables don't exist yet. */
+  streak?: StreakState | null
 }
 
 /**
@@ -30,8 +33,23 @@ export function buildNotifications({
   startLevel,
   progress,
   completedStandups,
+  streak,
 }: Input): Notification[] {
   const items: Notification[] = []
+
+  // A streak that ends tonight comes first: everything else can wait a day.
+  if (streak?.kind === "at-risk")
+    items.push({
+      id: "streak",
+      kind: "streak",
+      title: `Your ${streak.count} day streak ends at midnight`,
+      text:
+        streak.freezing > 0
+          ? "Practise today and a streak freeze covers the day you missed."
+          : "Earn 10 XP today to keep it: one lesson or a short review does it.",
+      href: dueWords > 0 ? "/review" : "/path",
+      action: "Keep my streak",
+    })
 
   if (dueWords > 0)
     items.push({

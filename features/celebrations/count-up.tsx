@@ -7,6 +7,8 @@ import { useLessMotion } from "./use-less-motion"
 
 type CountUpProps = {
   to: number
+  /** Where the count starts. */
+  from?: number
   /** Seconds. */
   duration?: number
   delay?: number
@@ -20,13 +22,14 @@ type CountUpProps = {
  */
 export function CountUp({
   to,
+  from = 0,
   duration = 1.1,
   delay = 0.2,
   prefix = "",
   className,
 }: CountUpProps) {
   const still = useLessMotion()
-  const value = useMotionValue(still ? to : 0)
+  const value = useMotionValue(still ? to : from)
   const text = useTransform(value, (latest) => `${prefix}${Math.round(latest)}`)
 
   useEffect(() => {
@@ -34,13 +37,14 @@ export function CountUp({
       value.set(to)
       return
     }
+    value.set(from)
     const controls = animate(value, to, {
       duration,
       delay,
       ease: [0.2, 0.8, 0.2, 1],
     })
     return () => controls.stop()
-  }, [still, to, duration, delay, value])
+  }, [still, from, to, duration, delay, value])
 
   return (
     <span className={className}>

@@ -1,3 +1,5 @@
+import { Suspense } from "react"
+
 import { AppShell } from "@/components/layout/app-shell"
 import { isLessonAvailable } from "@/content/availability"
 import { HowItWorks, PathStrip, PlanPanel, TeamCard } from "./home-panels"
@@ -6,6 +8,7 @@ import { dayAtCompany } from "@/features/learner/day-at-company"
 import type { Learner } from "@/features/learner/load-learner"
 import { isPreviewLevel } from "@/features/onboarding/plan"
 import { currentUnitNumber, homeLevel, nextLesson } from "@/features/path/model"
+import { TodayPanel } from "@/features/streaks/components/today-panel"
 
 type HomeViewProps = Pick<
   Learner,
@@ -74,6 +77,9 @@ export function HomeView({
               preview.
             </p>
           )}
+          <Suspense fallback={null}>
+            <TodayPanel />
+          </Suspense>
           {next && (
             <MissionCard
               next={next}

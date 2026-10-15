@@ -1,6 +1,8 @@
 "use server"
 
 import { isMissingTable } from "@/features/onboarding/data"
+import { awardXp } from "@/features/rewards/award"
+import type { Rewards } from "@/features/rewards/payload"
 import { trackServer } from "@/lib/analytics/server"
 import { requireUser } from "@/lib/auth/session"
 import { firstName } from "@/lib/auth/user-name"
@@ -19,13 +21,21 @@ import { personalise } from "./schema"
 import { loadRunnableLesson } from "./source"
 
 export type LessonSaveResult = { ok: true } | { ok: false; message: string }
+/** Completing also reports what was earned, or null when XP couldn't be recorded. */
+export type LessonCompleteResult =
+  { ok: true; rewards: Rewards | null } | { ok: false; message: string }
+
+/** Extra XP for a lesson with every answer right first time. */
+const PERFECT_BONUS = 10
 
 const FAILED =
   "Your progress isn’t saved yet. It’s kept on this device while you’re here; try saving again."
 const NOT_READY =
   "Progress can’t be saved yet because the database isn’t set up. If you run this copy of Klarlingo, apply the migrations in supabase/migrations."
 
-const failure = (error: { code?: string } | null): LessonSaveResult =>
+const failure = (
+  error: { code?: string } | null
+): { ok: false; message: string } =>
   isMissingTable(error)
     ? { ok: false, message: NOT_READY }
     : { ok: false, message: FAILED }
@@ -70,10 +80,13 @@ export async function saveLessonProgressAction(
   return error ? failure(error) : { ok: true }
 }
 
-/** XP comes from the lesson's own content, never from the browser. Completing again awards nothing. */
+/**
+ * XP comes from the lesson's own content, never from the browser, and award_xp() checks and clamps
+ * it. Finishing a lesson again saves nothing new but earns practice XP once a day.
+ */
 export async function completeLessonAction(
   input: unknown
-): Promise<LessonSaveResult> {
+): Promise<LessonCompleteResult> {
   const parsed = completeInput.safeParse(input)
   if (!parsed.success) return { ok: false, message: FAILED }
   const ctx = await context(parsed.data.lessonId)
@@ -86,7 +99,16 @@ export async function completeLessonAction(
     .eq("lesson_id", parsed.data.lessonId)
     .maybeSingle()
   if (readError) return failure(readError)
-  if (existing?.status === "completed") return { ok: true }
+  if (existing?.status === "completed")
+    return {
+      ok: true,
+      rewards: await awardXp(
+        ctx.supabase,
+        ctx.user.id,
+        "lesson_replay",
+        parsed.data.lessonId
+      ),
+    }
 
   const { error: reviewError } = await ctx.supabase
     .from("review_items")
@@ -110,14 +132,23 @@ export async function completeLessonAction(
   )
   if (error) return failure(error)
 
+  const perfect = parsed.data.outcomes.every((o) => o === "first_try")
+  const xp = ctx.lesson.xp + (perfect ? PERFECT_BONUS : 0)
+  const rewards = await awardXp(
+    ctx.supabase,
+    ctx.user.id,
+    "lesson",
+    parsed.data.lessonId,
+    xp
+  )
   trackServer(ctx.user.id, "lesson_completed", {
     lesson_id: parsed.data.lessonId,
-    xp: ctx.lesson.xp,
+    xp: rewards?.awarded ?? xp,
     exercises: parsed.data.outcomes.length,
     first_try: parsed.data.outcomes.filter((o) => o === "first_try").length,
     source: ctx.source,
   })
-  return { ok: true }
+  return { ok: true, rewards }
 }
 
 /** A first miss goes to the mistakes notebook. A repeated miss on the same item updates one row. */

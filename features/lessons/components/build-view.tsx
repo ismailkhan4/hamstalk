@@ -84,7 +84,7 @@ export function BuildView({
               disabled={!answering}
               onClick={() => setPlaced(placed.filter((value) => value !== i))}
               aria-label={`${tile(i)}, word ${position + 1}${answering ? ". Press to remove." : ""}`}
-              className="min-h-12 rounded-xl border-2 border-selected-border bg-selected px-4 font-voice text-[1.3125rem] font-semibold text-selected-text shadow-[0_3px_0_var(--selected-edge)] transition-transform duration-(--duration-instant) active:translate-y-[3px] active:shadow-none motion-safe:animate-bump"
+              className="min-h-12 rounded-xl border-2 border-selected-border bg-selected px-4 font-voice text-[1.3125rem] font-semibold text-selected-text transition-transform duration-(--duration-instant) active:scale-[0.97] motion-safe:animate-bump"
             >
               <span lang="de">{tile(i)}</span>
             </button>
@@ -98,7 +98,7 @@ export function BuildView({
                 type="button"
                 disabled={!answering}
                 onClick={() => setPlaced([...placed, i])}
-                className="min-h-12 rounded-xl border-2 border-border bg-card px-4 font-voice text-[1.3125rem] font-semibold shadow-[0_3px_0_var(--border)] transition-[transform,box-shadow,background-color] duration-(--duration-instant) hover:bg-background-subtle active:translate-y-[3px] active:shadow-none disabled:translate-y-0 disabled:opacity-60 disabled:shadow-none"
+                className="min-h-12 rounded-xl border-2 border-border bg-card px-4 font-voice text-[1.3125rem] font-semibold transition-[transform,background-color,border-color] duration-(--duration-instant) hover:border-input hover:bg-background-subtle active:scale-[0.97] disabled:opacity-60"
               >
                 <span lang="de">{tile(i)}</span>
               </button>

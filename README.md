@@ -17,7 +17,7 @@ This will place the ui components in the `components` directory.
 To use the components in your app, import them as follows:
 
 ```tsx
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 ```
 
 ## Curriculum in the database
@@ -68,3 +68,31 @@ WCAG AA contrast (4.5:1) in both themes.
 In development, `/dev/lesson?id=a1-u1-l2` runs any lesson without an account (`&screen=complete`,
 plus `&perfect=1`, shows the end screen) and `/dev/mascot` shows every mood. Both are off in
 production.
+
+## XP, daily goals and streaks
+
+Apply `supabase/migrations/habit_loop.sql` after the other migrations. It adds three tables
+(`xp_events`, `daily_activity`, `streaks`) that learners can read but never write, and one function,
+`award_xp()`, that does all the writing. The browser holds the learner's token and could call the
+API directly, so the database, not the app, decides how much XP anything is worth:
+
+| Activity             | XP                                                                                                | How often               |
+| -------------------- | ------------------------------------------------------------------------------------------------- | ----------------------- |
+| A lesson, first time | its authored XP (30, or 40 for a review lesson), +10 if every answer was right first time, max 60 | once                    |
+| A lesson again       | 10                                                                                                | once per lesson per day |
+| A review card        | 2                                                                                                 | once per word per day   |
+| A team standup       | 20                                                                                                | once per unit           |
+
+- **Days** are counted in the learner's own time zone (`learner_preferences.timezone`).
+- **Daily goal:** the learner picks minutes; the goal is minutes × 3 XP (10 min = 30 XP).
+- **Streak:** a day with at least 10 XP extends it. Missed days are settled at the next practice:
+  each one uses a streak freeze if there is one, otherwise the streak starts again at 1. Learners
+  start with one freeze, hold at most two, and earn one every seven days.
+- Lessons must be in `exercises_pool` to earn XP (run `bun run curriculum:ingest`). If XP can't be
+  recorded, the lesson still saves and the learner just doesn't see a reward.
+- Resetting progress in Settings keeps XP and the streak.
+
+`features/streaks/model.ts` mirrors the streak rules in TypeScript, to show the current state
+between visits without writing anything. Keep the two in step. In development, `/dev/habit` shows
+every streak state, and `/dev/lesson?screen=complete&streak=7&earned=1&goal=1` shows the
+celebration.

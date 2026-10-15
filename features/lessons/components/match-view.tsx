@@ -120,19 +120,18 @@ export function MatchView({
                       : `${pair.phrase}. ${exercise.labels.empty}.`
                   }
                   className={cn(
-                    "flex min-h-14 w-full items-center gap-3 rounded-xl border-2 border-border bg-card px-4 py-2.5 text-left shadow-[0_4px_0_var(--border)] transition-[transform,box-shadow,background-color,border-color] duration-(--duration-instant)",
+                    "flex min-h-14 w-full items-center gap-3 rounded-xl border-2 border-border bg-card px-4 py-2.5 text-left transition-[transform,background-color,border-color] duration-(--duration-instant)",
                     answering &&
-                      "cursor-pointer hover:bg-background-subtle active:translate-y-[4px] active:shadow-none",
+                      "cursor-pointer hover:border-input hover:bg-background-subtle active:scale-[0.99]",
                     answering &&
                       active === i &&
-                      "border-selected-border bg-selected shadow-[0_4px_0_var(--selected-edge)] hover:bg-selected",
+                      "border-selected-border bg-selected hover:bg-selected",
                     right === true &&
-                      "border-success bg-success-subtle shadow-[0_4px_0_var(--success-edge)] motion-safe:animate-bump",
+                      "border-success bg-success-subtle motion-safe:animate-bump",
                     right === false &&
                       !shown &&
-                      "border-danger bg-danger-subtle shadow-[0_4px_0_var(--danger-border)] motion-safe:animate-shake",
-                    shown &&
-                      "border-success bg-success-subtle shadow-[0_4px_0_var(--success-edge)]"
+                      "border-danger bg-danger-subtle motion-safe:animate-shake",
+                    shown && "border-success bg-success-subtle"
                   )}
                 >
                   <GermanText className="min-w-0 flex-1 text-xl">
@@ -180,7 +179,7 @@ export function MatchView({
                   type="button"
                   disabled={!answering}
                   onClick={() => pairWith(meaning)}
-                  className="min-h-11 rounded-xl border-2 border-border bg-card px-3.5 text-[1rem] font-semibold shadow-[0_3px_0_var(--border)] transition-[transform,box-shadow,background-color] duration-(--duration-instant) hover:bg-background-subtle active:translate-y-[3px] active:shadow-none disabled:translate-y-0 disabled:opacity-60 disabled:shadow-none"
+                  className="min-h-11 rounded-xl border-2 border-border bg-card px-3.5 text-[1rem] font-semibold transition-[transform,background-color,border-color] duration-(--duration-instant) hover:border-input hover:bg-background-subtle active:scale-[0.97] disabled:opacity-60"
                 >
                   {meaning}
                 </button>

@@ -20,6 +20,7 @@ import {
 } from "@/features/celebrations/combo"
 import { ComboToast } from "@/features/celebrations/combo-toast"
 import { playFeedback } from "@/features/celebrations/feedback"
+import type { Rewards } from "@/features/rewards/payload"
 import { track } from "@/lib/analytics/client"
 
 import type { Outcome } from "../engine/attempt"
@@ -34,6 +35,7 @@ import {
   type SessionState,
 } from "../engine/session"
 import { isGraded, type Lesson } from "../schema"
+import { ticketId } from "../ticket"
 import { BuildView } from "./build-view"
 import { TranslateView } from "./translate-view"
 import { ChoiceView } from "./choice-view"
@@ -46,6 +48,8 @@ import { TipView } from "./tip-view"
 import type { Learner } from "./types"
 
 type SaveResult = { ok: true } | { ok: false; message: string }
+type CompleteResult =
+  { ok: true; rewards?: Rewards | null } | { ok: false; message: string }
 
 /** What the runner needs from the server. The real actions or a stand-in for previews and tests. */
 export type LessonActions = {
@@ -57,7 +61,7 @@ export type LessonActions = {
   complete: (input: {
     lessonId: string
     outcomes: Outcome[]
-  }) => Promise<SaveResult>
+  }) => Promise<CompleteResult>
   recordMistake: (
     input: MistakeRecord & { lessonId: string }
   ) => Promise<SaveResult>
@@ -120,6 +124,7 @@ export function LessonRunner({
   const [completeProblem, setCompleteProblem] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [startedAt, setStartedAt] = useState(() => Date.now())
+  const [rewards, setRewards] = useState<Rewards | null>(null)
   const [combo, setCombo] = useState(0)
   const [bestCombo, setBestCombo] = useState(0)
   const [milestone, setMilestone] = useState<ComboMilestone | null>(null)
@@ -151,16 +156,19 @@ export function LessonRunner({
   const outcomesOf = (state: SessionState) =>
     state.outcomes.filter((value): value is Outcome => value !== null)
 
+  // A replay saves no progress, but still earns practice XP and can keep the streak going.
   const finishLesson = useCallback(
     async (state: SessionState) => {
-      if (replay) return
       setSaving(true)
       const result = await actions.complete({
         lessonId: lesson.id,
         outcomes: outcomesOf(state),
       })
       setSaving(false)
-      setCompleteProblem(result.ok ? null : result.message)
+      if (result.ok) {
+        setRewards(result.rewards ?? null)
+        setCompleteProblem(null)
+      } else if (!replay) setCompleteProblem(result.message)
     },
     [actions, lesson.id, replay]
   )
@@ -264,7 +272,9 @@ export function LessonRunner({
         <FocusHeader
           closeLabel="Close lesson"
           onClose={() => router.push(exitHref)}
+          ticket={ticketId(lesson.id)}
           title={lesson.title}
+          titleLang={lesson.titleIsGerman ? "de" : undefined}
         />
         <LessonIntro
           lesson={lesson}
@@ -286,6 +296,9 @@ export function LessonRunner({
         <FocusHeader
           closeLabel="Leave"
           onClose={() => router.push(exitHref)}
+          ticket={ticketId(lesson.id)}
+          title={lesson.title}
+          titleLang={lesson.titleIsGerman ? "de" : undefined}
           progress={progress}
         />
         <LessonComplete
@@ -293,6 +306,7 @@ export function LessonRunner({
           summary={summarise(lesson, state)}
           minutes={minutes}
           bestCombo={bestCombo}
+          rewards={rewards}
           mistakeCount={mistakes}
           replay={replay}
           upNext={upNext}
@@ -313,6 +327,9 @@ export function LessonRunner({
       <FocusHeader
         closeLabel="Leave lesson"
         onClose={() => setExitOpen(true)}
+        ticket={ticketId(lesson.id)}
+        title={lesson.title}
+        titleLang={lesson.titleIsGerman ? "de" : undefined}
         progress={progress}
         combo={combo}
       />

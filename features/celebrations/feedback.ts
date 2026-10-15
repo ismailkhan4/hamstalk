@@ -9,7 +9,7 @@ import { feedbackPreferences } from "@/lib/appearance"
  * always true here: every cue answers something they just did.
  */
 export type FeedbackKind =
-  "tap" | "correct" | "incorrect" | "combo" | "complete" | "perfect"
+  "tap" | "correct" | "incorrect" | "combo" | "complete" | "perfect" | "streak"
 
 type Note = {
   /** Hz. */
@@ -35,6 +35,21 @@ const G6 = 1568
 const C7 = 2093
 
 const CUES: Record<FeedbackKind, Note[]> = {
+  // A warm swoosh up into a bell chord: the flame catching.
+  streak: [
+    {
+      freq: 320,
+      at: 0,
+      length: 0.35,
+      type: "sine",
+      volume: 0.35,
+      glideTo: 880,
+    },
+    { freq: E5, at: 0.3, length: 0.6, type: "triangle", volume: 0.4 },
+    { freq: A5, at: 0.3, length: 0.6, type: "triangle", volume: 0.35 },
+    { freq: E6, at: 0.3, length: 0.7, type: "sine", volume: 0.25 },
+    { freq: A5 * 2, at: 0.42, length: 0.5, type: "sine", volume: 0.15 },
+  ],
   tap: [{ freq: 1400, at: 0, length: 0.03, type: "triangle", volume: 0.12 }],
   // Two rising notes: "ding-ding!"
   correct: [
@@ -98,6 +113,7 @@ const BUZZ: Record<FeedbackKind, number[]> = {
   combo: [10, 30, 10, 30, 22],
   complete: [18, 40, 18, 40, 60],
   perfect: [18, 40, 18, 40, 18, 40, 80],
+  streak: [30, 60, 80],
 }
 
 const MASTER_VOLUME = 0.32

@@ -11,6 +11,9 @@ const TABLES = [
   "review_items",
   "mistakes",
   "standup_completions",
+  "xp_events",
+  "daily_activity",
+  "streaks",
 ] as const
 
 /** A copy of everything stored for the signed-in learner. Policies limit every query to their own rows. */
