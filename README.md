@@ -45,3 +45,26 @@ Copy `.env.example` to `.env.local`. PostHog (`NEXT_PUBLIC_POSTHOG_KEY`) and Sen
 
 `lib/supabase/database.types.ts` is maintained by hand. Update it whenever a migration changes a
 table, column or nullability.
+
+## Design language
+
+Klarlingo is meant to feel like a game you want to come back to: bright, rounded and quick to
+celebrate. The pieces live in `features/celebrations/`:
+
+- **Quietschi** (`mascot.tsx`): the rubber-duck mascot, an animated SVG with eight moods (`idle`,
+  `happy`, `sad`, `thinking`, `cheer`, `dance`, `sleepy`, `onFire`). Screens only use
+  `<Mascot mood="…" />`, so a Rive file can replace the drawing later.
+- **Sound and vibration** (`feedback.ts`): `playFeedback("correct" | "incorrect" | "combo" | …)`.
+  Sounds are synthesised with the Web Audio API; there are no audio files. Learners switch each
+  off in Settings.
+- **Combos** (`combo.ts`, `combo-toast.tsx`): answers right first time in a row. The progress bar
+  glows from 3, and 3, 5, 7 and every fifth after 10 get a callout.
+- **Confetti and count-ups** (`confetti.ts`, `count-up.tsx`).
+
+Reduced motion (the device setting or Klarlingo's own) keeps the sound, colour and words but drops
+movement and confetti. Tokens are in `app/globals.css`; every text colour there is chosen to meet
+WCAG AA contrast (4.5:1) in both themes.
+
+In development, `/dev/lesson?id=a1-u1-l2` runs any lesson without an account (`&screen=complete`,
+plus `&perfect=1`, shows the end screen) and `/dev/mascot` shows every mood. Both are off in
+production.

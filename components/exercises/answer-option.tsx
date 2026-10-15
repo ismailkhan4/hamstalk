@@ -69,25 +69,27 @@ function AnswerOption({
       data-state={state}
       onClick={locked ? undefined : onSelect}
       className={cn(
-        "flex min-h-14 w-full items-center gap-3.5 rounded-lg border-[1.5px] border-border bg-card px-4 py-3 text-left text-[1.0625rem] leading-[1.35] font-medium text-foreground transition-[border-color,background-color,box-shadow] duration-(--duration-fast) ease-out",
-        !locked && "cursor-pointer hover:border-input",
+        "flex min-h-14 w-full items-center gap-3.5 rounded-xl border-2 border-border bg-card px-4 py-3 text-left text-[1.0625rem] leading-[1.35] font-semibold text-foreground shadow-[0_4px_0_var(--border)] transition-[border-color,background-color,box-shadow,transform] duration-(--duration-instant) ease-out",
+        !locked &&
+          "cursor-pointer hover:bg-background-subtle active:translate-y-[4px] active:shadow-none",
         locked && "cursor-default",
         state === "selected" &&
-          "border-primary bg-primary-subtle shadow-[inset_0_0_0_1px_var(--primary)]",
+          "border-selected-border bg-selected text-selected-text shadow-[0_4px_0_var(--selected-edge)] hover:bg-selected",
         isPositive &&
-          "border-success bg-success-subtle shadow-[inset_0_0_0_1px_var(--success)]",
+          "border-success bg-success-subtle text-success-text shadow-[0_4px_0_var(--success-edge)]",
         isNegative &&
-          "border-danger bg-danger-subtle shadow-[inset_0_0_0_1px_var(--danger)]",
-        state === "incorrect" && "motion-safe:animate-nudge",
+          "border-danger bg-danger-subtle text-danger-text shadow-[0_4px_0_var(--danger-border)]",
+        state === "incorrect" && "motion-safe:animate-shake",
+        state === "correct" && "motion-safe:animate-bump",
         state === "dimmed" && "opacity-55"
       )}
     >
       <span
         aria-hidden="true"
         className={cn(
-          "grid size-[30px] shrink-0 place-items-center rounded-md text-[0.8125rem] font-semibold text-muted-foreground shadow-[inset_0_0_0_1.5px_var(--border)]",
+          "grid size-[30px] shrink-0 place-items-center rounded-lg text-[0.8125rem] font-extrabold text-muted-foreground shadow-[inset_0_0_0_2px_var(--border)]",
           state === "selected" &&
-            "bg-primary text-primary-foreground shadow-none",
+            "text-selected-text shadow-[inset_0_0_0_2px_var(--selected-border)]",
           isPositive && "bg-success text-success-foreground shadow-none",
           isNegative && "bg-danger text-danger-foreground shadow-none"
         )}

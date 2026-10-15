@@ -34,6 +34,7 @@ import {
   type PlacementLevel,
 } from "../scoring"
 import { ListeningPlayer } from "./listening-player"
+import { optionOrder } from "@/features/lessons/engine/shuffle"
 
 const TOTAL = placementQuestions.length
 
@@ -401,21 +402,24 @@ export function PlacementCheck({
           aria-label="Answers"
           className="mt-6 flex flex-col gap-3"
         >
-          {options.map((option, optionIndex) => {
-            const isIdk = optionIndex === IDK
-            return (
-              <AnswerOption
-                key={option}
-                index={optionIndex}
-                keyLabel={isIdk ? "?" : undefined}
-                lang={question.germanOptions && !isIdk ? "de" : "en"}
-                state={selected === optionIndex ? "selected" : "idle"}
-                onSelect={() => choose(optionIndex)}
-              >
-                {option}
-              </AnswerOption>
-            )
-          })}
+          {[...optionOrder(IDK, `placement:${index}`), IDK].map(
+            (optionIndex, position) => {
+              const option = options[optionIndex] ?? ""
+              const isIdk = optionIndex === IDK
+              return (
+                <AnswerOption
+                  key={option}
+                  index={position}
+                  keyLabel={isIdk ? "?" : undefined}
+                  lang={question.germanOptions && !isIdk ? "de" : "en"}
+                  state={selected === optionIndex ? "selected" : "idle"}
+                  onSelect={() => choose(optionIndex)}
+                >
+                  {option}
+                </AnswerOption>
+              )
+            }
+          )}
         </div>
         {error && (
           <Alert tone="error" title="Not saved yet" className="mt-6">

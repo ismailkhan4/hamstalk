@@ -28,7 +28,7 @@ export function upNextAfter(
   const after = withCompleted(progress, lessonId)
   const next = nextLesson(level, after)
   const current = findLesson(lessonId)
-    if (!current) return null
+  if (!current) return null
 
   const unitDone = current.unit.lessons.every((lesson) =>
     after.some(

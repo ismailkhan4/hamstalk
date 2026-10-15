@@ -20,6 +20,7 @@ import { ListenButton } from "@/features/lessons/components/listen-button"
 import { cn } from "@/lib/utils"
 
 import type { StandupResult } from "./actions"
+import { optionOrder } from "@/features/lessons/engine/shuffle"
 
 type Said = { who: "lena" | "me"; de: string; en: string }
 
@@ -195,12 +196,17 @@ export function StandupSession({
               aria-labelledby="your-turn"
               className="mt-4 flex flex-col gap-2.5"
             >
-              {prompt.options.map((option, i) => {
+              {optionOrder(
+                prompt.options.length,
+                `standup:${standup.unitId}:${index}`
+              ).map((i, position) => {
+                const option = prompt.options[i]
+                if (!option) return null
                 const mine = selection === i
                 return (
                   <AnswerOption
                     key={option.de}
-                    index={i}
+                    index={position}
                     lang="de"
                     translation={showEnglish ? option.en : undefined}
                     locked={answered}

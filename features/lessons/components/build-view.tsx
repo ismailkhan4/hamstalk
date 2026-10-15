@@ -66,7 +66,7 @@ export function BuildView({
         <div
           aria-label="Your sentence"
           className={cn(
-            "mt-8 flex min-h-20 flex-wrap items-center gap-2 rounded-xl border-[1.5px] border-dashed border-input p-3",
+            "mt-8 flex min-h-20 flex-wrap items-center gap-2 rounded-2xl border-2 border-dashed border-input p-3",
             slotState === "ok" &&
               "border-solid border-success bg-success-subtle",
             slotState === "bad" && "border-solid border-danger bg-danger-subtle"
@@ -84,7 +84,7 @@ export function BuildView({
               disabled={!answering}
               onClick={() => setPlaced(placed.filter((value) => value !== i))}
               aria-label={`${tile(i)}, word ${position + 1}${answering ? ". Press to remove." : ""}`}
-              className="min-h-12 rounded-lg border-[1.5px] border-primary bg-primary-subtle px-4 font-voice text-[1.3125rem]"
+              className="min-h-12 rounded-xl border-2 border-selected-border bg-selected px-4 font-voice text-[1.3125rem] font-semibold text-selected-text shadow-[0_3px_0_var(--selected-edge)] transition-transform duration-(--duration-instant) active:translate-y-[3px] active:shadow-none motion-safe:animate-bump"
             >
               <span lang="de">{tile(i)}</span>
             </button>
@@ -98,7 +98,7 @@ export function BuildView({
                 type="button"
                 disabled={!answering}
                 onClick={() => setPlaced([...placed, i])}
-                className="min-h-12 rounded-lg border-[1.5px] border-border bg-card px-4 font-voice text-[1.3125rem] hover:border-input disabled:opacity-60"
+                className="min-h-12 rounded-xl border-2 border-border bg-card px-4 font-voice text-[1.3125rem] font-semibold shadow-[0_3px_0_var(--border)] transition-[transform,box-shadow,background-color] duration-(--duration-instant) hover:bg-background-subtle active:translate-y-[3px] active:shadow-none disabled:translate-y-0 disabled:opacity-60 disabled:shadow-none"
               >
                 <span lang="de">{tile(i)}</span>
               </button>

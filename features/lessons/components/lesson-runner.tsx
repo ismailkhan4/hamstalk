@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 import { Alert } from "@/components/feedback/alert"
 import { FocusHeader } from "@/components/learning/focus-header"
@@ -13,6 +13,13 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  comboMilestone,
+  nextCombo,
+  type ComboMilestone,
+} from "@/features/celebrations/combo"
+import { ComboToast } from "@/features/celebrations/combo-toast"
+import { playFeedback } from "@/features/celebrations/feedback"
 import { track } from "@/lib/analytics/client"
 
 import type { Outcome } from "../engine/attempt"
@@ -26,7 +33,7 @@ import {
   summarise,
   type SessionState,
 } from "../engine/session"
-import type { Lesson } from "../schema"
+import { isGraded, type Lesson } from "../schema"
 import { BuildView } from "./build-view"
 import { TranslateView } from "./translate-view"
 import { ChoiceView } from "./choice-view"
@@ -113,6 +120,16 @@ export function LessonRunner({
   const [completeProblem, setCompleteProblem] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [startedAt, setStartedAt] = useState(() => Date.now())
+  const [combo, setCombo] = useState(0)
+  const [bestCombo, setBestCombo] = useState(0)
+  const [milestone, setMilestone] = useState<ComboMilestone | null>(null)
+  const milestoneTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(
+    () => () => {
+      if (milestoneTimer.current) clearTimeout(milestoneTimer.current)
+    },
+    []
+  )
   const [finished, setFinished] = useState<{
     state: SessionState
     minutes: number
@@ -171,7 +188,22 @@ export function LessonRunner({
     }
   }
 
+  function updateCombo(outcome: Outcome) {
+    if (!exercise) return
+    const next = nextCombo(combo, outcome, isGraded(exercise))
+    if (next === combo) return
+    setCombo(next)
+    setBestCombo((best) => Math.max(best, next))
+    const reached = comboMilestone(next)
+    if (!reached) return
+    setMilestone(reached)
+    playFeedback("combo")
+    if (milestoneTimer.current) clearTimeout(milestoneTimer.current)
+    milestoneTimer.current = setTimeout(() => setMilestone(null), 1900)
+  }
+
   function onDone(outcome: Outcome, turnOutcomes?: Outcome[]) {
+    updateCombo(outcome)
     if (exercise)
       track("exercise_answered", {
         lesson_id: lesson.id,
@@ -210,6 +242,8 @@ export function LessonRunner({
       resumed: fromSaved,
       replay,
     })
+    setCombo(0)
+    setBestCombo(0)
     if (!fromSaved) {
       setIndex(0)
       setSession(startSession(lesson))
@@ -258,6 +292,7 @@ export function LessonRunner({
           lesson={lesson}
           summary={summarise(lesson, state)}
           minutes={minutes}
+          bestCombo={bestCombo}
           mistakeCount={mistakes}
           replay={replay}
           upNext={upNext}
@@ -279,7 +314,9 @@ export function LessonRunner({
         closeLabel="Leave lesson"
         onClose={() => setExitOpen(true)}
         progress={progress}
+        combo={combo}
       />
+      <ComboToast milestone={milestone} />
       {warning && (
         <div className="mx-auto w-full max-w-(--lesson-max) px-[clamp(20px,4vw,32px)] pt-4">
           <Alert tone="warning" title="Not saved yet">

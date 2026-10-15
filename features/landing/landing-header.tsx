@@ -1,4 +1,3 @@
-import { Menu, X } from "lucide-react"
 import Link from "next/link"
 
 import { Logo } from "@/components/brand/logo"
@@ -6,56 +5,31 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { buttonVariants } from "@/components/ui/button-variants"
 import { cn } from "@/lib/utils"
 
-import { navLinks } from "./content"
-import styles from "./landing.module.css"
+import { cta } from "./content"
 
 export function LandingHeader() {
   return (
-    <header className={styles.nav}>
-      <div className={cn(styles.wrap, styles["nav-in"])}>
-        <a className={styles.brand} href="#top" aria-label="Klarlingo home">
+    <header className="sticky top-0 z-(--z-header) border-b-2 border-border-subtle bg-background/90 backdrop-blur-md">
+      <div className="mx-auto flex h-17 max-w-280 items-center gap-2 px-4 sm:px-6">
+        <a href="#top" aria-label="Klarlingo home" className="mr-auto">
           <Logo symbolClassName="size-[30px]" />
         </a>
-        <nav className={styles.links} aria-label="Main">
-          {navLinks.map((link) => (
-            <a key={link.href} href={link.href}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
-        <div className={cn(styles.navcta, "flex items-center gap-2")}>
-          <ThemeToggle />
-          <Link
-            href="/signin"
-            className={buttonVariants({ variant: "ghost", size: "md" })}
-          >
-            Sign in
-          </Link>
-          <Link href="/signup" className={buttonVariants({ size: "md" })}>
-            Get started
-          </Link>
-        </div>
-        <ThemeToggle className={styles.mtheme} />
-        <details className={styles.mnav}>
-          <summary aria-label="Menu">
-            <Menu aria-hidden="true" className={cn(styles.icon, styles.bars)} />
-            <X aria-hidden="true" className={cn(styles.icon, styles.x)} />
-          </summary>
-          <nav className={styles["mnav-panel"]} aria-label="Main, mobile">
-            {navLinks.map((link) => (
-              <a key={link.href} href={link.href}>
-                {link.label}
-              </a>
-            ))}
-            <Link href="/signin">Sign in</Link>
-            <Link
-              href="/signup"
-              className={cn(buttonVariants({ size: "lg" }), "mt-5")}
-            >
-              Get started
-            </Link>
-          </nav>
-        </details>
+        <ThemeToggle />
+        <Link
+          href="/signin"
+          className={buttonVariants({ variant: "ghost", size: "md" })}
+        >
+          {cta.signIn}
+        </Link>
+        <Link
+          href="/signup"
+          className={cn(
+            buttonVariants({ size: "md" }),
+            "hidden sm:inline-flex"
+          )}
+        >
+          {cta.start}
+        </Link>
       </div>
     </header>
   )

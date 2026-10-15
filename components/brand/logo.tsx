@@ -11,15 +11,9 @@ function LogoSymbol({ className, title }: SymbolProps) {
       aria-hidden={title ? undefined : true}
       className={cn("size-8 shrink-0", className)}
     >
-      <rect
-        width="48"
-        height="48"
-        rx="13"
-        fill="var(--primary)"
-        className="dark:fill-[var(--spruce-600)]"
-      />
+      <rect width="48" height="48" rx="13" fill="var(--primary)" />
       <g
-        stroke="var(--paper-25)"
+        stroke="var(--primary-foreground)"
         strokeWidth="4.5"
         strokeLinecap="round"
         fill="none"
@@ -28,7 +22,7 @@ function LogoSymbol({ className, title }: SymbolProps) {
         <path d="M17 29c0-7 5-12.5 12.5-13.5" />
         <path d="M20 24.5 30.5 35.5" />
       </g>
-      <circle cx="32.5" cy="15.5" r="5" fill="var(--coral-500)" />
+      <circle cx="32.5" cy="15.5" r="5" fill="var(--spark)" />
     </svg>
   )
 }
@@ -40,7 +34,7 @@ function Wordmark({ className }: { className?: string }) {
     <span
       aria-hidden="true"
       className={cn(
-        "inline-flex items-baseline font-display text-[1.4375rem] leading-none font-[650] tracking-[-0.04em] text-foreground",
+        "inline-flex items-baseline font-display text-[1.4375rem] leading-none font-[650] tracking-[-0.015em] text-foreground",
         className
       )}
     >

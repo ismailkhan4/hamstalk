@@ -1,11 +1,29 @@
-import { Check, Info, NotebookPen } from "lucide-react"
+"use client"
+
+import {
+  Check,
+  Clock,
+  Flame,
+  Info,
+  NotebookPen,
+  Star,
+  Target,
+  Zap,
+  type LucideIcon,
+} from "lucide-react"
 import Link from "next/link"
+import { useEffect, useRef } from "react"
 
 import { Alert } from "@/components/feedback/alert"
 import { GermanText } from "@/components/learning/german-text"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button-variants"
+import { celebrate } from "@/features/celebrations/confetti"
+import { CountUp } from "@/features/celebrations/count-up"
+import { playFeedback } from "@/features/celebrations/feedback"
+import { Mascot } from "@/features/celebrations/mascot"
+import { cn } from "@/lib/utils"
 
 import type { LessonSummary } from "../engine/session"
 import type { Lesson } from "../schema"
@@ -23,6 +41,8 @@ type LessonCompleteProps = {
   lesson: Lesson
   summary: LessonSummary
   minutes: number
+  /** The longest run of answers right first time. */
+  bestCombo: number
   mistakeCount: number
   replay: boolean
   /** What happens after this one, decided by the path rules. Null when nothing is next yet. */
@@ -44,6 +64,7 @@ export function LessonComplete({
   lesson,
   summary,
   minutes,
+  bestCombo,
   mistakeCount,
   replay,
   upNext,
@@ -54,28 +75,49 @@ export function LessonComplete({
   onRetrySave,
 }: LessonCompleteProps) {
   const review = lesson.kind === "review"
+  const perfect = summary.graded > 0 && summary.firstTry === summary.graded
+  const accuracy =
+    summary.graded > 0
+      ? Math.round((summary.firstTry / summary.graded) * 100)
+      : 100
+
+  // The moment of the lesson: fanfare and confetti, once.
+  const celebrated = useRef(false)
+  useEffect(() => {
+    if (celebrated.current) return
+    celebrated.current = true
+    playFeedback(perfect && !replay ? "perfect" : "complete")
+    celebrate(replay ? "small" : "big")
+  }, [perfect, replay])
+
   return (
     <main
       id="main"
-      className="mx-auto w-full max-w-(--lesson-max) flex-1 px-[clamp(20px,4vw,32px)] py-12 pb-16"
+      className="mx-auto w-full max-w-(--lesson-max) flex-1 px-[clamp(20px,4vw,32px)] py-10 pb-16"
     >
-      <div className="text-center">
-        <span
-          aria-hidden="true"
-          className="relative mx-auto grid size-[72px] place-items-center rounded-full border-[3px] border-primary text-primary-text"
-        >
-          <Check className="size-9" strokeWidth={2.6} />
-          <i className="absolute -top-1 -right-1 size-3.5 rounded-full bg-spark" />
-        </span>
+      <div className="flex flex-col items-center text-center">
+        <Mascot
+          mood={perfect ? "cheer" : "dance"}
+          size={148}
+          className="motion-safe:animate-pop"
+        />
+        {/* Entrances are CSS, so reduced motion applies from the first paint, before any script. */}
         <h1
           lang="de"
-          className="mt-6 font-voice text-[clamp(40px,6vw,60px)] leading-tight"
+          style={{ animationDelay: "150ms" }}
+          className="mt-4 font-display text-[clamp(36px,6vw,52px)] leading-tight font-semibold text-primary-text motion-safe:animate-rise"
         >
           {review ? "Wiederholung geschafft!" : "Lektion geschafft!"}
         </h1>
-        <p className="mt-1 text-lg text-secondary-text">
+        <p className="mt-1 text-lg font-semibold text-secondary-text">
           {review ? "Review complete" : "Lesson complete"}: {lesson.title}
         </p>
+        {perfect && (
+          <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-reward px-3.5 py-1 text-sm font-extrabold text-reward-foreground motion-safe:animate-pop">
+            <Star aria-hidden="true" className="size-4 fill-current" />
+            <span lang="de">Perfekt!</span> Every answer right first time
+          </p>
+        )}
       </div>
 
       {saveProblem && (
@@ -99,44 +141,24 @@ export function LessonComplete({
         </Alert>
       )}
 
-      <dl className="mt-10 grid grid-cols-2 gap-4 border-y border-border py-4 sm:grid-cols-4">
-        <div>
-          <dt className="text-[0.8125rem] text-muted-foreground">
-            XP for this session
-          </dt>
-          <dd className="mt-1 font-display text-3xl font-bold text-reward-text">
-            {replay ? "0" : `+${summary.xp}`}{" "}
-            <span className="text-sm font-normal">XP</span>
-          </dd>
-        </div>
-        <div>
-          <dt className="text-[0.8125rem] text-muted-foreground">
-            Right first time
-          </dt>
-          <dd className="mt-1 font-display text-3xl font-bold">
-            {summary.firstTry}{" "}
-            <span className="text-sm font-normal text-muted-foreground">
-              of {summary.graded}
-            </span>
-          </dd>
-        </div>
-        <div>
-          <dt className="text-[0.8125rem] text-muted-foreground">Time</dt>
-          <dd className="mt-1 font-display text-3xl font-bold">
-            {minutes}{" "}
-            <span className="text-sm font-normal text-muted-foreground">
-              min
-            </span>
-          </dd>
-        </div>
-        <div>
-          <dt className="text-[0.8125rem] text-muted-foreground">
-            {review ? "Lessons revisited" : "Phrases"}
-          </dt>
-          <dd className="mt-1 font-display text-3xl font-bold">
-            {review ? summary.byLesson.length : lesson.practised.length}
-          </dd>
-        </div>
+      <dl className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <StatTile label="Total XP" icon={Zap} tone="reward" index={0}>
+          {replay ? "0" : <CountUp to={summary.xp} prefix="+" />}
+        </StatTile>
+        <StatTile
+          label={perfect ? "Perfect" : "Accuracy"}
+          icon={Target}
+          tone="primary"
+          index={1}
+        >
+          <CountUp to={accuracy} delay={0.35} />%
+        </StatTile>
+        <StatTile label="Time" icon={Clock} tone="info" index={2}>
+          {minutes} min
+        </StatTile>
+        <StatTile label="Best combo" icon={Flame} tone="spark" index={3}>
+          {bestCombo}
+        </StatTile>
       </dl>
       {replay && (
         <p className="mt-2 text-sm text-muted-foreground">
@@ -245,11 +267,10 @@ export function LessonComplete({
             {Array.from({ length: unitProgress.total }, (_, i) => (
               <i
                 key={i}
-                className={
-                  i < unitProgress.done
-                    ? "h-1.5 w-10 rounded-full bg-primary"
-                    : "h-1.5 w-10 rounded-full bg-muted"
-                }
+                className={cn(
+                  "h-3 w-10 rounded-full",
+                  i < unitProgress.done ? "bg-primary" : "bg-muted"
+                )}
               />
             ))}
           </div>
@@ -262,7 +283,7 @@ export function LessonComplete({
       {upNext && (
         <section
           aria-label="Up next"
-          className="mt-8 rounded-xl border border-border bg-card p-4"
+          className="mt-8 rounded-2xl border-2 border-border bg-card p-4"
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -285,7 +306,7 @@ export function LessonComplete({
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         {upNext?.href && (
-          <Link href={upNext.href} className={buttonVariants({ size: "lg" })}>
+          <Link href={upNext.href} className={buttonVariants({ size: "xl" })}>
             {upNext.ctaLabel}
           </Link>
         )}
@@ -308,5 +329,61 @@ export function LessonComplete({
         the A1 checkpoint.
       </p>
     </main>
+  )
+}
+
+const TILE_TONES = {
+  reward: "border-reward bg-reward text-reward-foreground",
+  primary: "border-primary bg-primary text-primary-foreground",
+  info: "border-info bg-info text-info-foreground",
+  spark: "border-spark bg-spark text-spark-foreground",
+} as const
+
+const TILE_TEXT = {
+  reward: "text-reward-text",
+  primary: "text-primary-text",
+  info: "text-info-text",
+  spark: "text-spark-text",
+} as const
+
+/** A stat with a coloured label band, dropping in one after another. */
+function StatTile({
+  label,
+  icon: Icon,
+  tone,
+  index,
+  children,
+}: {
+  label: string
+  icon: LucideIcon
+  tone: keyof typeof TILE_TONES
+  index: number
+  children: React.ReactNode
+}) {
+  return (
+    <div
+      style={{ animationDelay: `${350 + index * 120}ms` }}
+      className={cn(
+        "overflow-hidden rounded-2xl border-2 motion-safe:animate-rise",
+        TILE_TONES[tone]
+      )}
+    >
+      <dt className="px-2 py-1 text-center text-[0.75rem] font-extrabold tracking-wide uppercase">
+        {label}
+      </dt>
+      <dd
+        className={cn(
+          "m-0.5 flex items-center justify-center gap-1.5 rounded-[14px] bg-card px-2 py-3 font-display text-2xl font-semibold tabular-nums",
+          TILE_TEXT[tone]
+        )}
+      >
+        <Icon
+          aria-hidden="true"
+          className="size-5 shrink-0"
+          strokeWidth={2.6}
+        />
+        <span>{children}</span>
+      </dd>
+    </div>
   )
 }

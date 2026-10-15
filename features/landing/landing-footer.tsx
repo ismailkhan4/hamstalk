@@ -1,39 +1,37 @@
+import Link from "next/link"
+
 import { Logo } from "@/components/brand/logo"
 
-import styles from "./landing.module.css"
+import { footerNote } from "./content"
 
-const footerLinks = [
-  ["#how", "How it works"],
-  ["#team", "The team"],
-  ["#journey", "Journey"],
-  ["#features", "Features"],
-  ["#open-source", "Open source"],
-  ["#faq", "FAQ"],
-] as const
+const links = [
+  { href: "#week", label: "Your first week" },
+  { href: "#growth", label: "Levels" },
+  { href: "#buddy", label: "Quietschi" },
+  { href: "#faq", label: "FAQ" },
+  { href: "/signin", label: "Sign in" },
+]
 
 export function LandingFooter() {
   return (
-    <footer className={styles.foot}>
-      <div className={`${styles.wrap} ${styles["foot-in"]}`}>
-        <div>
-          <Logo symbolClassName="size-[26px]" />
-          <p className="mt-3.5 max-w-[48ch] text-[0.9375rem] text-secondary-text">
-            Learn German. Join the team. An open-source German course for
-            software engineers, from A1 towards B2.
-          </p>
-        </div>
-        <nav aria-label="Footer">
-          {footerLinks.map(([href, label]) => (
-            <a key={href} href={href}>
-              {label}
-            </a>
+    <footer className="border-t-2 border-border-subtle">
+      <div className="mx-auto flex max-w-280 flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-center md:justify-between">
+        <Logo symbolClassName="size-[26px]" />
+        <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="font-bold text-secondary-text hover:text-foreground hover:underline hover:underline-offset-4"
+            >
+              {link.label}
+            </Link>
           ))}
         </nav>
-        <small>
-          © 2026 Klarlingo. Open-source project in early development, released
-          under the MIT License. Kaffeesatz GmbH and its team are fictional.
-        </small>
       </div>
+      <p className="mx-auto max-w-280 px-4 pb-10 text-sm font-semibold text-muted-foreground sm:px-6">
+        © 2026 Klarlingo. {footerNote}
+      </p>
     </footer>
   )
 }

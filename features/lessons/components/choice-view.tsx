@@ -1,7 +1,7 @@
 "use client"
 
 import { FileText } from "lucide-react"
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 import {
   AnswerOption,
@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils"
 import { check, retry, startAttempt, type Attempt } from "../engine/attempt"
 import { choiceNote, gradeChoice } from "../engine/grading"
 import { choiceMistake } from "../engine/mistakes"
+import { optionOrder } from "../engine/shuffle"
 import { personalise, type ChoiceExercise } from "../schema"
 import { ExerciseHeading } from "./exercise-heading"
 import { ActionFooter, FeedbackFooter, rightTitle } from "./footer"
@@ -39,8 +40,20 @@ export function ChoiceView({
   const answering = attempt.phase === "answering"
   const german = exercise.optionsLanguage === "de"
 
+  // Selection, grading and feedback all use authored option indexes; only the screen is shuffled.
+  const order = useMemo(
+    () => optionOrder(exercise.options.length, `${lessonId}:${index}`),
+    [exercise.options.length, lessonId, index]
+  )
   const pick = useCallback((option: number) => setSelection(option), [])
-  useDigitKeys(exercise.options.length, answering, pick)
+  const pickShown = useCallback(
+    (position: number) => {
+      const option = order[position]
+      if (option !== undefined) setSelection(option)
+    },
+    [order]
+  )
+  useDigitKeys(exercise.options.length, answering, pickShown)
 
   function onCheck() {
     if (selection === null) return
@@ -145,16 +158,16 @@ export function ChoiceView({
           aria-label="Answers"
           className="mt-6 flex flex-col gap-3"
         >
-          {exercise.options.map((option, i) => (
+          {order.map((option, position) => (
             <AnswerOption
               key={option}
-              index={i}
+              index={position}
               lang={german ? "de" : "en"}
-              state={optionState(i)}
+              state={optionState(option)}
               locked={!answering}
-              onSelect={() => pick(i)}
+              onSelect={() => pick(option)}
             >
-              {personalise(option, learner)}
+              {personalise(exercise.options[option] ?? "", learner)}
             </AnswerOption>
           ))}
         </div>

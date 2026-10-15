@@ -33,10 +33,12 @@ import {
   levelOptions,
   type Preferences,
 } from "@/features/onboarding/options"
+import { playFeedback } from "@/features/celebrations/feedback"
 import type { NotebookCounts } from "@/features/review/data"
 import {
   MOTION_OPTIONS,
   TEXT_SIZE_OPTIONS,
+  TOGGLE_OPTIONS,
   useAppearance,
 } from "@/lib/appearance"
 import { resetAnalytics } from "@/lib/analytics/client"
@@ -161,7 +163,16 @@ export function SettingsScreen({
     () => true,
     () => false
   )
-  const { motion, setMotion, textSize, setTextSize } = useAppearance()
+  const {
+    motion,
+    setMotion,
+    textSize,
+    setTextSize,
+    sound,
+    setSound,
+    haptics,
+    setHaptics,
+  } = useAppearance()
 
   const [name, setName] = useState(shell.name)
   const [prefs, setPrefs] = useState(initial)
@@ -435,6 +446,45 @@ export function SettingsScreen({
                   onChange={() => setTextSize(value)}
                 >
                   {value === "default" ? "Default" : "Larger"}
+                </Chip>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset className="mt-6">
+            <legend className="text-sm font-semibold">Sound effects</legend>
+            <div className="mt-2 flex flex-wrap gap-2.5">
+              {TOGGLE_OPTIONS.map((value) => (
+                <Chip
+                  key={value}
+                  type="radio"
+                  name="sound"
+                  checked={sound === value}
+                  onChange={() => {
+                    setSound(value)
+                    if (value === "on") playFeedback("correct")
+                  }}
+                >
+                  {value === "on" ? "On" : "Off"}
+                </Chip>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset className="mt-6">
+            <legend className="text-sm font-semibold">Vibration</legend>
+            <p className="mt-1 text-sm text-muted-foreground">
+              On phones that support it, a short buzz for right and wrong
+              answers.
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2.5">
+              {TOGGLE_OPTIONS.map((value) => (
+                <Chip
+                  key={value}
+                  type="radio"
+                  name="haptics"
+                  checked={haptics === value}
+                  onChange={() => setHaptics(value)}
+                >
+                  {value === "on" ? "On" : "Off"}
                 </Chip>
               ))}
             </div>

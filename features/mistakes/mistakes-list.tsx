@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/feedback/empty-state"
 import { GermanText } from "@/components/learning/german-text"
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button-variants"
+import { optionOrder } from "@/features/lessons/engine/shuffle"
 import { cn } from "@/lib/utils"
 
 import type { Mistake } from "./data"
@@ -118,19 +119,26 @@ function Card({
                 aria-label="Answers"
                 className="mt-3 flex flex-col gap-2"
               >
-                {mistake.retry?.options.map((option, i) => (
-                  <AnswerOption
-                    key={option.de}
-                    index={i}
-                    lang={mistake.retry?.optionsLanguage ?? "en"}
-                    {...(option.en ? { translation: option.en } : {})}
-                    state="idle"
-                    locked={state.pending}
-                    onSelect={() => onPick(i)}
-                  >
-                    {option.de}
-                  </AnswerOption>
-                ))}
+                {(mistake.retry
+                  ? optionOrder(mistake.retry.options.length, mistake.itemKey)
+                  : []
+                ).map((i, position) => {
+                  const option = mistake.retry?.options[i]
+                  if (!option) return null
+                  return (
+                    <AnswerOption
+                      key={option.de}
+                      index={position}
+                      lang={mistake.retry?.optionsLanguage ?? "en"}
+                      {...(option.en ? { translation: option.en } : {})}
+                      state="idle"
+                      locked={state.pending}
+                      onSelect={() => onPick(i)}
+                    >
+                      {option.de}
+                    </AnswerOption>
+                  )
+                })}
               </div>
               <p
                 role="status"

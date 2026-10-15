@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useCallback, useState, useMemo } from "react"
 
 import {
   AnswerOption,
@@ -20,6 +20,7 @@ import {
   type Outcome,
 } from "../engine/attempt"
 import { choiceNote, gradeChoice } from "../engine/grading"
+import { optionOrder } from "../engine/shuffle"
 import { turnMistake } from "../engine/mistakes"
 import { personalise, type ConversationExercise } from "../schema"
 import { ExerciseHeading } from "./exercise-heading"
@@ -60,8 +61,21 @@ export function ConversationView({
   const answering = attempt.phase === "answering"
   const finished = attempt.phase === "right" || attempt.phase === "shown"
 
+  // Selection and grading use authored option indexes; only the screen is shuffled.
+  const optionCount = turn?.options.length ?? 0
+  const order = useMemo(
+    () => optionOrder(optionCount, `${lessonId}:${index}.${turnIndex}`),
+    [optionCount, lessonId, index, turnIndex]
+  )
   const pick = useCallback((option: number) => setSelection(option), [])
-  useDigitKeys(turn?.options.length ?? 0, answering, pick)
+  const pickShown = useCallback(
+    (position: number) => {
+      const option = order[position]
+      if (option !== undefined) setSelection(option)
+    },
+    [order]
+  )
+  useDigitKeys(optionCount, answering, pickShown)
 
   if (!turn) return null
 
@@ -204,19 +218,23 @@ export function ConversationView({
               aria-labelledby={`turn-${turnIndex}`}
               className="mt-4 flex flex-col gap-3"
             >
-              {turn.options.map((option, i) => (
-                <AnswerOption
-                  key={option.de}
-                  index={i}
-                  lang="de"
-                  translation={personalise(option.en, learner)}
-                  state={optionState(i)}
-                  locked={!answering}
-                  onSelect={() => pick(i)}
-                >
-                  {personalise(option.de, learner)}
-                </AnswerOption>
-              ))}
+              {order.map((option, position) => {
+                const text = turn.options[option]
+                if (!text) return null
+                return (
+                  <AnswerOption
+                    key={text.de}
+                    index={position}
+                    lang="de"
+                    translation={personalise(text.en, learner)}
+                    state={optionState(option)}
+                    locked={!answering}
+                    onSelect={() => pick(option)}
+                  >
+                    {personalise(text.de, learner)}
+                  </AnswerOption>
+                )
+              })}
             </div>
             <p className="mt-3 text-sm text-muted-foreground">
               Question {turnIndex + 1} of {exercise.turns.length}

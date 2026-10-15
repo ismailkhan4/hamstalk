@@ -4,11 +4,18 @@ import { useCallback, useSyncExternalStore } from "react"
 
 export const MOTION_OPTIONS = ["system", "reduce"] as const
 export const TEXT_SIZE_OPTIONS = ["default", "large"] as const
+export const TOGGLE_OPTIONS = ["on", "off"] as const
 
 export type Motion = (typeof MOTION_OPTIONS)[number]
 export type TextSize = (typeof TEXT_SIZE_OPTIONS)[number]
+export type Toggle = (typeof TOGGLE_OPTIONS)[number]
 
-const KEYS = { motion: "klarlingo-motion", textSize: "klarlingo-text-size" }
+const KEYS = {
+  motion: "klarlingo-motion",
+  textSize: "klarlingo-text-size",
+  sound: "klarlingo-sound",
+  haptics: "klarlingo-haptics",
+}
 const CHANGE_EVENT = "klarlingo-appearance"
 
 function read<T extends string>(
@@ -64,6 +71,16 @@ export function useAppearance() {
     () => read(KEYS.textSize, TEXT_SIZE_OPTIONS, "default"),
     () => "default" as TextSize
   )
+  const sound = useSyncExternalStore(
+    subscribe,
+    () => read(KEYS.sound, TOGGLE_OPTIONS, "on"),
+    () => "on" as Toggle
+  )
+  const haptics = useSyncExternalStore(
+    subscribe,
+    () => read(KEYS.haptics, TOGGLE_OPTIONS, "on"),
+    () => "on" as Toggle
+  )
   const setMotion = useCallback(
     (value: Motion) => write(KEYS.motion, value),
     []
@@ -72,5 +89,35 @@ export function useAppearance() {
     (value: TextSize) => write(KEYS.textSize, value),
     []
   )
-  return { motion, textSize, setMotion, setTextSize }
+  const setSound = useCallback((value: Toggle) => write(KEYS.sound, value), [])
+  const setHaptics = useCallback(
+    (value: Toggle) => write(KEYS.haptics, value),
+    []
+  )
+  return {
+    motion,
+    textSize,
+    sound,
+    haptics,
+    setMotion,
+    setTextSize,
+    setSound,
+    setHaptics,
+  }
+}
+
+/**
+ * The feedback choices as they are right now, for code that runs outside React (sound and
+ * vibration fire from event handlers). Motion follows the device unless the learner reduced it here.
+ */
+export function feedbackPreferences() {
+  if (typeof window === "undefined")
+    return { sound: false, haptics: false, reduceMotion: true }
+  return {
+    sound: read(KEYS.sound, TOGGLE_OPTIONS, "on") === "on",
+    haptics: read(KEYS.haptics, TOGGLE_OPTIONS, "on") === "on",
+    reduceMotion:
+      read(KEYS.motion, MOTION_OPTIONS, "system") === "reduce" ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  }
 }
