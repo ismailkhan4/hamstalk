@@ -33,12 +33,15 @@ import {
   levelOptions,
   type Preferences,
 } from "@/features/onboarding/options"
+import { playFeedback } from "@/features/celebrations/feedback"
 import type { NotebookCounts } from "@/features/review/data"
 import {
   MOTION_OPTIONS,
   TEXT_SIZE_OPTIONS,
+  TOGGLE_OPTIONS,
   useAppearance,
 } from "@/lib/appearance"
+import { goalXpFor } from "@/features/streaks/model"
 import { resetAnalytics } from "@/lib/analytics/client"
 import { cn } from "@/lib/utils"
 
@@ -161,7 +164,16 @@ export function SettingsScreen({
     () => true,
     () => false
   )
-  const { motion, setMotion, textSize, setTextSize } = useAppearance()
+  const {
+    motion,
+    setMotion,
+    textSize,
+    setTextSize,
+    sound,
+    setSound,
+    haptics,
+    setHaptics,
+  } = useAppearance()
 
   const [name, setName] = useState(shell.name)
   const [prefs, setPrefs] = useState(initial)
@@ -286,7 +298,7 @@ export function SettingsScreen({
                   checked={prefs.dailyMinutes === minutes}
                   onChange={() => save({ dailyMinutes: minutes })}
                 >
-                  {minutes} min
+                  {minutes} min · {goalXpFor(minutes)} XP
                 </Chip>
               ))}
             </div>
@@ -439,6 +451,45 @@ export function SettingsScreen({
               ))}
             </div>
           </fieldset>
+          <fieldset className="mt-6">
+            <legend className="text-sm font-semibold">Sound effects</legend>
+            <div className="mt-2 flex flex-wrap gap-2.5">
+              {TOGGLE_OPTIONS.map((value) => (
+                <Chip
+                  key={value}
+                  type="radio"
+                  name="sound"
+                  checked={sound === value}
+                  onChange={() => {
+                    setSound(value)
+                    if (value === "on") playFeedback("correct")
+                  }}
+                >
+                  {value === "on" ? "On" : "Off"}
+                </Chip>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset className="mt-6">
+            <legend className="text-sm font-semibold">Vibration</legend>
+            <p className="mt-1 text-sm text-muted-foreground">
+              On phones that support it, a short buzz for right and wrong
+              answers.
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2.5">
+              {TOGGLE_OPTIONS.map((value) => (
+                <Chip
+                  key={value}
+                  type="radio"
+                  name="haptics"
+                  checked={haptics === value}
+                  onChange={() => setHaptics(value)}
+                >
+                  {value === "on" ? "On" : "Off"}
+                </Chip>
+              ))}
+            </div>
+          </fieldset>
         </Section>
 
         <Section title="Account" lede={`Signed in as ${shell.email}`}>
@@ -485,8 +536,8 @@ export function SettingsScreen({
               Reset learning progress
             </h3>
             <p className="mt-1 text-sm text-secondary-text">
-              Start again from Unit 1. Your account, phrasebook and settings
-              stay.
+              Start again from Unit 1. Your account, phrasebook, settings, XP
+              and streak stay.
             </p>
             <Button
               variant="outline"
@@ -561,7 +612,7 @@ export function SettingsScreen({
         open={dialog === "reset"}
         onOpenChange={close("reset")}
         title="Reset your learning progress?"
-        description="This clears your lessons, units, words, mistakes and standups, and starts you again from Unit 1. Your account, phrasebook and settings stay. You can’t undo it."
+        description="This clears your lessons, units, words, mistakes and standups, and starts you again from Unit 1. Your account, phrasebook, settings, XP and streak stay: the practice you put in still counts. You can’t undo it."
         keepLabel="Keep my progress"
         confirmLabel="Reset progress"
         onConfirm={() => actions.resetProgress()}

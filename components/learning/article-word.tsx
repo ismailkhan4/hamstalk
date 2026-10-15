@@ -1,3 +1,4 @@
+import { TARGET_LANG } from "@/content/courses"
 import { cn } from "@/lib/utils"
 
 type Article = "der" | "die" | "das"
@@ -29,7 +30,7 @@ function ArticleWord({
   const style = articleStyles[article]
   return (
     <span className={cn("font-voice", className)}>
-      <span lang="de">
+      <span lang={TARGET_LANG}>
         <b className={cn("font-semibold", style.className)}>{article}</b> {word}
       </span>
       {showGender && (

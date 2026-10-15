@@ -1,4 +1,4 @@
-import { Bell, Flag, Info, Repeat, Route, Users } from "lucide-react"
+import { Bell, Flag, Flame, Info, Repeat, Route, Users } from "lucide-react"
 import Link from "next/link"
 
 import { EmptyState } from "@/components/feedback/empty-state"
@@ -9,6 +9,7 @@ import type { NotebookCounts } from "@/features/review/data"
 import type { Notification } from "./items"
 
 const icons = {
+  streak: <Flame aria-hidden="true" />,
   review: <Repeat aria-hidden="true" />,
   lesson: <Route aria-hidden="true" />,
   standup: <Users aria-hidden="true" />,

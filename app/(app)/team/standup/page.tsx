@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 
-import { getStandup, standups } from "@/content/standup"
+import { getStandup, standups } from "@/content/courses/de/standup"
 import { initialsFor } from "@/components/learning/team-badge"
 import { loadLearner } from "@/features/learner/load-learner"
 import { DatabaseNotReady } from "@/features/onboarding/database-not-ready"

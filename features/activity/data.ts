@@ -2,8 +2,8 @@ import "server-only"
 
 import { z } from "zod"
 
-import { findLesson } from "@/content/curriculum"
-import { getLesson } from "@/content/lessons/registry"
+import { findLesson } from "@/content/courses/de/curriculum"
+import { getLesson } from "@/content/courses/de/lessons/registry"
 import { isMissingTable } from "@/features/onboarding/data"
 import type { createClient } from "@/lib/supabase/server"
 
@@ -50,8 +50,8 @@ export async function loadActivity(
           id: row.lesson_id,
           at: row.completed_at ?? row.updated_at,
           title: `${place} · ${content?.title ?? found.lesson.title}`,
-          titleIsGerman:
-            found.lesson.kind === "lesson" && found.lesson.titleIsGerman,
+          titleInTarget:
+            found.lesson.kind === "lesson" && found.lesson.titleInTarget,
           detail:
             row.status === "completed"
               ? `Unit ${found.unit.number} · completed${row.xp > 0 ? ` · +${row.xp} XP` : ""}`

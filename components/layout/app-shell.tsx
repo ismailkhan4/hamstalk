@@ -1,11 +1,12 @@
 import { Bell, Search } from "lucide-react"
 import Link from "next/link"
 
-import { Logo } from "@/components/brand/logo"
+import { Logo, LogoSymbol } from "@/components/brand/logo"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { initialsFor } from "@/components/learning/team-badge"
 
 import type { NotebookCounts } from "@/features/review/data"
+import { HabitStats } from "@/features/streaks/components/habit-stats"
 
 import { notesNav, primaryNav } from "./nav-items"
 import { BottomNavLink, SidebarLink } from "./nav-link"
@@ -44,7 +45,8 @@ export function AppShell({ name, email, counts, children }: AppShellProps) {
             <Bell aria-hidden="true" className="size-5" />
           </Link>
         </div>
-        <form role="search" action="/search" className="relative mt-6">
+        <HabitStats className="mt-4 -ml-1 self-start" />
+        <form role="search" action="/search" className="relative mt-4">
           <label htmlFor="sidebar-search" className="sr-only">
             Search lessons, words and phrases
           </label>
@@ -91,10 +93,13 @@ export function AppShell({ name, email, counts, children }: AppShellProps) {
 
       <header className="sticky top-0 z-(--z-header) flex h-14 items-center justify-between border-b border-border-subtle bg-background/95 px-4 backdrop-blur lg:hidden">
         <Link href="/home" aria-label="Klarlingo home">
-          <Logo symbolClassName="size-[30px]" />
+          {/* Narrow phones keep just the mark, to leave room for the streak. */}
+          <LogoSymbol className="size-[30px] sm:hidden" />
+          <Logo className="max-sm:hidden" symbolClassName="size-[30px]" />
         </Link>
         <div className="flex items-center gap-1">
-          <ThemeToggle />
+          <HabitStats className="gap-2 px-1.5" />
+          <ThemeToggle className="max-sm:hidden" />
           <Link
             href="/notifications"
             aria-label="Notifications"

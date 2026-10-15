@@ -2,6 +2,8 @@ import type { Lesson } from "@/features/lessons/schema"
 
 import { firstDue } from "./scheduler"
 
+/** A row of public.review_items. Its columns keep their original names (`en`, `example_de`); the
+ * app's own objects say `target` and `native`. */
 export type ReviewItemRow = {
   user_id: string
   item_key: string
@@ -29,18 +31,18 @@ export function lessonVocabularyRows(
     lesson_id: lesson.id,
     article: entry.article ?? null,
     word: entry.word,
-    en: entry.en,
-    example_de: entry.example.de,
-    example_en: entry.example.en,
+    en: entry.native,
+    example_de: entry.example.target,
+    example_en: entry.example.native,
     due_at: due,
   }))
 }
 
 export type SavedLine = {
-  de: string
-  en: string
+  target: string
+  native: string
   article?: "der" | "die" | "das" | undefined
-  example?: { de: string; en: string } | undefined
+  example?: { target: string; native: string } | undefined
 }
 
 export function savedPhraseRow(
@@ -56,10 +58,10 @@ export function savedPhraseRow(
     source: "saved",
     lesson_id: lessonId,
     article: line.article ?? null,
-    word: line.de,
-    en: line.en,
-    example_de: line.example?.de ?? null,
-    example_en: line.example?.en ?? null,
+    word: line.target,
+    en: line.native,
+    example_de: line.example?.target ?? null,
+    example_en: line.example?.native ?? null,
     due_at: firstDue(now).toISOString(),
   }
 }

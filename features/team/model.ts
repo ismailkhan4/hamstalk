@@ -1,5 +1,5 @@
-import { getUnit } from "@/content/curriculum"
-import { getStandup } from "@/content/standup"
+import { getUnit } from "@/content/courses/de/curriculum"
+import { getStandup } from "@/content/courses/de/standup"
 import { isUnitCompleted, type LessonProgress } from "@/features/path/model"
 
 export type StandupState = "planned" | "locked" | "ready" | "done"

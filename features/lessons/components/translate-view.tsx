@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 
+import { TARGET_LANG } from "@/content/courses"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -60,7 +61,7 @@ export function TranslateView({
 
         <div className="mt-8 flex items-start gap-3 rounded-xl border border-border bg-card p-5">
           <p
-            lang="de"
+            lang={TARGET_LANG}
             className="min-w-0 flex-1 font-voice text-2xl leading-snug"
           >
             {source}
@@ -112,7 +113,7 @@ export function TranslateView({
         <FeedbackFooter
           result="correct"
           title={rightTitle(index)}
-          titleLang="de"
+          titleLang={TARGET_LANG}
           action={
             <Button
               size="lg"

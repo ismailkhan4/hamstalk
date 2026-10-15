@@ -27,6 +27,19 @@ export type AnalyticsEvents = {
     first_try: number
     source: "pool" | "registry"
   }
+  /** Sent by the server when a day's XP first passes the streak threshold. */
+  streak_extended: {
+    streak: number
+    /** A missed day without enough freezes ended the old streak; this is day 1 of a new one. */
+    restarted: boolean
+    freezes_used: number
+    milestone: number | null
+  }
+  /** Sent by the server when the day's XP first reaches the learner's daily goal. */
+  daily_goal_reached: {
+    goal_xp: number
+    source: "lesson" | "lesson_replay" | "review" | "standup"
+  }
   /** The server confirmed the learner completed onboarding. */
   onboarding_completed: Record<string, never>
   /** The server recorded a completed placement check. */

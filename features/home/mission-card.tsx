@@ -1,11 +1,12 @@
 import { Hammer } from "lucide-react"
 import Link from "next/link"
 
+import { TARGET_LANG } from "@/content/courses"
 import { Avatar } from "@/components/learning/avatar"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button-variants"
-import { isLessonAvailable } from "@/content/availability"
+import { isLessonAvailable } from "@/content/courses/de/availability"
 import type { NextLesson } from "@/features/path/model"
 import { cn } from "@/lib/utils"
 
@@ -49,10 +50,10 @@ export function MissionCard({
       </p>
       <h2
         id="mission-title"
-        lang={lesson.titleIsGerman ? "de" : undefined}
+        lang={lesson.titleInTarget ? TARGET_LANG : undefined}
         className={cn(
           "mt-2",
-          lesson.titleIsGerman
+          lesson.titleInTarget
             ? "font-voice text-[2.5rem] leading-tight"
             : "font-display text-h2 font-bold"
         )}
@@ -71,10 +72,10 @@ export function MissionCard({
         <div className="mt-5 flex items-center gap-4 rounded-xl bg-inset p-4">
           <Avatar person={quote.person} initials={quote.initials} />
           <div>
-            <GermanText as="p" className="text-xl">
-              {quote.de.replaceAll("%N", firstName)}
-            </GermanText>
-            <p className="text-sm text-muted-foreground">{quote.en}</p>
+            <TargetText as="p" className="text-xl">
+              {quote.target.replaceAll("%N", firstName)}
+            </TargetText>
+            <p className="text-sm text-muted-foreground">{quote.native}</p>
           </div>
         </div>
       )}

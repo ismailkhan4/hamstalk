@@ -3,7 +3,7 @@
 import { FileText, Play, VolumeX } from "lucide-react"
 import { useState } from "react"
 
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { useGermanSpeech } from "@/lib/speech"
 import { cn } from "@/lib/utils"
 
@@ -50,7 +50,7 @@ export function ListeningPlayer({
         </p>
         {showTranscript ? (
           <p className="mt-3 rounded-lg bg-card p-3 text-foreground">
-            <GermanText className="text-lg">„{text}“</GermanText>
+            <TargetText className="text-lg">„{text}“</TargetText>
           </p>
         ) : (
           <button

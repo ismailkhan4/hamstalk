@@ -33,11 +33,7 @@ type LearnerBeaconProps = {
   fullName: string
 }
 
-export function LearnerBeacon({
-  userId,
-  email,
-  fullName,
-}: LearnerBeaconProps) {
+export function LearnerBeacon({ userId, email, fullName }: LearnerBeaconProps) {
   useEffect(() => {
     // A different learner on this device: start a fresh anonymous profile before identifying, so
     // the previous learner's events never merge into this one.

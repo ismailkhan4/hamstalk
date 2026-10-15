@@ -315,12 +315,56 @@ export type Database = {
         }
         Relationships: []
       }
+      xp_events: {
+        Row: {
+          id: number
+          user_id: string
+          source: string
+          ref: string
+          local_date: string
+          amount: number
+          created_at: string
+        }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
+      daily_activity: {
+        Row: {
+          user_id: string
+          local_date: string
+          xp: number
+          goal_xp: number
+          updated_at: string
+        }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
+      streaks: {
+        Row: {
+          user_id: string
+          current_streak: number
+          longest_streak: number
+          last_active_date: string | null
+          freezes: number
+          frozen_dates: string[]
+          updated_at: string
+        }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
     }
     Views: { [_ in never]: never }
     Functions: {
       delete_my_account: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      award_xp: {
+        Args: { p_source: string; p_ref: string; p_amount?: number | null }
+        Returns: Json
       }
     }
     Enums: { [_ in never]: never }

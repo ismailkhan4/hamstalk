@@ -9,7 +9,7 @@ import {
   match,
   mc,
 } from "../engine/fixtures"
-import { getLesson } from "@/content/lessons/registry"
+import { getLesson } from "@/content/courses/de/lessons/registry"
 
 import { LessonRunner, type LessonActions } from "./lesson-runner"
 
@@ -18,7 +18,7 @@ const listening = exerciseSchema.parse({
   variant: "listening",
   kind: "Listen",
   prompt: "It’s 6 pm and Jonas is leaving. What does he say to you?",
-  optionsLanguage: "en",
+  optionsLanguage: "native",
   options: ["Bye", "Hello", "Hello, everyone"],
   correct: 0,
   feedback: {
@@ -47,7 +47,10 @@ const tip = exerciseSchema.parse({
     ["Shops, reception, people you don’t know", "Hallo!", "Auf Wiedersehen!"],
   ],
   examples: [
-    { de: "Hallo, Lena! – Hallo, %N!", en: "Hello, Lena! – Hello, %N!" },
+    {
+      target: "Hallo, Lena! – Hallo, %N!",
+      native: "Hello, Lena! – Hello, %N!",
+    },
   ],
   note: "Not sure which goodbye to use? Auf Wiedersehen is always polite.",
 })
@@ -56,7 +59,7 @@ const previewLesson = lessonSchema.parse({
   id: "a1-u1-l1",
   kind: "lesson",
   title: "Hallo!",
-  titleIsGerman: true,
+  titleInTarget: true,
   titleEn: "Hello!",
   goal: "Say hello and goodbye: Hallo, Tschüss, Auf Wiedersehen.",
   minutes: 6,
@@ -64,8 +67,9 @@ const previewLesson = lessonSchema.parse({
   focus: "Hallo · Tschüss · Auf Wiedersehen",
   intro: {
     speaker: { person: "mb", initials: "MB" },
-    de: "Hallo!",
-    en: "Mia Braun works at reception. She’s the first person you’ll greet on your first morning.",
+    target: "Hallo!",
+    native:
+      "Mia Braun works at reception. She’s the first person you’ll greet on your first morning.",
   },
   phrases: ["Hallo", "Hallo zusammen", "Tschüss", "Auf Wiedersehen"],
   practised: ["Hallo", "Hallo zusammen", "Tschüss", "Auf Wiedersehen"],
@@ -126,7 +130,7 @@ export function LessonPreview({
         href: null,
         kicker: "Up next · Lesson 2",
         title: "Guten Morgen, guten Tag",
-        titleIsGerman: true,
+        titleInTarget: true,
         minutes: null,
         ctaLabel: "Continue to Lesson 2",
       }}

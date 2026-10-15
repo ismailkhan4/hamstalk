@@ -2,7 +2,7 @@ import "server-only"
 
 import * as Sentry from "@sentry/nextjs"
 
-import { getLesson } from "@/content/lessons/registry"
+import { getLesson } from "@/content/courses/de/lessons/registry"
 import type { createClient } from "@/lib/supabase/server"
 
 import { loadPoolLesson } from "./pool/data"
@@ -14,7 +14,7 @@ export type LessonSource = "pool" | "registry"
 
 /**
  * Where lessons are read from. `pool` (the default) reads published exercises from
- * public.exercises_pool and falls back to content/lessons whenever the pool can't serve the lesson;
+ * public.exercises_pool and falls back to content/courses/de/lessons whenever the pool can't serve the lesson;
  * `registry` skips the database entirely, which is the rollback (see docs/exercise-pool.md).
  */
 export function lessonSource(): LessonSource {

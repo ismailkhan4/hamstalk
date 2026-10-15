@@ -50,7 +50,10 @@ export function track<E extends AnalyticsEvent>(
 }
 
 /** Ties this browser's events to the signed-in learner with the Supabase user id. */
-export function identify(userId: string, personProperties: Record<string, string>) {
+export function identify(
+  userId: string,
+  personProperties: Record<string, string>
+) {
   if (!posthogKey || posthog.get_distinct_id() === userId) return
   posthog.identify(userId, personProperties)
 }

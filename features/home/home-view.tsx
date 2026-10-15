@@ -1,11 +1,15 @@
+import { Suspense } from "react"
+
+import { ACTIVE_COURSE, TARGET_LANG } from "@/content/courses"
 import { AppShell } from "@/components/layout/app-shell"
-import { isLessonAvailable } from "@/content/availability"
+import { isLessonAvailable } from "@/content/courses/de/availability"
 import { HowItWorks, PathStrip, PlanPanel, TeamCard } from "./home-panels"
 import { MissionCard } from "./mission-card"
 import { dayAtCompany } from "@/features/learner/day-at-company"
 import type { Learner } from "@/features/learner/load-learner"
 import { isPreviewLevel } from "@/features/onboarding/plan"
 import { currentUnitNumber, homeLevel, nextLesson } from "@/features/path/model"
+import { TodayPanel } from "@/features/streaks/components/today-panel"
 
 type HomeViewProps = Pick<
   Learner,
@@ -52,10 +56,10 @@ export function HomeView({
                 Day {dayAtCompany(preferences.startedAt)} at Kaffeesatz GmbH
               </p>
               <h1
-                lang="de"
+                lang={TARGET_LANG}
                 className="mt-1 font-voice text-[clamp(40px,4.5vw,56px)] leading-tight"
               >
-                Hallo, {firstName}!
+                {ACTIVE_COURSE.phrases.greeting(firstName)}
               </h1>
               <p className="mt-2 max-w-[56ch] text-body-lg text-secondary-text">
                 {message}
@@ -74,6 +78,9 @@ export function HomeView({
               preview.
             </p>
           )}
+          <Suspense fallback={null}>
+            <TodayPanel />
+          </Suspense>
           {next && (
             <MissionCard
               next={next}

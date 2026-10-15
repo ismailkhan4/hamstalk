@@ -1,5 +1,6 @@
 import { Check, Info } from "lucide-react"
 
+import { goalXpFor } from "@/features/streaks/model"
 import { cn } from "@/lib/utils"
 
 import {
@@ -81,7 +82,10 @@ export function DailyStep({
                     {option.tag}
                   </span>
                 )}
-                <span className="mt-3 text-sm text-secondary-text">
+                <span className="mt-3 text-sm font-extrabold text-reward-text">
+                  {goalXpFor(value)} XP a day
+                </span>
+                <span className="mt-1 text-sm text-secondary-text">
                   {option.text}
                 </span>
               </label>

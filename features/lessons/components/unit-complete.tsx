@@ -1,10 +1,11 @@
 import { Check, Info, Route } from "lucide-react"
 import Link from "next/link"
 
+import { ACTIVE_COURSE, TARGET_LANG } from "@/content/courses"
 import { Avatar } from "@/components/learning/avatar"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { buttonVariants } from "@/components/ui/button-variants"
-import type { Unit } from "@/content/curriculum"
+import type { Unit } from "@/content/courses/de/curriculum"
 
 type UnitCompleteProps = {
   unit: Unit
@@ -40,10 +41,10 @@ export function UnitComplete({
           <i className="absolute -top-1 -right-1 size-3.5 rounded-full bg-spark" />
         </span>
         <h1
-          lang="de"
+          lang={TARGET_LANG}
           className="mt-6 font-voice text-[clamp(40px,6vw,60px)] leading-tight"
         >
-          Einheit {unit.number} geschafft!
+          {ACTIVE_COURSE.phrases.unitDone(unit.number)}
         </h1>
         <p className="mt-1 text-lg text-secondary-text">
           Unit {unit.number} complete: {unit.title}
@@ -126,9 +127,9 @@ export function UnitComplete({
                   : `Lesson ${i + 1}`}
               </span>
               <span
-                lang={lesson.titleIsGerman ? "de" : undefined}
+                lang={lesson.titleInTarget ? TARGET_LANG : undefined}
                 className={
-                  lesson.titleIsGerman
+                  lesson.titleInTarget
                     ? "min-w-0 flex-1 font-voice text-lg"
                     : "min-w-0 flex-1 font-semibold"
                 }
@@ -153,12 +154,12 @@ export function UnitComplete({
           <div className="mt-3 flex items-start gap-4 rounded-xl bg-inset p-4">
             <Avatar person="lf" initials="LF" />
             <div>
-              <GermanText as="p" className="text-2xl">
-                {milestone.standup.de}
-              </GermanText>
+              <TargetText as="p" className="text-2xl">
+                {milestone.standup.target}
+              </TargetText>
               <p className="text-[0.9375rem] text-muted-foreground">
-                {milestone.standup.en} Each unit adds one more line you can say
-                at the standup.
+                {milestone.standup.native} Each unit adds one more line you can
+                say at the standup.
               </p>
             </div>
           </div>

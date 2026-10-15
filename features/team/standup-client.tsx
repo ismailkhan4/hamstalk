@@ -1,6 +1,6 @@
 "use client"
 
-import type { Standup } from "@/content/standup"
+import type { Standup } from "@/content/courses/de/standup"
 
 import { completeStandupAction } from "./actions"
 import { StandupSession } from "./standup-session"

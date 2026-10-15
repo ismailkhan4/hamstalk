@@ -4,13 +4,13 @@ export type PlacementQuestion = {
   skill: PlacementSkill
   level: "A1" | "A2" | "B1"
   prompt: string
-  /** German shown with the question; options are German too when germanOptions is set. */
+  /** German shown with the question; options are German too when optionsInTarget is set. */
   german?: string
   sign?: string
   mail?: { from: string; text: string }
   /** Spoken with the browser's German voice; the transcript is offered when no voice is available. */
   listening?: string
-  germanOptions?: boolean
+  optionsInTarget?: boolean
   options: [string, string, string]
   correct: 0 | 1 | 2
 }
@@ -31,7 +31,7 @@ export const placementQuestions: PlacementQuestion[] = [
     level: "A1",
     prompt: "Which word completes the sentence?",
     german: "Wir ___ aus Berlin.",
-    germanOptions: true,
+    optionsInTarget: true,
     options: ["kommen", "kommt", "komme"],
     correct: 0,
   },
@@ -60,7 +60,7 @@ export const placementQuestions: PlacementQuestion[] = [
     level: "A2",
     prompt: "Which word completes the sentence?",
     german: "Gestern ___ ich lange gearbeitet.",
-    germanOptions: true,
+    optionsInTarget: true,
     options: ["habe", "bin", "war"],
     correct: 0,
   },
@@ -69,7 +69,7 @@ export const placementQuestions: PlacementQuestion[] = [
     level: "A2",
     prompt: "Which verb fits?",
     german: "Ich muss den Termin leider ___.",
-    germanOptions: true,
+    optionsInTarget: true,
     options: ["verschieben", "verschenken", "verstehen"],
     correct: 0,
   },

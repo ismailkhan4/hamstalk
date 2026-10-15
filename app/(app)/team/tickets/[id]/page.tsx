@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
-import { ticket } from "@/content/team-tasks"
+import { ticket } from "@/content/courses/de/team-tasks"
 import { DatabaseNotReady } from "@/features/onboarding/database-not-ready"
 import { loadTaskLearner } from "@/features/team/task-access"
 import { TicketScreen } from "@/features/team/ticket-screen"
