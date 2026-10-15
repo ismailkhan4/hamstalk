@@ -2,7 +2,7 @@ import "server-only"
 
 import { z } from "zod"
 
-import { getLesson } from "@/content/lessons/registry"
+import { getLesson } from "@/content/courses/de/lessons/registry"
 import { lessonLabel, retryQuestion } from "@/features/lessons/lookup"
 import { isMissingTable } from "@/features/onboarding/data"
 import type { createClient } from "@/lib/supabase/server"
@@ -22,8 +22,8 @@ export type Mistake = {
   learned: boolean
   /** The question again, without its answer. Null when it can only be replayed in its lesson. */
   retry: {
-    options: { de: string; en?: string }[]
-    optionsLanguage: "de" | "en"
+    options: { target: string; native?: string }[]
+    optionsLanguage: "target" | "native"
     fill?: { before: string; after: string }
   } | null
 }

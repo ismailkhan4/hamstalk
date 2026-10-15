@@ -3,7 +3,8 @@
 import { Check, ChevronRight, X } from "lucide-react"
 import { useState } from "react"
 
-import { GermanText } from "@/components/learning/german-text"
+import { TARGET_LANG } from "@/content/courses"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -134,9 +135,9 @@ export function MatchView({
                     shown && "border-success bg-success-subtle"
                   )}
                 >
-                  <GermanText className="min-w-0 flex-1 text-xl">
+                  <TargetText className="min-w-0 flex-1 text-xl">
                     {pair.phrase}
-                  </GermanText>
+                  </TargetText>
                   <ChevronRight
                     aria-hidden="true"
                     className="size-4 shrink-0 text-muted-foreground"
@@ -145,7 +146,7 @@ export function MatchView({
                     className={cn(
                       "min-w-0 flex-1 text-[1.0625rem]",
                       !meaning && "text-muted-foreground italic",
-                      exercise.meaningsLanguage === "de" && "font-voice"
+                      exercise.meaningsLanguage === "target" && "font-voice"
                     )}
                   >
                     {meaning ?? exercise.labels.empty}
@@ -213,7 +214,7 @@ export function MatchView({
         <FeedbackFooter
           result="correct"
           title={rightTitle(index)}
-          titleLang="de"
+          titleLang={TARGET_LANG}
           action={
             <Button
               size="lg"

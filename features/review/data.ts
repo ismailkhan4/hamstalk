@@ -11,9 +11,9 @@ export type ReviewCard = {
   itemKey: string
   article: "der" | "die" | "das" | null
   word: string
-  en: string
-  exampleDe: string | null
-  exampleEn: string | null
+  native: string
+  exampleTarget: string | null
+  exampleNative: string | null
   strength: 1 | 2 | 3
   lessonId: string
 }
@@ -54,9 +54,9 @@ export async function loadDueCards(
       itemKey: row.item_key,
       article: row.article,
       word: row.word,
-      en: row.en,
-      exampleDe: row.example_de,
-      exampleEn: row.example_en,
+      native: row.en,
+      exampleTarget: row.example_de,
+      exampleNative: row.example_en,
       strength: row.strength,
       lessonId: row.lesson_id,
     }))
@@ -142,9 +142,9 @@ export async function loadReviewOverview(
         itemKey: row.item_key,
         article: row.article,
         word: row.word,
-        en: row.en,
-        exampleDe: row.example_de,
-        exampleEn: row.example_en,
+        native: row.en,
+        exampleTarget: row.example_de,
+        exampleNative: row.example_en,
         strength: row.strength,
         lessonId: row.lesson_id,
       })),

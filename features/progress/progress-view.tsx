@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Suspense } from "react"
 
 import { AppShell } from "@/components/layout/app-shell"
-import { getLevel, levels } from "@/content/curriculum"
+import { getLevel, levels } from "@/content/courses/de/curriculum"
 import {
   ActivityList,
   type ActivityEntry,

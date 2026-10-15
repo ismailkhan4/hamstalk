@@ -4,10 +4,10 @@ import { motion, type TargetAndTransition } from "motion/react"
 
 import { cn } from "@/lib/utils"
 
+import { MASCOT_NAME } from "./mascot-name"
 import { useLessMotion } from "./use-less-motion"
 
-/** The duck's name, in one place. Quietscheentchen is German for rubber duck. */
-export const MASCOT_NAME = "Quietschi"
+export { MASCOT_NAME }
 
 export type MascotMood =
   | "idle"
@@ -25,16 +25,16 @@ type MascotProps = {
   size?: number
   className?: string
   /**
-   * The duck is decoration by default: the words around it say what happened. Pass a label only
-   * where the duck itself is the message.
+   * Hamsti is decoration by default: the words around it say what happened. Pass a label only
+   * where Hamsti itself is the message.
    */
   label?: string
 }
 
 /**
- * Quietschi, Klarlingo's rubber duck: a nod to rubber-duck debugging, and the face of every
- * celebration. An SVG with Motion today; the props are the contract, so a Rive file can replace
- * the drawing later without touching any screen.
+ * Hamsti, Klarlingo's hamster. In German, *hamstern* means to stockpile, and Hamsti stockpiles the
+ * words you learn: the cheeks puff up whenever something good happens. An SVG with Motion; the
+ * props are the contract, so a Rive file can replace the drawing later without touching a screen.
  */
 export function Mascot({
   mood = "idle",
@@ -43,8 +43,8 @@ export function Mascot({
   label,
 }: MascotProps) {
   const still = useLessMotion()
-  const eyes = EYES[mood]
-  const mouthOpen = OPEN_MOUTH.has(mood)
+  const joyful = JOYFUL.has(mood)
+  const armsUp = mood === "cheer"
 
   return (
     <motion.svg
@@ -62,73 +62,131 @@ export function Mascot({
 
       <motion.g
         key={mood}
-        style={{ originX: "50%", originY: "90%" }}
+        // Motion measures SVG origins against the element's own box.
+        style={{ originX: 0.5, originY: 0.95 }}
         animate={still ? undefined : BODY[mood]}
       >
-        {/* Body, with the tail flicking up at the back */}
-        <path
-          d="M22 82c0-17 18-23 36-19 15 3 27 0 37-11 6-6 13-2 12 7-1 12-3 22-7 31-6 12-21 18-40 18-23 0-38-10-38-26Z"
-          fill="var(--duck-body)"
-        />
-        <path
-          d="M27 92c7 9 18 14 33 14 17 0 29-5 35-14-8 5-20 8-35 8-14 0-25-3-33-8Z"
-          fill="var(--duck-shade)"
-        />
-        {/* Wing */}
-        <motion.path
-          d="M57 77c8-9 25-8 30 3-6 9-21 11-30 4-2-2-2-5 0-7Z"
-          fill="var(--duck-shade)"
-          // Motion measures SVG origins against the element's own box: pivot at the wing's root.
-          style={{ originX: 0.1, originY: 0.6 }}
-          animate={still ? undefined : WING[mood]}
-        />
-
-        {/* Head */}
+        {/* Ears */}
         <motion.g
-          style={{ originX: 0.6, originY: 0.9 }}
-          animate={still ? HEAD_POSE[mood] : HEAD[mood]}
+          style={{ originX: 0.5, originY: 1 }}
+          animate={still ? EAR_POSE[mood] : EARS[mood]}
         >
-          <circle cx="46" cy="42" r="25" fill="var(--duck-body)" />
-          <path
-            d="M24 52c4 10 13 15 24 15 9 0 16-4 20-10-6 4-13 6-20 6-10 0-18-4-24-11Z"
-            fill="var(--duck-shade)"
-            opacity="0.7"
-          />
-          {/* Beak */}
-          <path
-            d="M25 43c-9-3-17 0-17 5 0 4 9 6 19 3Z"
-            fill="var(--duck-beak)"
-          />
-          {mouthOpen ? (
-            <path
-              d="M25 52c-7 2-13 4-12 8 2 4 10 2 16-3Z"
-              fill="var(--duck-beak-shade)"
+          <circle cx="36" cy="30" r="10" fill="var(--hamster-fur)" />
+          <circle cx="36" cy="30" r="5" fill="var(--hamster-pink)" />
+        </motion.g>
+        <motion.g
+          style={{ originX: 0.5, originY: 1 }}
+          animate={still ? EAR_POSE_R[mood] : EARS_R[mood]}
+        >
+          <circle cx="84" cy="30" r="10" fill="var(--hamster-fur)" />
+          <circle cx="84" cy="30" r="5" fill="var(--hamster-pink)" />
+        </motion.g>
+
+        {armsUp && (
+          <>
+            <ellipse
+              cx="22"
+              cy="48"
+              rx="7"
+              ry="9"
+              fill="var(--hamster-fur-dark)"
+              transform="rotate(-25 22 48)"
             />
-          ) : (
-            <path
-              d="M27 51c-6 1-12 0-15-2 2 3 8 5 15 4Z"
-              fill="var(--duck-beak-shade)"
+            <ellipse
+              cx="98"
+              cy="48"
+              rx="7"
+              ry="9"
+              fill="var(--hamster-fur-dark)"
+              transform="rotate(25 98 48)"
             />
-          )}
+          </>
+        )}
+
+        {/* Body and belly */}
+        <ellipse cx="60" cy="74" rx="38" ry="36" fill="var(--hamster-fur)" />
+        <ellipse cx="60" cy="84" rx="25" ry="24" fill="var(--hamster-cream)" />
+
+        {/* Cheek pouches: they fill up when something good happens */}
+        {[34, 86].map((cx) => (
+          <motion.ellipse
+            key={cx}
+            cx={cx}
+            cy="72"
+            rx={joyful ? 13 : 9}
+            ry={joyful ? 11 : 8}
+            fill="var(--hamster-cream)"
+            style={{ originX: 0.5, originY: 0.5 }}
+            animate={
+              still || !joyful
+                ? undefined
+                : { scale: [1, 1.12, 1], transition: loop(1.2) }
+            }
+          />
+        ))}
+
+        <Eyes mood={mood} still={still} />
+        {mood === "onFire" && (
+          <g
+            stroke="var(--hamster-eye)"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          >
+            <path d="M43 51l10 2.5" />
+            <path d="M77 51l-10 2.5" />
+          </g>
+        )}
+
+        {/* Nose, mouth, blush */}
+        <path d="M57 67h6l-3 3.5z" fill="var(--hamster-pink)" />
+        <Mouth mood={mood} />
+        {[38, 82].map((cx) => (
           <ellipse
-            cx="50"
-            cy="51"
+            key={cx}
+            cx={cx}
+            cy="72"
             rx="5"
             ry="3"
-            fill="var(--duck-cheek)"
-            opacity={mood === "sad" ? 0.35 : 0.75}
+            fill="var(--hamster-pink)"
+            opacity={mood === "sad" ? 0.3 : 0.75}
           />
-          <Eye kind={eyes} still={still} />
-          {mood === "onFire" && (
-            <path
-              d="M33 31l11-3"
-              stroke="var(--duck-eye)"
-              strokeWidth="2.5"
-              strokeLinecap="round"
+        ))}
+
+        {/* Paws: in front, one at the chin while thinking, or up for a cheer */}
+        {!armsUp && (
+          <>
+            <ellipse
+              cx="47"
+              cy="96"
+              rx="6"
+              ry="5"
+              fill="var(--hamster-fur-dark)"
             />
-          )}
-          {mood === "sad" && <Tear still={still} />}
-        </motion.g>
+            <ellipse
+              cx={mood === "thinking" ? 68 : 73}
+              cy={mood === "thinking" ? 82 : 96}
+              rx="6"
+              ry="5"
+              fill="var(--hamster-fur-dark)"
+            />
+          </>
+        )}
+        <ellipse
+          cx="44"
+          cy="108"
+          rx="9"
+          ry="4.5"
+          fill="var(--hamster-fur-dark)"
+        />
+        <ellipse
+          cx="76"
+          cy="108"
+          rx="9"
+          ry="4.5"
+          fill="var(--hamster-fur-dark)"
+        />
+
+        {mood === "sad" && <Tear still={still} />}
       </motion.g>
 
       {mood === "sleepy" && <Snore still={still} />}
@@ -137,61 +195,32 @@ export function Mascot({
   )
 }
 
-type EyeKind = "open" | "happy" | "closed" | "up" | "droopy"
+const JOYFUL = new Set<MascotMood>(["happy", "cheer", "dance", "onFire"])
 
-const EYES: Record<MascotMood, EyeKind> = {
-  idle: "open",
-  happy: "happy",
-  sad: "droopy",
-  thinking: "up",
-  cheer: "happy",
-  dance: "happy",
-  sleepy: "closed",
-  onFire: "open",
-}
-
-const OPEN_MOUTH = new Set<MascotMood>(["happy", "cheer", "dance", "onFire"])
-
-function Eye({ kind, still }: { kind: EyeKind; still: boolean }) {
-  if (kind === "happy")
+function Eyes({ mood, still }: { mood: MascotMood; still: boolean }) {
+  const line = {
+    fill: "none",
+    stroke: "var(--hamster-eye)",
+    strokeLinecap: "round" as const,
+  }
+  if (mood === "happy" || mood === "cheer" || mood === "dance")
     return (
-      <path
-        d="M35 40q5-6 10 0"
-        fill="none"
-        stroke="var(--duck-eye)"
-        strokeWidth="3.2"
-        strokeLinecap="round"
-      />
-    )
-  if (kind === "closed")
-    return (
-      <path
-        d="M35 39q5 4 10 0"
-        fill="none"
-        stroke="var(--duck-eye)"
-        strokeWidth="3"
-        strokeLinecap="round"
-      />
-    )
-  if (kind === "droopy")
-    // Looking down, with a heavy lid: disappointed, not cross.
-    return (
-      <g>
-        <circle cx="40" cy="40" r="5" fill="var(--duck-eye)" />
-        <circle cx="41.4" cy="39" r="1.4" fill="#ffffff" />
-        <path d="M34 33h12v5.5c-4-2.5-8-2.5-12 0Z" fill="var(--duck-body)" />
-        <path
-          d="M34 38.5c4-2.5 8-2.5 12 0"
-          fill="none"
-          stroke="var(--duck-eye)"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
+      <g {...line} strokeWidth="3.2">
+        <path d="M44 62q5-7 10 0" />
+        <path d="M66 62q5-7 10 0" />
       </g>
     )
-  const up = kind === "up"
+  if (mood === "sleepy")
+    return (
+      <g {...line} strokeWidth="3">
+        <path d="M44 60q5 4 10 0" />
+        <path d="M66 60q5 4 10 0" />
+      </g>
+    )
+  const up = mood === "thinking" ? -2 : mood === "sad" ? 1.5 : 0
+  const side = mood === "thinking" ? 1.4 : 0
   return (
-    // A blink every few seconds keeps an idle duck alive.
+    // A blink every few seconds keeps an idle hamster alive.
     <motion.g
       style={{ originX: 0.5, originY: 0.5 }}
       animate={still ? undefined : { scaleY: [1, 1, 0.1, 1] }}
@@ -202,10 +231,61 @@ function Eye({ kind, still }: { kind: EyeKind; still: boolean }) {
         repeatDelay: 3.4,
       }}
     >
-      <circle cx="40" cy={up ? 36 : 38} r="5" fill="var(--duck-eye)" />
-      <circle cx="41.8" cy={up ? 34.2 : 36.2} r="1.7" fill="#ffffff" />
+      {[49, 71].map((cx) => (
+        <g key={cx}>
+          <circle cx={cx + side} cy={60 + up} r="5" fill="var(--hamster-eye)" />
+          <circle cx={cx + side + 1.6} cy={58.6 + up} r="1.6" fill="#ffffff" />
+          {mood === "sad" && (
+            <path
+              d={cx < 60 ? `M${cx - 6} 57q5-2 12-4` : `M${cx - 6} 53q7 2 12 4`}
+              {...line}
+              strokeWidth="2.4"
+            />
+          )}
+        </g>
+      ))}
     </motion.g>
   )
+}
+
+function Mouth({ mood }: { mood: MascotMood }) {
+  const ink = "var(--hamster-eye)"
+  if (mood === "cheer" || mood === "dance" || mood === "onFire")
+    return (
+      <>
+        <path d="M54 73q6 9 12 0z" fill={ink} />
+        <rect x="57.6" y="73" width="2.2" height="3.2" rx=".6" fill="#fff" />
+        <rect x="60.2" y="73" width="2.2" height="3.2" rx=".6" fill="#fff" />
+      </>
+    )
+  if (mood === "happy")
+    return (
+      <>
+        <path d="M55.5 73.5q4.5 6 9 0z" fill={ink} />
+        <rect x="57.8" y="73.5" width="2" height="2.8" rx=".6" fill="#fff" />
+        <rect x="60.2" y="73.5" width="2" height="2.8" rx=".6" fill="#fff" />
+      </>
+    )
+  if (mood === "sad")
+    return (
+      <path
+        d="M56 77q4-4 8 0"
+        fill="none"
+        stroke={ink}
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+    )
+  if (mood === "thinking")
+    return (
+      <path
+        d="M56.5 75h7"
+        stroke={ink}
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+    )
+  return <ellipse cx="60" cy="75" rx="2" ry="2.4" fill={ink} />
 }
 
 const loop = (duration: number) => ({
@@ -214,7 +294,7 @@ const loop = (duration: number) => ({
   ease: "easeInOut" as const,
 })
 
-/** Whole-duck movement for each mood. */
+/** Whole-hamster movement for each mood. */
 const BODY: Record<MascotMood, TargetAndTransition> = {
   idle: { y: [0, -3, 0], transition: loop(2.6) },
   happy: {
@@ -224,7 +304,7 @@ const BODY: Record<MascotMood, TargetAndTransition> = {
   },
   sad: {
     y: [0, 3],
-    rotate: [0, -4],
+    rotate: [0, -3],
     transition: { duration: 0.5, ease: "easeOut" },
   },
   thinking: { y: [0, -2, 0], transition: loop(2) },
@@ -242,47 +322,58 @@ const BODY: Record<MascotMood, TargetAndTransition> = {
   onFire: { y: [0, -5, 0], transition: loop(0.5) },
 }
 
-const HEAD: Record<MascotMood, TargetAndTransition> = {
+/** Ears perk up with joy and droop with disappointment. These are the left ear's. */
+const EARS: Record<MascotMood, TargetAndTransition> = {
   idle: {},
-  happy: {},
-  sad: { rotate: 10, y: 3, transition: { duration: 0.5 } },
-  thinking: { rotate: [0, 8, 6], transition: { duration: 0.6 } },
-  cheer: {},
-  dance: { rotate: [6, -6, 6], transition: loop(0.9) },
-  sleepy: { rotate: 12, y: 4, transition: { duration: 0.8 } },
-  onFire: { rotate: -4 },
+  happy: { rotate: [0, -14, 0], transition: { duration: 0.6 } },
+  sad: { rotate: -28, y: 6, transition: { duration: 0.5 } },
+  thinking: { rotate: -6 },
+  cheer: { rotate: [0, -16, 0], transition: loop(0.55) },
+  dance: { rotate: [-10, 10, -10], transition: loop(0.9) },
+  sleepy: { rotate: -18, y: 4, transition: { duration: 0.8 } },
+  onFire: { rotate: -8 },
 }
 
-/** The same head poses, held still, for reduced motion. */
-const HEAD_POSE: Record<MascotMood, TargetAndTransition> = {
+/** The right ear mirrors the left. */
+const EARS_R: Record<MascotMood, TargetAndTransition> = {
+  idle: {},
+  happy: { rotate: [0, 14, 0], transition: { duration: 0.6 } },
+  sad: { rotate: 28, y: 6, transition: { duration: 0.5 } },
+  thinking: { rotate: 6 },
+  cheer: { rotate: [0, 16, 0], transition: loop(0.55) },
+  dance: { rotate: [10, -10, 10], transition: loop(0.9) },
+  sleepy: { rotate: 18, y: 4, transition: { duration: 0.8 } },
+  onFire: { rotate: 8 },
+}
+
+const held = (target: TargetAndTransition): TargetAndTransition => ({
+  ...target,
+  transition: { duration: 0 },
+})
+
+/** The same ear poses, held still, for reduced motion. */
+const EAR_POSE: Record<MascotMood, TargetAndTransition> = {
   idle: {},
   happy: {},
-  sad: { rotate: 10, y: 3, transition: { duration: 0 } },
-  thinking: { rotate: 6, transition: { duration: 0 } },
+  sad: held({ rotate: -28, y: 6 }),
+  thinking: held({ rotate: -6 }),
   cheer: {},
   dance: {},
-  sleepy: { rotate: 12, y: 4, transition: { duration: 0 } },
-  onFire: { rotate: -4, transition: { duration: 0 } },
+  sleepy: held({ rotate: -18, y: 4 }),
+  onFire: held({ rotate: -8 }),
 }
-
-const WING: Record<MascotMood, TargetAndTransition> = {
-  idle: {},
-  happy: {
-    rotate: [0, -30, 0, -20, 0],
-    transition: { duration: 0.8 },
-  },
-  sad: {},
-  thinking: {},
-  cheer: { rotate: [0, -45, 0], transition: loop(0.35) },
-  dance: { rotate: [0, -25, 0], transition: loop(0.45) },
-  sleepy: {},
-  onFire: { rotate: [0, -20, 0], transition: loop(0.5) },
+const EAR_POSE_R: Record<MascotMood, TargetAndTransition> = {
+  ...EAR_POSE,
+  sad: held({ rotate: 28, y: 6 }),
+  thinking: held({ rotate: 6 }),
+  sleepy: held({ rotate: 18, y: 4 }),
+  onFire: held({ rotate: 8 }),
 }
 
 function Tear({ still }: { still: boolean }) {
   return (
     <motion.path
-      d="M37 46c-2 3-3 5-1 6 2 1 3-1 2-3Z"
+      d="M45 66c-2 3-3 5-1 6.5 2 1 3.5-1 2.5-3.5z"
       fill="var(--info)"
       initial={{ opacity: 0, y: -2 }}
       animate={
@@ -297,9 +388,9 @@ function Snore({ still }: { still: boolean }) {
   return (
     <g fill="var(--info)" fontFamily="var(--font-display)" fontWeight="700">
       {[
-        { x: 74, y: 22, size: 12, delay: 0 },
-        { x: 86, y: 12, size: 15, delay: 0.6 },
-        { x: 100, y: 2, size: 18, delay: 1.2 },
+        { x: 86, y: 22, size: 12, delay: 0 },
+        { x: 96, y: 12, size: 15, delay: 0.6 },
+        { x: 106, y: 2, size: 18, delay: 1.2 },
       ].map((z) => (
         <motion.text
           key={z.x}
@@ -323,9 +414,9 @@ function ThoughtDots({ still }: { still: boolean }) {
   return (
     <g fill="var(--border-edge)">
       {[
-        { cx: 72, cy: 20, r: 3 },
-        { cx: 82, cy: 12, r: 4 },
-        { cx: 94, cy: 4, r: 5 },
+        { cx: 88, cy: 26, r: 3 },
+        { cx: 96, cy: 17, r: 4 },
+        { cx: 106, cy: 7, r: 5 },
       ].map((dot, i) => (
         <motion.circle
           key={dot.cx}
@@ -342,10 +433,10 @@ function Sparkles({ still }: { still: boolean }) {
   return (
     <g fill="var(--gold)">
       {[
-        { x: 8, y: 14, s: 1 },
-        { x: 98, y: 20, s: 0.8 },
-        { x: 104, y: 70, s: 0.6 },
-        { x: 4, y: 74, s: 0.7 },
+        { x: 10, y: 22, s: 1 },
+        { x: 108, y: 24, s: 0.8 },
+        { x: 112, y: 76, s: 0.6 },
+        { x: 6, y: 80, s: 0.7 },
       ].map((star, i) => (
         // Placement lives on the group: Motion's transform would replace an SVG transform attribute.
         <g
@@ -373,16 +464,16 @@ function Flame({ still }: { still: boolean }) {
       animate={
         still
           ? undefined
-          : { scaleY: [1, 1.08, 0.96, 1], opacity: [0.85, 1, 0.9, 0.85] }
+          : { scaleY: [1, 1.08, 0.96, 1], opacity: [0.9, 1, 0.92, 0.9] }
       }
       transition={loop(0.6)}
     >
       <path
-        d="M60 112c-30 0-44-20-36-44 3 10 9 14 14 14-6-16 2-34 18-44-2 14 6 22 14 28 2-8 8-12 14-14-4 10 0 18 6 24 4 6 6 12 6 18 0 12-14 18-36 18Z"
+        d="M60 114c-32 0-46-22-38-48 3 10 9 14 14 14-6-16 2-36 18-46-2 14 6 22 14 28 2-8 8-12 14-14-4 10 0 18 6 24 4 6 6 12 6 18 0 14-14 24-34 24Z"
         fill="var(--streak)"
       />
       <path
-        d="M60 112c-20 0-30-12-25-28 3 6 7 8 10 8-3-10 2-20 12-26-1 9 4 14 9 18 1-5 5-8 9-9-2 7 0 12 4 16 3 4 4 7 4 11 0 7-9 10-23 10Z"
+        d="M60 114c-20 0-30-12-25-28 3 6 7 8 10 8-3-10 2-20 12-26-1 9 4 14 9 18 1-5 5-8 9-9-2 7 0 12 4 16 3 4 4 7 4 11 0 7-9 10-23 10Z"
         fill="var(--gold)"
       />
     </motion.g>

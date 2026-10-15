@@ -2,7 +2,7 @@ import { Mascot } from "@/features/celebrations/mascot"
 
 import { buddy } from "./content"
 
-/** Quietschi, introduced like a colleague: four moods, four lines. */
+/** Hamsti, introduced like a colleague: four moods, four lines. */
 export function BuddySection() {
   return (
     <section
@@ -19,7 +19,9 @@ export function BuddySection() {
             {buddy.title}
           </h2>
           <p className="mt-4 text-lg font-semibold text-secondary-text">
-            {buddy.lede}
+            {buddy.lede.before}
+            <i lang="de">{buddy.lede.word}</i>
+            {buddy.lede.after}
           </p>
         </div>
         <ul className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">

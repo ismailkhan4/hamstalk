@@ -1,8 +1,8 @@
-import { isLessonAvailable } from "@/content/availability"
+import { isLessonAvailable } from "@/content/courses/de/availability"
 import type { StartLevel } from "@/features/onboarding/options"
 import { nextLesson, type LessonProgress } from "@/features/path/model"
-import { getLesson } from "@/content/lessons/registry"
-import { standups } from "@/content/standup"
+import { getLesson } from "@/content/courses/de/lessons/registry"
+import { standups } from "@/content/courses/de/standup"
 import type { StreakState } from "@/features/streaks/model"
 import { standupState } from "@/features/team/model"
 

@@ -9,37 +9,43 @@ export const TICKET_UNIT_ID = "a1-u3"
 export type Gloss = {
   article?: "der" | "die" | "das"
   word: string
-  en: string
+  native: string
   forms?: string
 }
 
 export const ticket = {
   id: "KLAR-142",
-  title: { de: "Neue Anmeldung testen", en: "Test the new sign-in" },
-  status: { de: "Offen", en: "open" },
+  title: { target: "Neue Anmeldung testen", native: "Test the new sign-in" },
+  status: { target: "Offen", native: "open" },
   fields: [
-    { de: "Priorität", en: "priority", value: { de: "Hoch", en: "high" } },
     {
-      de: "Erstellt von",
-      en: "created by",
-      value: { de: "Aylin Öztürk", en: "" },
+      target: "Priorität",
+      native: "priority",
+      value: { target: "Hoch", native: "high" },
     },
     {
-      de: "Zuständig",
-      en: "assigned to",
-      value: { de: "%N (du)", en: "" },
+      target: "Erstellt von",
+      native: "created by",
+      value: { target: "Aylin Öztürk", native: "" },
+    },
+    {
+      target: "Zuständig",
+      native: "assigned to",
+      value: { target: "%N (du)", native: "" },
     },
   ],
   body: {
-    de: "Hallo %N, die neue Anmeldung ist online. Bitte heute testen: E-Mail und Passwort. Danke!",
-    en: "Hi %N, the new sign-in is live. Please test it today: email and password. Thanks!",
+    target:
+      "Hallo %N, die neue Anmeldung ist online. Bitte heute testen: E-Mail und Passwort. Danke!",
+    native:
+      "Hi %N, the new sign-in is live. Please test it today: email and password. Thanks!",
   },
   words: [
-    { article: "die", word: "Anmeldung", en: "sign-in" },
-    { word: "testen", en: "to test", forms: "ich teste, du testest" },
-    { word: "neu", en: "new" },
-    { word: "heute", en: "today" },
-    { article: "das", word: "Passwort", en: "password" },
+    { article: "die", word: "Anmeldung", native: "sign-in" },
+    { word: "testen", native: "to test", forms: "ich teste, du testest" },
+    { word: "neu", native: "new" },
+    { word: "heute", native: "today" },
+    { article: "das", word: "Passwort", native: "password" },
   ] satisfies Gloss[],
   task: {
     title: "Tell Lena what you’re doing today",
@@ -55,8 +61,8 @@ export const ticket = {
 }
 
 export type ChatReply = {
-  de: string
-  en: string
+  target: string
+  native: string
   correct: boolean
   title?: string
   note: string
@@ -65,31 +71,33 @@ export type ChatReply = {
 export const chat = {
   from: { name: "Jonas Krüger", initials: "JK", time: "14:02" },
   message: {
-    de: "Hey %N, kannst du kurz auf meinen Pull Request schauen? Ich brauche ein Review bis 15 Uhr.",
-    en: "Hey %N, can you take a quick look at my pull request? I need a review by 3 pm.",
+    target:
+      "Hey %N, kannst du kurz auf meinen Pull Request schauen? Ich brauche ein Review bis 15 Uhr.",
+    native:
+      "Hey %N, can you take a quick look at my pull request? I need a review by 3 pm.",
   },
   chips: [
-    { word: "kurz", en: "quickly, briefly" },
-    { word: "schauen auf", en: "to look at" },
-    { word: "bis 15 Uhr", en: "by 3 pm" },
+    { word: "kurz", native: "quickly, briefly" },
+    { word: "schauen auf", native: "to look at" },
+    { word: "bis 15 Uhr", native: "by 3 pm" },
   ],
   replies: [
     {
-      de: "Klar, ich schaue gleich.",
-      en: "Sure, I’ll take a look right away.",
+      target: "Klar, ich schaue gleich.",
+      native: "Sure, I’ll take a look right away.",
       correct: true,
       note: "Friendly, informal like Jonas, and “gleich” tells him it will happen well before 15 Uhr.",
     },
     {
-      de: "Ja, ich schaue morgen.",
-      en: "Yes, I’ll look tomorrow.",
+      target: "Ja, ich schaue morgen.",
+      native: "Yes, I’ll look tomorrow.",
       correct: false,
       title: "Too late for Jonas",
       note: "Your German is correct, but Jonas needs the review by 15 Uhr today. Morgen means tomorrow.",
     },
     {
-      de: "Können Sie das bitte wiederholen?",
-      en: "Could you repeat that, please? (formal)",
+      target: "Können Sie das bitte wiederholen?",
+      native: "Could you repeat that, please? (formal)",
       correct: false,
       title: "Correct German, wrong tone",
       note: "Sie is the formal you. Teammates use du, and Jonas’s message was clear, so there is nothing to repeat.",

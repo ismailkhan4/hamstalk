@@ -59,12 +59,12 @@ function checkOptions(
 
 const discoverLine = z.object({
   speaker: voice,
-  de: z.string().min(1),
-  en: z.string().min(1),
+  target: z.string().min(1),
+  native: z.string().min(1),
   note: z.string().optional(),
   saveKey: z.string().optional(),
   topic: z.string().optional(),
-  example: z.object({ de: z.string(), en: z.string() }).optional(),
+  example: z.object({ target: z.string(), native: z.string() }).optional(),
   article: z.enum(["der", "die", "das"]).optional(),
 })
 
@@ -83,7 +83,7 @@ export const tipExercise = z.object({
   sub: z.string(),
   columns: z.array(z.string()).min(2),
   rows: z.array(z.array(z.string())).min(1),
-  examples: z.array(z.object({ de: z.string(), en: z.string() })),
+  examples: z.array(z.object({ target: z.string(), native: z.string() })),
   note: z.string(),
 })
 
@@ -93,7 +93,7 @@ export const choiceExercise = z
     variant: z.enum(["multiple-choice", "fill", "listening"]),
     kind: z.string(),
     prompt: z.string().min(1),
-    optionsLanguage: z.enum(["de", "en"]),
+    optionsLanguage: z.enum(["target", "native"]),
     options: z.array(z.string().min(1)).min(2).max(4),
     correct: optionIndex,
     alternatives: z.array(optionIndex).default([]),
@@ -134,7 +134,7 @@ export const matchExercise = z
       empty: z.string(),
       joiner: z.string(),
     }),
-    meaningsLanguage: z.enum(["de", "en"]).default("en"),
+    meaningsLanguage: z.enum(["target", "native"]).default("native"),
     explanation: z.string(),
     topic: z.string().optional(),
     revisits: z.number().int().min(0).optional(),
@@ -195,7 +195,7 @@ const turn = z
     translation: z.string(),
     task: z.string(),
     options: z
-      .array(z.object({ de: z.string(), en: z.string() }))
+      .array(z.object({ target: z.string(), native: z.string() }))
       .min(2)
       .max(4),
     correct: optionIndex,
@@ -211,7 +211,7 @@ export const conversationExercise = z.object({
   prompt: z.string(),
   sub: z.string(),
   turns: z.array(turn).min(2).max(5),
-  closing: z.object({ speaker: voice, de: z.string(), en: z.string() }),
+  closing: z.object({ speaker: voice, target: z.string(), native: z.string() }),
   topic: z.string().optional(),
 })
 
@@ -228,15 +228,15 @@ export const exerciseSchema = z.discriminatedUnion("type", [
 const vocabularyEntry = z.object({
   article: z.enum(["der", "die", "das"]).optional(),
   word: z.string().min(1),
-  en: z.string().min(1),
-  example: z.object({ de: z.string(), en: z.string() }),
+  native: z.string().min(1),
+  example: z.object({ target: z.string(), native: z.string() }),
 })
 
 export const lessonSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]{3,64}$/),
   kind: z.enum(["lesson", "review"]),
   title: z.string(),
-  titleIsGerman: z.boolean(),
+  titleInTarget: z.boolean(),
   titleEn: z.string(),
   goal: z.string(),
   minutes: z.number().int().positive(),
@@ -244,8 +244,8 @@ export const lessonSchema = z.object({
   focus: z.string(),
   intro: z.object({
     speaker: z.object({ person, initials: z.string() }),
-    de: z.string(),
-    en: z.string(),
+    target: z.string(),
+    native: z.string(),
   }),
   phrases: z.array(z.string()),
   vocabulary: z.array(vocabularyEntry),

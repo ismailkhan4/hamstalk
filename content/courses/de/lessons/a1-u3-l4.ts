@@ -9,7 +9,7 @@ export const lesson4: Lesson = {
   id: "a1-u3-l4",
   kind: "lesson",
   title: "Woher kommst du?",
-  titleIsGerman: true,
+  titleInTarget: true,
   titleEn: "Where are you from?",
   goal: "Ask where someone is from, say where you’re from and talk about the languages you speak",
   minutes: 10,
@@ -17,42 +17,49 @@ export const lesson4: Lesson = {
   focus: "kommen aus · sprechen · lernen",
   intro: {
     speaker: { person: "cm", initials: "CM" },
-    de: "Hallo! Ich bin Clara, ich bin neu im Team.",
-    en: "Clara Martin starts in the design team today. You’ll talk to her at the end of this lesson.",
+    target: "Hallo! Ich bin Clara, ich bin neu im Team.",
+    native:
+      "Clara Martin starts in the design team today. You’ll talk to her at the end of this lesson.",
   },
   phrases: ["Woher kommst du?", "Ich komme aus …", "sprechen", "lernen"],
   vocabulary: [
     {
       word: "Woher kommst du?",
-      en: "where are you from?",
+      native: "where are you from?",
       example: {
-        de: "Woher kommst du? – Ich komme aus Spanien.",
-        en: "Where are you from? – I’m from Spain.",
+        target: "Woher kommst du? – Ich komme aus Spanien.",
+        native: "Where are you from? – I’m from Spain.",
       },
     },
     {
       word: "Ich komme aus …",
-      en: "I’m from …",
-      example: { de: "Ich komme aus Deutschland.", en: "I’m from Germany." },
+      native: "I’m from …",
+      example: {
+        target: "Ich komme aus Deutschland.",
+        native: "I’m from Germany.",
+      },
     },
     {
       word: "sprechen",
-      en: "to speak",
+      native: "to speak",
       example: {
-        de: "Ich spreche Spanisch und Englisch.",
-        en: "I speak Spanish and English.",
+        target: "Ich spreche Spanisch und Englisch.",
+        native: "I speak Spanish and English.",
       },
     },
     {
       word: "lernen",
-      en: "to learn",
-      example: { de: "Ich lerne Deutsch.", en: "I’m learning German." },
+      native: "to learn",
+      example: { target: "Ich lerne Deutsch.", native: "I’m learning German." },
     },
     {
       article: "die",
       word: "Sprache",
-      en: "language",
-      example: { de: "Deutsch ist eine Sprache.", en: "German is a language." },
+      native: "language",
+      example: {
+        target: "Deutsch ist eine Sprache.",
+        native: "German is a language.",
+      },
     },
   ],
   practised: [
@@ -76,47 +83,50 @@ export const lesson4: Lesson = {
       lines: [
         {
           speaker: { person: "lf", initials: "LF", label: "Lena" },
-          de: "Hallo! Ich heiße Lena. Woher kommst du?",
-          en: "Hi! My name is Lena. Where are you from?",
+          target: "Hallo! Ich heiße Lena. Woher kommst du?",
+          native: "Hi! My name is Lena. Where are you from?",
           note: "Woher kommst du? asks where someone is from.",
           saveKey: "L4a",
           topic: "Where from",
-          example: { de: "Woher kommst du?", en: "Where are you from?" },
+          example: {
+            target: "Woher kommst du?",
+            native: "Where are you from?",
+          },
         },
         {
           speaker: { person: "me", initials: "%I", label: "You" },
-          de: "Ich komme aus Spanien.",
-          en: "I’m from Spain.",
+          target: "Ich komme aus Spanien.",
+          native: "I’m from Spain.",
           note: "Ich komme aus + country. Use your own country.",
           saveKey: "L4b",
           topic: "Where from",
         },
         {
           speaker: { person: "me", initials: "%I", label: "You" },
-          de: "Ich spreche Spanisch und Englisch.",
-          en: "I speak Spanish and English.",
+          target: "Ich spreche Spanisch und Englisch.",
+          native: "I speak Spanish and English.",
           note: "sprechen + the languages you speak.",
           saveKey: "L4c",
           topic: "Languages",
         },
         {
           speaker: { person: "me", initials: "%I", label: "You" },
-          de: "Ich lerne Deutsch.",
-          en: "I’m learning German.",
+          target: "Ich lerne Deutsch.",
+          native: "I’m learning German.",
           note: "lernen + the language you’re learning.",
           saveKey: "L4d",
           topic: "Languages",
         },
         {
           speaker: { person: "lf", initials: "LF", label: "Lena" },
-          de: "Super! Ich komme aus Deutschland, aus Köln.",
-          en: "Great! I’m from Germany, from Cologne.",
+          target: "Super! Ich komme aus Deutschland, aus Köln.",
+          native: "Great! I’m from Germany, from Cologne.",
           note: "With Sie, for HR, customers and people you don’t know: Woher kommen Sie?",
           saveKey: "L4e",
           topic: "Where from",
           example: {
-            de: "Woher kommen Sie?",
-            en: "Where are you from? (formal)",
+            target: "Woher kommen Sie?",
+            native: "Where are you from? (formal)",
           },
         },
       ],
@@ -126,7 +136,7 @@ export const lesson4: Lesson = {
       variant: "listening",
       kind: "Listen",
       prompt: "Which language is Jonas learning?",
-      optionsLanguage: "en",
+      optionsLanguage: "native",
       options: ["Spanish", "English", "German"],
       correct: 0,
       alternatives: [],
@@ -165,7 +175,7 @@ export const lesson4: Lesson = {
         empty: "Choose a language",
         joiner: " → ",
       },
-      meaningsLanguage: "de",
+      meaningsLanguage: "target",
       explanation:
         "Many languages end in -isch: Spanien → Spanisch, Frankreich → Französisch. Deutschland → Deutsch.",
       topic: "Languages",
@@ -184,16 +194,16 @@ export const lesson4: Lesson = {
       ],
       examples: [
         {
-          de: "Woher kommst du? – Ich komme aus Spanien.",
-          en: "Where are you from? – I’m from Spain.",
+          target: "Woher kommst du? – Ich komme aus Spanien.",
+          native: "Where are you from? – I’m from Spain.",
         },
         {
-          de: "Woher kommen Sie? – Ich komme aus Deutschland.",
-          en: "Where are you from? (Sie) – I’m from Germany.",
+          target: "Woher kommen Sie? – Ich komme aus Deutschland.",
+          native: "Where are you from? (Sie) – I’m from Germany.",
         },
         {
-          de: "Lena spricht Deutsch. Ich lerne Deutsch.",
-          en: "Lena speaks German. I’m learning German.",
+          target: "Lena spricht Deutsch. Ich lerne Deutsch.",
+          native: "Lena speaks German. I’m learning German.",
         },
       ],
       note: "Woher? asks where someone is from; answer with aus and the country. sprechen changes its vowel with du and er or sie: du sprichst, sie spricht. lernen works like kommen: ich lerne, du lernst.",
@@ -203,7 +213,7 @@ export const lesson4: Lesson = {
       variant: "fill",
       kind: "Fill in the blank",
       prompt: "Ask Clara where she’s from",
-      optionsLanguage: "de",
+      optionsLanguage: "target",
       options: ["kommst", "komme", "kommt"],
       correct: 0,
       alternatives: [],
@@ -224,7 +234,7 @@ export const lesson4: Lesson = {
       kind: "Choose the answer",
       prompt:
         "Frau Wagner from HR meets you for the first time. What does she ask?",
-      optionsLanguage: "de",
+      optionsLanguage: "target",
       options: ["Woher kommen Sie?", "Woher kommst du?", "Wo kommen Sie?"],
       correct: 0,
       alternatives: [],
@@ -245,7 +255,7 @@ export const lesson4: Lesson = {
       kind: "Fill in the blank",
       prompt:
         "Say which languages Lena speaks. Lena speaks German and English.",
-      optionsLanguage: "de",
+      optionsLanguage: "target",
       options: ["spricht", "sprichst", "spreche"],
       correct: 0,
       alternatives: [],
@@ -267,7 +277,7 @@ export const lesson4: Lesson = {
       kind: "Choose the answer",
       prompt:
         "You speak Spanish and English, and you’re learning German. What do you say?",
-      optionsLanguage: "de",
+      optionsLanguage: "target",
       options: [
         "Ich spreche Spanisch und Englisch. Ich lerne Deutsch.",
         "Ich lerne Spanisch und Englisch. Ich spreche Deutsch.",
@@ -326,9 +336,9 @@ export const lesson4: Lesson = {
             "Hi! I’m Clara, I’m new in the design team. Where are you from?",
           task: "Say you’re from Spain",
           options: [
-            { de: "Ich komme aus Spanien.", en: "I’m from Spain." },
-            { de: "Ich heiße Spanien.", en: "My name is Spain." },
-            { de: "Ich spreche Spanien.", en: "I speak Spain." },
+            { target: "Ich komme aus Spanien.", native: "I’m from Spain." },
+            { target: "Ich heiße Spanien.", native: "My name is Spain." },
+            { target: "Ich spreche Spanien.", native: "I speak Spain." },
           ],
           correct: 0,
           alternatives: [],
@@ -352,16 +362,17 @@ export const lesson4: Lesson = {
           task: "Say you speak Spanish and English, and are learning German",
           options: [
             {
-              de: "Ich spreche Spanisch und Englisch. Und ich lerne Deutsch.",
-              en: "I speak Spanish and English. And I’m learning German.",
+              target:
+                "Ich spreche Spanisch und Englisch. Und ich lerne Deutsch.",
+              native: "I speak Spanish and English. And I’m learning German.",
             },
             {
-              de: "Ich komme aus Spanisch und Englisch.",
-              en: "I’m from Spanish and English.",
+              target: "Ich komme aus Spanisch und Englisch.",
+              native: "I’m from Spanish and English.",
             },
             {
-              de: "Ich lerne Spanisch und Englisch.",
-              en: "I’m learning Spanish and English.",
+              target: "Ich lerne Spanisch und Englisch.",
+              native: "I’m learning Spanish and English.",
             },
           ],
           correct: 0,
@@ -386,14 +397,14 @@ export const lesson4: Lesson = {
           task: "Thank her and ask where she’s from",
           options: [
             {
-              de: "Danke! Und du? Woher kommst du?",
-              en: "Thanks! And you? Where are you from?",
+              target: "Danke! Und du? Woher kommst du?",
+              native: "Thanks! And you? Where are you from?",
             },
             {
-              de: "Danke! Und Sie? Woher kommen Sie?",
-              en: "Thanks! And you? Where are you from? (Sie)",
+              target: "Danke! Und Sie? Woher kommen Sie?",
+              native: "Thanks! And you? Where are you from? (Sie)",
             },
-            { de: "Danke! Wo bist du?", en: "Thanks! Where are you?" },
+            { target: "Danke! Wo bist du?", native: "Thanks! Where are you?" },
           ],
           correct: 0,
           alternatives: [],
@@ -410,8 +421,10 @@ export const lesson4: Lesson = {
       ],
       closing: {
         speaker: { person: "cm", initials: "CM", label: "Clara" },
-        de: "Ich komme aus Frankreich, aus Lyon. Ich spreche Französisch, Englisch und ein bisschen Deutsch.",
-        en: "I’m from France, from Lyon. I speak French, English and a little German.",
+        target:
+          "Ich komme aus Frankreich, aus Lyon. Ich spreche Französisch, Englisch und ein bisschen Deutsch.",
+        native:
+          "I’m from France, from Lyon. I speak French, English and a little German.",
       },
     },
   ],

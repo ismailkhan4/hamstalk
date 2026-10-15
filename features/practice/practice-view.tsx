@@ -10,11 +10,11 @@ import Link from "next/link"
 
 import { AppShell } from "@/components/layout/app-shell"
 import { ArticleWord } from "@/components/learning/article-word"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { LocalTime } from "@/components/learning/local-time"
 import { buttonVariants } from "@/components/ui/button-variants"
-import { findLesson } from "@/content/curriculum"
-import { getLesson } from "@/content/lessons/registry"
+import { findLesson } from "@/content/courses/de/curriculum"
+import { getLesson } from "@/content/courses/de/lessons/registry"
 import type { NotebookCounts, ReviewOverview } from "@/features/review/data"
 import { StrengthBars } from "@/features/review/strength-bars"
 import type { LessonProgress } from "@/features/path/model"
@@ -189,12 +189,12 @@ export function PracticeView({
                       className="min-w-0 flex-1 text-lg"
                     />
                   ) : (
-                    <GermanText className="min-w-0 flex-1 text-lg">
+                    <TargetText className="min-w-0 flex-1 text-lg">
                       {card.word}
-                    </GermanText>
+                    </TargetText>
                   )}
                   <span className="hidden text-sm text-muted-foreground sm:block">
-                    {card.en}
+                    {card.native}
                   </span>
                   <StrengthBars strength={card.strength} />
                 </li>

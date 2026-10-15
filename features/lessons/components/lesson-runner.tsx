@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useRef, useState } from "react"
 
+import { TARGET_LANG } from "@/content/courses"
 import { Alert } from "@/components/feedback/alert"
 import { FocusHeader } from "@/components/learning/focus-header"
 import { Button } from "@/components/ui/button"
@@ -274,7 +275,7 @@ export function LessonRunner({
           onClose={() => router.push(exitHref)}
           ticket={ticketId(lesson.id)}
           title={lesson.title}
-          titleLang={lesson.titleIsGerman ? "de" : undefined}
+          titleLang={lesson.titleInTarget ? TARGET_LANG : undefined}
         />
         <LessonIntro
           lesson={lesson}
@@ -298,7 +299,7 @@ export function LessonRunner({
           onClose={() => router.push(exitHref)}
           ticket={ticketId(lesson.id)}
           title={lesson.title}
-          titleLang={lesson.titleIsGerman ? "de" : undefined}
+          titleLang={lesson.titleInTarget ? TARGET_LANG : undefined}
           progress={progress}
         />
         <LessonComplete
@@ -329,7 +330,7 @@ export function LessonRunner({
         onClose={() => setExitOpen(true)}
         ticket={ticketId(lesson.id)}
         title={lesson.title}
-        titleLang={lesson.titleIsGerman ? "de" : undefined}
+        titleLang={lesson.titleInTarget ? TARGET_LANG : undefined}
         progress={progress}
         combo={combo}
       />

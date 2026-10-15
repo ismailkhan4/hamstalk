@@ -4,13 +4,14 @@ import { Check, Languages } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
+import { TARGET_LANG } from "@/content/courses"
 import { Alert } from "@/components/feedback/alert"
 import { AnswerOption } from "@/components/exercises/answer-option"
 import { Avatar, type Person } from "@/components/learning/avatar"
 import { FocusHeader } from "@/components/learning/focus-header"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
-import { personaliseLine, type Standup } from "@/content/standup"
+import { personaliseLine, type Standup } from "@/content/courses/de/standup"
 import {
   ActionFooter,
   FeedbackFooter,
@@ -22,7 +23,7 @@ import { cn } from "@/lib/utils"
 import type { StandupResult } from "./actions"
 import { optionOrder } from "@/features/lessons/engine/shuffle"
 
-type Said = { who: "lena" | "me"; de: string; en: string }
+type Said = { who: "lena" | "me"; target: string; native: string }
 
 const cast: { person: Person; initials: string; name: string }[] = [
   { person: "lf", initials: "LF", name: "Lena" },
@@ -160,17 +161,17 @@ export function StandupSession({
                 <p className="text-[0.8125rem] font-semibold text-muted-foreground">
                   {line.who === "lena" ? "Lena" : "You"}
                 </p>
-                <GermanText
+                <TargetText
                   as="p"
                   className={cn(
                     "text-xl leading-snug",
                     line.who === "me" && "text-primary-text"
                   )}
                 >
-                  {line.de}
-                </GermanText>
+                  {line.target}
+                </TargetText>
                 {showEnglish && (
-                  <p className="text-sm text-secondary-text">{line.en}</p>
+                  <p className="text-sm text-secondary-text">{line.native}</p>
                 )}
               </div>
             </li>
@@ -187,7 +188,9 @@ export function StandupSession({
                 Your turn · {prompt.task}
               </h2>
               <ListenButton
-                text={history.filter((l) => l.who === "lena").at(-1)?.de ?? ""}
+                text={
+                  history.filter((l) => l.who === "lena").at(-1)?.target ?? ""
+                }
                 label="Hear Lena again"
               />
             </div>
@@ -205,10 +208,10 @@ export function StandupSession({
                 const mine = selection === i
                 return (
                   <AnswerOption
-                    key={option.de}
+                    key={option.target}
                     index={position}
-                    lang="de"
-                    translation={showEnglish ? option.en : undefined}
+                    language="target"
+                    translation={showEnglish ? option.native : undefined}
                     locked={answered}
                     state={
                       answered && i === prompt.correct
@@ -224,7 +227,7 @@ export function StandupSession({
                       setResult(null)
                     }}
                   >
-                    {option.de}
+                    {option.target}
                   </AnswerOption>
                 )
               })}
@@ -235,11 +238,11 @@ export function StandupSession({
               </summary>
               <ul className="mt-3 space-y-1">
                 {prompt.phrases.map((phrase) => (
-                  <li key={phrase.de}>
-                    <GermanText>{phrase.de}</GermanText>
+                  <li key={phrase.target}>
+                    <TargetText>{phrase.target}</TargetText>
                     <span className="text-sm text-secondary-text">
                       {" "}
-                      · {phrase.en}
+                      · {phrase.native}
                     </span>
                   </li>
                 ))}
@@ -286,7 +289,7 @@ export function StandupSession({
         <FeedbackFooter
           result="correct"
           title={rightTitle(index)}
-          titleLang="de"
+          titleLang={TARGET_LANG}
           action={
             <Button size="lg" onClick={next} disabled={saving}>
               {last ? "Finish standup" : "Continue"}

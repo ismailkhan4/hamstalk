@@ -7,7 +7,8 @@ import {
   AnswerOption,
   type AnswerOptionState,
 } from "@/components/exercises/answer-option"
-import { GermanText } from "@/components/learning/german-text"
+import { TARGET_LANG } from "@/content/courses"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -38,7 +39,7 @@ export function ChoiceView({
   const [transcriptOpen, setTranscriptOpen] = useState(false)
 
   const answering = attempt.phase === "answering"
-  const german = exercise.optionsLanguage === "de"
+  const german = exercise.optionsLanguage === "target"
 
   // Selection, grading and feedback all use authored option indexes; only the screen is shuffled.
   const order = useMemo(
@@ -113,9 +114,9 @@ export function ChoiceView({
                 <p className="text-xs font-semibold text-muted-foreground">
                   Transcript
                 </p>
-                <GermanText as="p" className="text-xl">
+                <TargetText as="p" className="text-xl">
                   „{personalise(exercise.listening.clip, learner)}“
-                </GermanText>
+                </TargetText>
                 <p className="text-[0.9375rem] text-muted-foreground">
                   {personalise(exercise.listening.translation, learner)}
                 </p>
@@ -135,7 +136,7 @@ export function ChoiceView({
 
         {exercise.fill && (
           <p
-            lang="de"
+            lang={TARGET_LANG}
             className="mt-6 rounded-xl bg-inset px-5 py-4 font-voice text-2xl"
             aria-label={`${exercise.fill.before} blank ${exercise.fill.after}`}
           >
@@ -162,7 +163,7 @@ export function ChoiceView({
             <AnswerOption
               key={option}
               index={position}
-              lang={german ? "de" : "en"}
+              language={german ? "target" : "native"}
               state={optionState(option)}
               locked={!answering}
               onSelect={() => pick(option)}
@@ -189,7 +190,7 @@ export function ChoiceView({
         <FeedbackFooter
           result="correct"
           title={rightTitle(index)}
-          titleLang="de"
+          titleLang={TARGET_LANG}
           action={
             <Button
               size="lg"

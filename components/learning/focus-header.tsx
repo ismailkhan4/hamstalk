@@ -11,7 +11,7 @@ type FocusHeaderProps = {
   closeLabel: string
   onClose: () => void
   title?: string
-  titleLang?: "de"
+  titleLang?: string
   /** A lesson's ticket number, e.g. KLAR-102, shown before the title. */
   ticket?: string
   progress?: { current: number; total: number; done?: boolean }

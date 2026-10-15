@@ -3,7 +3,10 @@ import "server-only"
 import { SeverityNumber } from "@opentelemetry/api-logs"
 import { OTLPLogExporter } from "@opentelemetry/exporter-logs-otlp-http"
 import { resourceFromAttributes } from "@opentelemetry/resources"
-import { BatchLogRecordProcessor, LoggerProvider } from "@opentelemetry/sdk-logs"
+import {
+  BatchLogRecordProcessor,
+  LoggerProvider,
+} from "@opentelemetry/sdk-logs"
 
 import { posthogHosts } from "@/lib/analytics/hosts"
 

@@ -4,7 +4,7 @@ import Link from "next/link"
 import { EmptyState } from "@/components/feedback/empty-state"
 import { AppShell } from "@/components/layout/app-shell"
 import { ArticleWord } from "@/components/learning/article-word"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { buttonVariants } from "@/components/ui/button-variants"
 import type { NotebookCounts } from "@/features/review/data"
 
@@ -164,7 +164,7 @@ export function SearchView({
                     {word.article ? (
                       <ArticleWord article={word.article} word={word.word} />
                     ) : (
-                      <GermanText>{word.word}</GermanText>
+                      <TargetText>{word.word}</TargetText>
                     )}
                   </Row>
                 ))}
@@ -179,8 +179,8 @@ export function SearchView({
                     icon={<Route aria-hidden="true" />}
                     detail={lesson.detail}
                   >
-                    {lesson.titleIsGerman ? (
-                      <GermanText>{lesson.title}</GermanText>
+                    {lesson.titleInTarget ? (
+                      <TargetText>{lesson.title}</TargetText>
                     ) : (
                       <span className="text-lg font-semibold">
                         {lesson.title}
@@ -197,9 +197,9 @@ export function SearchView({
                     key={phrase.key}
                     href="/phrasebook"
                     icon={<Bookmark aria-hidden="true" />}
-                    detail={`${phrase.en} · ${phrase.detail}`}
+                    detail={`${phrase.native} · ${phrase.detail}`}
                   >
-                    <GermanText>{phrase.de}</GermanText>
+                    <TargetText>{phrase.target}</TargetText>
                   </Row>
                 ))}
               </Group>

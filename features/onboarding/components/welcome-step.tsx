@@ -1,3 +1,4 @@
+import { TARGET_LANG } from "@/content/courses"
 import { Avatar } from "@/components/learning/avatar"
 import { initialsFor } from "@/components/learning/team-badge"
 
@@ -25,7 +26,7 @@ export function WelcomeStep({
   return (
     <>
       <h1
-        lang="de"
+        lang={TARGET_LANG}
         className="font-voice text-[clamp(44px,5.6vw,72px)] leading-[1.02] tracking-[-0.022em]"
       >
         Willkommen im Team!

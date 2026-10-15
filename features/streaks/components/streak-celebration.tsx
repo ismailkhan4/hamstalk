@@ -1,5 +1,6 @@
 "use client"
 
+import { ACTIVE_COURSE } from "@/content/courses"
 import { Flame, Snowflake, Target } from "lucide-react"
 import { useEffect, useRef } from "react"
 
@@ -8,17 +9,9 @@ import { celebrate } from "@/features/celebrations/confetti"
 import { CountUp } from "@/features/celebrations/count-up"
 import { playFeedback } from "@/features/celebrations/feedback"
 import { Mascot, type MascotMood } from "@/features/celebrations/mascot"
+import { MASCOT_NAME } from "@/features/celebrations/mascot-name"
 import type { Rewards } from "@/features/rewards/payload"
 import { cn } from "@/lib/utils"
-
-const MILESTONE_CHEERS: Record<number, string> = {
-  3: "Guter Start!",
-  7: "Eine ganze Woche!",
-  14: "Zwei Wochen!",
-  30: "Ein ganzer Monat!",
-  50: "Fünfzig!",
-  100: "Hundert! Wahnsinn!",
-}
 
 function headline(rewards: Rewards) {
   const { streak } = rewards
@@ -30,9 +23,12 @@ function headline(rewards: Rewards) {
 function subline(rewards: Rewards) {
   const { streak } = rewards
   if (!streak.extended)
-    return `${rewards.xpToday} XP today. Quietschi is impressed.`
+    return `${rewards.xpToday} XP today. ${MASCOT_NAME} is impressed.`
   if (streak.milestone)
-    return MILESTONE_CHEERS[streak.milestone] ?? "What a streak!"
+    return (
+      ACTIVE_COURSE.phrases.milestones[streak.milestone] ??
+      ACTIVE_COURSE.phrases.milestoneOther
+    )
   if (streak.after === 1) return "Practise again tomorrow to keep it going."
   return "Commit again tomorrow to keep the graph green."
 }
@@ -100,7 +96,7 @@ export function StreakCelebration({
       </h2>
       <p
         id="streak-sub"
-        lang={streak.milestone ? "de" : undefined}
+        lang={streak.milestone ? ACTIVE_COURSE.lang : undefined}
         className="mt-1 text-lg font-bold text-secondary-text"
       >
         {subline(rewards)}

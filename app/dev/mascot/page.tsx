@@ -14,7 +14,7 @@ const MOODS: MascotMood[] = [
   "onFire",
 ]
 
-/** Development only: every mood of Quietschi side by side. */
+/** Development only: every mood of Hamsti side by side. */
 export default function DevMascotPage() {
   if (!devPreviewsEnabled) notFound()
   return (

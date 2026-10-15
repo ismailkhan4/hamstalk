@@ -1,5 +1,6 @@
 import { Check, X } from "lucide-react"
 
+import { TARGET_LANG } from "@/content/courses"
 import { cn } from "@/lib/utils"
 
 type AnswerOptionState =
@@ -36,7 +37,8 @@ const learnerChoice = new Set<AnswerOptionState>([
 type AnswerOptionProps = {
   index: number
   state: AnswerOptionState
-  lang?: "de" | "en"
+  /** Whose language the option is in: the course's target language, or the learner's own. */
+  language?: "target" | "native"
   locked?: boolean
   onSelect?: () => void
   children: React.ReactNode
@@ -52,7 +54,7 @@ type AnswerOptionProps = {
 function AnswerOption({
   index,
   state,
-  lang = "en",
+  language = "native",
   locked = false,
   onSelect,
   children,
@@ -106,10 +108,10 @@ function AnswerOption({
       <span className="flex min-w-0 flex-1 items-center gap-3 px-4 py-3">
         <span className="min-w-0 flex-1">
           <span
-            lang={lang}
+            lang={language === "target" ? TARGET_LANG : "en"}
             className={cn(
               "block",
-              lang === "de" && "font-voice text-lg",
+              language === "target" && "font-voice text-lg",
               state === "your-answer" && "line-through decoration-2"
             )}
           >

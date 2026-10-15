@@ -1,6 +1,6 @@
 "use client"
 
-import { getLesson } from "@/content/lessons/registry"
+import { getLesson } from "@/content/courses/de/lessons/registry"
 import { LessonComplete } from "@/features/lessons/components/lesson-complete"
 import type { Rewards } from "@/features/rewards/payload"
 import {
@@ -75,7 +75,7 @@ export function CompletePreview({
         href: "/dev/lesson?id=a1-u1-l2",
         kicker: "Up next · Lesson 2",
         title: "Guten Morgen, guten Tag",
-        titleIsGerman: true,
+        titleInTarget: true,
         minutes: 6,
         ctaLabel: "Continue to Lesson 2",
       }}

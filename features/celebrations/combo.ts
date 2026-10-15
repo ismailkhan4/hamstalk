@@ -1,3 +1,5 @@
+import { ACTIVE_COURSE } from "@/content/courses"
+
 /**
  * In-lesson combos: answers right first time in a row. Only graded exercises count: reading a
  * dialogue or a grammar tip neither builds nor breaks a combo.
@@ -19,11 +21,13 @@ export const COMBO_GLOW_AT = 3
 
 export type ComboMilestone = { count: number; cheer: string }
 
-/** The combos worth shouting about, with a German cheer that grows with them. */
-export function comboMilestone(count: number): ComboMilestone | null {
-  if (count === 3) return { count, cheer: "Super!" }
-  if (count === 5) return { count, cheer: "Fantastisch!" }
-  if (count === 7) return { count, cheer: "Unglaublich!" }
-  if (count >= 10 && count % 5 === 0) return { count, cheer: "Weltklasse!" }
+/** The combos worth shouting about, with a cheer in the course's language that grows with them. */
+export function comboMilestone(
+  count: number,
+  phrases = ACTIVE_COURSE.phrases
+): ComboMilestone | null {
+  if (count === 3 || count === 5 || count === 7)
+    return { count, cheer: phrases.combo[count] }
+  if (count >= 10 && count % 5 === 0) return { count, cheer: phrases.comboBig }
   return null
 }

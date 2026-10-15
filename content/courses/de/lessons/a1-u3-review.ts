@@ -5,7 +5,7 @@ export const review: Lesson = {
   id: "a1-u3-review",
   kind: "review",
   title: "Introduce yourself to the whole team",
-  titleIsGerman: false,
+  titleInTarget: false,
   titleEn: "",
   goal: "Your first team meeting: give your name, say what you do, say where you’re from and what you speak, using everything from Lessons 1 to 4.",
   minutes: 8,
@@ -13,8 +13,9 @@ export const review: Lesson = {
   focus: "Lessons 1 to 4",
   intro: {
     speaker: { person: "lf", initials: "LF" },
-    de: "Willkommen im Team! Stell dich bitte vor.",
-    en: "Covers names, jobs, introductions and where you’re from. Nothing new: only what you’ve learned in Unit 3. It isn’t a test; it shows what to practise next.",
+    target: "Willkommen im Team! Stell dich bitte vor.",
+    native:
+      "Covers names, jobs, introductions and where you’re from. Nothing new: only what you’ve learned in Unit 3. It isn’t a test; it shows what to practise next.",
   },
   phrases: [
     "Wie heißt du?",
@@ -31,7 +32,7 @@ export const review: Lesson = {
       variant: "listening",
       kind: "Listen",
       prompt: "Frau Wagner from HR speaks to you. Is she formal or informal?",
-      optionsLanguage: "en",
+      optionsLanguage: "native",
       options: ["Formal (Sie)", "Informal (du)"],
       correct: 0,
       alternatives: [],
@@ -73,7 +74,7 @@ export const review: Lesson = {
         empty: "Choose a meaning",
         joiner: " means ",
       },
-      meaningsLanguage: "en",
+      meaningsLanguage: "native",
       explanation:
         "bin is for ich, ist for someone else, komme aus gives a country and lerne a language you’re learning.",
       topic: "Unit 3",
@@ -84,7 +85,7 @@ export const review: Lesson = {
       variant: "multiple-choice",
       kind: "Choose the answer",
       prompt: "Anna asks „Wie heißt du?“ What do you answer?",
-      optionsLanguage: "de",
+      optionsLanguage: "target",
       options: [
         "Ich heiße %N. Und du?",
         "Wie heißen Sie?",
@@ -108,7 +109,7 @@ export const review: Lesson = {
       variant: "fill",
       kind: "Fill in the blank",
       prompt: "Say what Jonas does",
-      optionsLanguage: "de",
+      optionsLanguage: "target",
       options: ["ist", "bin", "bist"],
       correct: 0,
       alternatives: [],
@@ -149,7 +150,7 @@ export const review: Lesson = {
       variant: "listening",
       kind: "Listen",
       prompt: "Which language does Clara speak besides English?",
-      optionsLanguage: "en",
+      optionsLanguage: "native",
       options: ["French", "Spanish", "German"],
       correct: 0,
       alternatives: [],
@@ -197,12 +198,15 @@ export const review: Lesson = {
           translation: "Hello. What’s your name?",
           task: "Greet her and give your name",
           options: [
-            { de: "Guten Tag. Ich heiße %N.", en: "Hello. My name is %N." },
             {
-              de: "Guten Tag. Wie heißt du?",
-              en: "Hello. What’s your name? (informal)",
+              target: "Guten Tag. Ich heiße %N.",
+              native: "Hello. My name is %N.",
             },
-            { de: "Ich bin Teamleiterin.", en: "I’m the team lead." },
+            {
+              target: "Guten Tag. Wie heißt du?",
+              native: "Hello. What’s your name? (informal)",
+            },
+            { target: "Ich bin Teamleiterin.", native: "I’m the team lead." },
           ],
           correct: 0,
           alternatives: [],
@@ -222,9 +226,15 @@ export const review: Lesson = {
           translation: "I’m the team lead. And you?",
           task: "Say you’re a developer",
           options: [
-            { de: "Ich bin Entwickler.", en: "I’m a developer. (man)" },
-            { de: "Ich bin Entwicklerin.", en: "I’m a developer. (woman)" },
-            { de: "Ich heiße Entwickler.", en: "My name is Developer." },
+            { target: "Ich bin Entwickler.", native: "I’m a developer. (man)" },
+            {
+              target: "Ich bin Entwicklerin.",
+              native: "I’m a developer. (woman)",
+            },
+            {
+              target: "Ich heiße Entwickler.",
+              native: "My name is Developer.",
+            },
           ],
           correct: 0,
           alternatives: [1],
@@ -246,16 +256,16 @@ export const review: Lesson = {
           task: "Say yes and that you’re from Spain",
           options: [
             {
-              de: "Ja, ich bin neu. Ich komme aus Spanien.",
-              en: "Yes, I’m new. I’m from Spain.",
+              target: "Ja, ich bin neu. Ich komme aus Spanien.",
+              native: "Yes, I’m new. I’m from Spain.",
             },
             {
-              de: "Ja, du bist neu. Ich heiße Spanien.",
-              en: "Yes, you are new. My name is Spain.",
+              target: "Ja, du bist neu. Ich heiße Spanien.",
+              native: "Yes, you are new. My name is Spain.",
             },
             {
-              de: "Ja, ich bin neu. Ich komme Spanien.",
-              en: "Yes, I’m new. I come Spain.",
+              target: "Ja, ich bin neu. Ich komme Spanien.",
+              native: "Yes, I’m new. I come Spain.",
             },
           ],
           correct: 0,
@@ -281,14 +291,15 @@ export const review: Lesson = {
           task: "Say you speak Spanish and English, and are learning German",
           options: [
             {
-              de: "Ich spreche Spanisch und Englisch. Und ich lerne Deutsch.",
-              en: "I speak Spanish and English. And I’m learning German.",
+              target:
+                "Ich spreche Spanisch und Englisch. Und ich lerne Deutsch.",
+              native: "I speak Spanish and English. And I’m learning German.",
             },
             {
-              de: "Ich lerne Spanisch und Englisch.",
-              en: "I’m learning Spanish and English.",
+              target: "Ich lerne Spanisch und Englisch.",
+              native: "I’m learning Spanish and English.",
             },
-            { de: "Ich komme aus Spanisch.", en: "I’m from Spanish." },
+            { target: "Ich komme aus Spanisch.", native: "I’m from Spanish." },
           ],
           correct: 0,
           alternatives: [],
@@ -305,8 +316,8 @@ export const review: Lesson = {
       ],
       closing: {
         speaker: { person: "lf", initials: "LF", label: "Lena" },
-        de: "Willkommen im Team, %N!",
-        en: "Welcome to the team, %N!",
+        target: "Willkommen im Team, %N!",
+        native: "Welcome to the team, %N!",
       },
     },
   ],

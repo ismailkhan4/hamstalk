@@ -3,6 +3,7 @@ import { Check, Lightbulb } from "lucide-react"
 import { Avatar } from "@/components/learning/avatar"
 import { LevelBadge } from "@/components/learning/level-badge"
 import { Mascot } from "@/features/celebrations/mascot"
+import { MASCOT_NAME } from "@/features/celebrations/mascot-name"
 import { cn } from "@/lib/utils"
 
 import { week, weekIntro, type Day } from "./content"
@@ -106,14 +107,18 @@ function DayEntry({ day, last }: { day: Day; last: boolean }) {
               className="mr-1 inline size-4 align-[-2px]"
               strokeWidth={2.6}
             />
-            <span className="sr-only">Quietschi’s tip: </span>
+            <span className="sr-only">{MASCOT_NAME}’s tip: </span>
             {day.tip}
           </p>
         </div>
 
         {last && (
           <p className="mt-4 flex w-fit max-w-full items-start gap-2 rounded-2xl bg-success px-3 py-1.5 text-sm font-extrabold text-success-foreground">
-            <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0" strokeWidth={3} />
+            <Check
+              aria-hidden="true"
+              className="mt-0.5 size-4 shrink-0"
+              strokeWidth={3}
+            />
             Pull request approved. <span lang="de">Schönes Wochenende!</span>
           </p>
         )}

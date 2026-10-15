@@ -1,11 +1,12 @@
 import { Check, Hammer, Lock } from "lucide-react"
 import Link from "next/link"
 
+import { TARGET_LANG } from "@/content/courses"
 import { ArticleWord } from "@/components/learning/article-word"
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button-variants"
-import { isLessonAvailable } from "@/content/availability"
-import type { Unit } from "@/content/curriculum"
+import { isLessonAvailable } from "@/content/courses/de/availability"
+import type { Unit } from "@/content/courses/de/curriculum"
 import type { StartLevel } from "@/features/onboarding/options"
 import { cn } from "@/lib/utils"
 
@@ -132,7 +133,10 @@ export function UnitPanel({
                     className="text-[1.0312rem]"
                   />
                 ) : (
-                  <span lang="de" className="font-voice text-[1.0312rem]">
+                  <span
+                    lang={TARGET_LANG}
+                    className="font-voice text-[1.0312rem]"
+                  >
                     {word.word}
                   </span>
                 )}
@@ -183,7 +187,7 @@ export function UnitPanel({
               const isNext = state === "up_next" || state === "in_progress"
               const title = (
                 <span
-                  lang={lesson.titleIsGerman ? "de" : undefined}
+                  lang={lesson.titleInTarget ? TARGET_LANG : undefined}
                   className={cn(isNext && "font-semibold")}
                 >
                   {lesson.title}

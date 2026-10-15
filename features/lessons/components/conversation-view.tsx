@@ -6,8 +6,9 @@ import {
   AnswerOption,
   type AnswerOptionState,
 } from "@/components/exercises/answer-option"
+import { TARGET_LANG } from "@/content/courses"
 import { Avatar } from "@/components/learning/avatar"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -33,8 +34,8 @@ type Said = {
   person: ConversationExercise["turns"][number]["speaker"]["person"]
   initials: string
   label: string
-  de: string
-  en: string
+  target: string
+  native: string
 }
 
 type ConversationViewProps = ExerciseProps<ConversationExercise> & {
@@ -98,13 +99,13 @@ export function ConversationView({
     const answer = turn.options[turn.correct]
     setHistory((current) => [
       ...current,
-      { ...turn.speaker, de: turn.line, en: turn.translation },
+      { ...turn.speaker, target: turn.line, native: turn.translation },
       {
         person: "me",
         initials: learner.initials,
         label: "You",
-        de: answer?.de ?? "",
-        en: answer?.en ?? "",
+        target: answer?.target ?? "",
+        native: answer?.native ?? "",
       },
     ])
     setTurnOutcomes(outcomes)
@@ -133,7 +134,7 @@ export function ConversationView({
 
   const bubbles: Said[] = [
     ...history,
-    { ...turn.speaker, de: turn.line, en: turn.translation },
+    { ...turn.speaker, target: turn.line, native: turn.translation },
   ]
   if (finished && last) {
     const answer = turn.options[turn.correct]
@@ -142,13 +143,13 @@ export function ConversationView({
         person: "me",
         initials: learner.initials,
         label: "You",
-        de: answer?.de ?? "",
-        en: answer?.en ?? "",
+        target: answer?.target ?? "",
+        native: answer?.native ?? "",
       },
       {
         ...exercise.closing.speaker,
-        de: exercise.closing.de,
-        en: exercise.closing.en,
+        target: exercise.closing.target,
+        native: exercise.closing.native,
       }
     )
   }
@@ -182,17 +183,17 @@ export function ConversationView({
                 <p className="text-xs text-muted-foreground">
                   {personalise(said.label, learner)}
                 </p>
-                <GermanText
+                <TargetText
                   as="p"
                   className={cn(
                     "text-[1.375rem] leading-snug",
                     said.person === "me" && "text-primary-text"
                   )}
                 >
-                  {personalise(said.de, learner)}
-                </GermanText>
+                  {personalise(said.target, learner)}
+                </TargetText>
                 <p className="text-[0.9375rem] text-muted-foreground">
-                  {personalise(said.en, learner)}
+                  {personalise(said.native, learner)}
                 </p>
               </div>
             </li>
@@ -223,15 +224,15 @@ export function ConversationView({
                 if (!text) return null
                 return (
                   <AnswerOption
-                    key={text.de}
+                    key={text.target}
                     index={position}
-                    lang="de"
-                    translation={personalise(text.en, learner)}
+                    language="target"
+                    translation={personalise(text.native, learner)}
                     state={optionState(option)}
                     locked={!answering}
                     onSelect={() => pick(option)}
                   >
-                    {personalise(text.de, learner)}
+                    {personalise(text.target, learner)}
                   </AnswerOption>
                 )
               })}
@@ -259,7 +260,7 @@ export function ConversationView({
         <FeedbackFooter
           result="correct"
           title={rightTitle(index + turnIndex)}
-          titleLang="de"
+          titleLang={TARGET_LANG}
           action={
             <Button size="lg" onClick={onContinue}>
               {last ? "Continue" : "Next"}
@@ -300,7 +301,7 @@ export function ConversationView({
             </Button>
           }
         >
-          {personalise(correct?.de ?? "", learner)}{" "}
+          {personalise(correct?.target ?? "", learner)}{" "}
           {personalise(turn.feedback.right, learner)} We’ve saved this one so
           you can practise it again.
         </FeedbackFooter>

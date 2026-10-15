@@ -1,0 +1,38 @@
+/**
+ * What a course is: the language it teaches, and every bit of that language the shared screens
+ * need. Lesson content lives beside the course's config in content/courses/<id>/; the interface
+ * itself stays in the learner's language (English for now).
+ *
+ * Ids: a course's lessons and units are globally unique. Every new course prefixes them with its
+ * id (`it-a1-u1-l1`). German, the first course, keeps its original unprefixed ids (`a1-u1-l1`);
+ * `courseOf()` in ./index.ts tells them apart.
+ */
+export type Course = {
+  /** ISO 639-1 code, also the id prefix for this course's lessons (except German, see above). */
+  id: string
+  /** The language's name in English, e.g. "German". */
+  language: string
+  /** The language's name in itself, e.g. "Deutsch". */
+  endonym: string
+  /** BCP 47 tag for `lang` attributes on target-language text. */
+  lang: string
+  /** Locale for speech voices, sorting and case-folding. */
+  locale: string
+  /** Target-language phrases the shared screens use. */
+  phrases: {
+    /** Titles for a right answer, rotated so they don't repeat. */
+    right: readonly string[]
+    /** Combo cheers by length; from 10, every fifth uses `comboBig`. */
+    combo: Readonly<Record<3 | 5 | 7, string>>
+    comboBig: string
+    /** Streak milestones; others fall back to `milestoneOther`. */
+    milestones: Readonly<Record<number, string>>
+    milestoneOther: string
+    lessonDone: string
+    reviewDone: string
+    unitDone: (unit: number) => string
+    greeting: (name: string) => string
+  }
+  /** The workplace story the course's lessons are set in. */
+  world: { company: string; city: string }
+}

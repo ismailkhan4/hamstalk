@@ -7,6 +7,8 @@ import type { ComboMilestone } from "./combo"
 import { Mascot } from "./mascot"
 import { useLessMotion } from "./use-less-motion"
 
+import { TARGET_LANG } from "@/content/courses"
+
 /**
  * A combo milestone, delivered like a CI notification: the build is green, here's how many checks
  * passed in a row. Slides in under the header, then leaves on its own.
@@ -49,7 +51,7 @@ export function ComboToast({
               </p>
               <p className="mt-0.5 font-display text-lg font-semibold">
                 {milestone.count} green checks ·{" "}
-                <span lang="de">{milestone.cheer}</span>
+                <span lang={TARGET_LANG}>{milestone.cheer}</span>
               </p>
             </div>
             <span aria-hidden="true" className="flex gap-0.5 self-end pb-1">

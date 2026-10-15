@@ -4,11 +4,12 @@ import { ArrowLeft, Info, Languages } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
+import { ACTIVE_COURSE, TARGET_LANG } from "@/content/courses"
 import { AppShell } from "@/components/layout/app-shell"
 import { ArticleWord } from "@/components/learning/article-word"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
-import { ticket } from "@/content/team-tasks"
+import { ticket } from "@/content/courses/de/team-tasks"
 import {
   check,
   retry,
@@ -71,7 +72,8 @@ export function TicketScreen({ shell, firstName }: Props) {
                     aria-hidden="true"
                     className="size-2 rounded-full bg-current"
                   />
-                  <span lang="de">{ticket.status.de}</span> · {ticket.status.en}
+                  <span lang={TARGET_LANG}>{ticket.status.target}</span> ·{" "}
+                  {ticket.status.native}
                 </span>
                 <span className="grow" />
                 <Button
@@ -86,42 +88,42 @@ export function TicketScreen({ shell, firstName }: Props) {
               </div>
               <h1
                 id="ticket-title"
-                lang="de"
+                lang={TARGET_LANG}
                 className="mt-4 font-voice text-[clamp(1.75rem,4vw,2.25rem)] leading-tight"
               >
-                {ticket.title.de}
+                {ticket.title.target}
               </h1>
               {english && (
-                <p className="text-secondary-text">{ticket.title.en}</p>
+                <p className="text-secondary-text">{ticket.title.native}</p>
               )}
 
               <ul className="mt-5 grid gap-4 border-y border-border-subtle py-4 sm:grid-cols-3">
                 {ticket.fields.map((field) => (
-                  <li key={field.de}>
+                  <li key={field.target}>
                     <span
-                      lang="de"
+                      lang={TARGET_LANG}
                       className="block text-xs text-muted-foreground"
                     >
-                      {field.de}
+                      {field.target}
                     </span>
-                    <GermanText className="text-lg">
-                      {personalise(field.value.de, firstName)}
-                    </GermanText>
+                    <TargetText className="text-lg">
+                      {personalise(field.value.target, firstName)}
+                    </TargetText>
                     {english && (
                       <span className="block text-xs text-muted-foreground">
-                        {field.value.en || field.en}
+                        {field.value.native || field.native}
                       </span>
                     )}
                   </li>
                 ))}
               </ul>
 
-              <GermanText as="p" className="mt-5 text-xl leading-relaxed">
-                {personalise(ticket.body.de, firstName)}
-              </GermanText>
+              <TargetText as="p" className="mt-5 text-xl leading-relaxed">
+                {personalise(ticket.body.target, firstName)}
+              </TargetText>
               {english && (
                 <p className="mt-2 text-secondary-text">
-                  {personalise(ticket.body.en, firstName)}
+                  {personalise(ticket.body.native, firstName)}
                 </p>
               )}
             </article>
@@ -168,7 +170,7 @@ export function TicketScreen({ shell, firstName }: Props) {
                     aria-label={`${task.tiles[i]}, word ${position + 1}${answering ? ". Press to remove." : ""}`}
                     className="min-h-12 rounded-lg border-[1.5px] border-primary bg-primary-subtle px-4 font-voice text-[1.3125rem]"
                   >
-                    <span lang="de">{task.tiles[i]}</span>
+                    <span lang={TARGET_LANG}>{task.tiles[i]}</span>
                   </button>
                 ))}
               </div>
@@ -184,7 +186,7 @@ export function TicketScreen({ shell, firstName }: Props) {
                       onClick={() => setPlaced([...placed, i])}
                       className="min-h-12 rounded-lg border-[1.5px] border-border bg-card px-4 font-voice text-[1.3125rem] hover:border-input disabled:opacity-60"
                     >
-                      <span lang="de">{task.tiles[i]}</span>
+                      <span lang={TARGET_LANG}>{task.tiles[i]}</span>
                     </button>
                   </li>
                 ))}
@@ -193,8 +195,10 @@ export function TicketScreen({ shell, firstName }: Props) {
               <div className="mt-5" aria-live="polite">
                 {attempt.phase === "right" && (
                   <p className="rounded-lg border border-success-border bg-success-subtle p-3 text-success-text">
-                    <b>Richtig!</b> {task.right} Nothing is sent to Lena; this
-                    is practice.
+                    <b lang={ACTIVE_COURSE.lang}>
+                      {ACTIVE_COURSE.phrases.right[0]}
+                    </b>{" "}
+                    {task.right} Nothing is sent to Lena; this is practice.
                   </p>
                 )}
                 {attempt.phase === "wrong" && (
@@ -264,14 +268,14 @@ export function TicketScreen({ shell, firstName }: Props) {
                         className="text-lg"
                       />
                     ) : (
-                      <GermanText className="text-lg">{gloss.word}</GermanText>
+                      <TargetText className="text-lg">{gloss.word}</TargetText>
                     )}
                     <span className="text-sm text-muted-foreground">
-                      {gloss.en}
+                      {gloss.native}
                     </span>
                   </div>
                   {gloss.forms && (
-                    <p lang="de" className="text-xs text-warning-text">
+                    <p lang={TARGET_LANG} className="text-xs text-warning-text">
                       {gloss.forms}
                     </p>
                   )}

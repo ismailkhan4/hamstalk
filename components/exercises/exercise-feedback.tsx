@@ -10,6 +10,7 @@ import { useEffect, useRef } from "react"
 
 import { playFeedback } from "@/features/celebrations/feedback"
 import { Mascot, type MascotMood } from "@/features/celebrations/mascot"
+import { MASCOT_NAME } from "@/features/celebrations/mascot-name"
 import { cn } from "@/lib/utils"
 
 type FeedbackResult = "correct" | "incorrect" | "shown"
@@ -18,7 +19,7 @@ type ExerciseFeedbackProps = {
   result: FeedbackResult
   title: string
   children: React.ReactNode
-  titleLang?: "de"
+  titleLang?: string
   /** Shown on a first miss: the item went to the mistakes notebook. */
   savedToMistakes?: boolean
   action: React.ReactNode
@@ -66,7 +67,7 @@ const REVIEW: Record<
 }
 
 /**
- * The lesson's feedback, as a code review: Quietschi reviews your answer, approves it or requests
+ * The lesson's feedback, as a code review: Hamsti reviews your answer, approves it or requests
  * a change, and explains why. Docked at the bottom with the next action. Approvals are announced
  * politely, change requests assertively, so screen-reader users hear why before they move on.
  */
@@ -110,7 +111,7 @@ function ExerciseFeedback({
           >
             <Mascot mood={review.mood} size={34} />
             <p className="text-sm">
-              <b className="font-extrabold">Quietschi</b>{" "}
+              <b className="font-extrabold">{MASCOT_NAME}</b>{" "}
               <span className="font-semibold text-muted-foreground">
                 reviewed your answer
               </span>

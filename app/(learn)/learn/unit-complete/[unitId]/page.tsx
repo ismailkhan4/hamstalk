@@ -2,14 +2,14 @@ import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 
 import { FocusHeaderLink } from "@/components/learning/focus-header-link"
-import { getUnit } from "@/content/curriculum"
-import { isLessonAvailable } from "@/content/availability"
-import { getLesson } from "@/content/lessons/registry"
+import { getUnit } from "@/content/courses/de/curriculum"
+import { isLessonAvailable } from "@/content/courses/de/availability"
+import { getLesson } from "@/content/courses/de/lessons/registry"
 import { loadLearner } from "@/features/learner/load-learner"
 import { UnitComplete } from "@/features/lessons/components/unit-complete"
 import { pathHrefFor } from "@/features/lessons/up-next"
 import { DatabaseNotReady } from "@/features/onboarding/database-not-ready"
-import { getLevel } from "@/content/curriculum"
+import { getLevel } from "@/content/courses/de/curriculum"
 
 type Props = { params: Promise<{ unitId: string }> }
 

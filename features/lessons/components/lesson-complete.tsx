@@ -1,5 +1,6 @@
 "use client"
 
+import { ACTIVE_COURSE, TARGET_LANG } from "@/content/courses"
 import {
   Check as CheckIcon,
   CircleCheck,
@@ -16,7 +17,7 @@ import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 
 import { Alert } from "@/components/feedback/alert"
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { buttonVariants } from "@/components/ui/button-variants"
@@ -24,6 +25,7 @@ import { celebrate } from "@/features/celebrations/confetti"
 import { CountUp } from "@/features/celebrations/count-up"
 import { playFeedback } from "@/features/celebrations/feedback"
 import { Mascot } from "@/features/celebrations/mascot"
+import { MASCOT_NAME } from "@/features/celebrations/mascot-name"
 import { isCelebration, type Rewards } from "@/features/rewards/payload"
 import { StreakCelebration } from "@/features/streaks/components/streak-celebration"
 import { cn } from "@/lib/utils"
@@ -36,7 +38,7 @@ export type UpNext = {
   href: string | null
   kicker: string
   title: string
-  titleIsGerman: boolean
+  titleInTarget: boolean
   minutes: number | null
   ctaLabel: string
 }
@@ -135,11 +137,13 @@ export function LessonComplete({
         </p>
         {/* Entrances are CSS, so reduced motion applies from the first paint, before any script. */}
         <h1
-          lang="de"
+          lang={TARGET_LANG}
           style={{ animationDelay: "150ms" }}
           className="mt-3 font-display text-[clamp(36px,6vw,52px)] leading-tight font-semibold text-primary-text motion-safe:animate-rise"
         >
-          {review ? "Wiederholung geschafft!" : "Lektion geschafft!"}
+          {review
+            ? ACTIVE_COURSE.phrases.reviewDone
+            : ACTIVE_COURSE.phrases.lessonDone}
         </h1>
         <p className="mt-1 text-lg font-semibold text-secondary-text">
           {review ? "Review complete" : "Lesson complete"}: {lesson.title}
@@ -175,7 +179,7 @@ export function LessonComplete({
         <header className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b-2 border-border-subtle bg-background-subtle py-2 pr-4 pl-2">
           <Mascot mood="happy" size={36} />
           <p className="text-sm">
-            <b className="font-extrabold">Quietschi</b>{" "}
+            <b className="font-extrabold">{MASCOT_NAME}</b>{" "}
             <span className="font-semibold text-muted-foreground">
               approved these changes
             </span>
@@ -183,7 +187,7 @@ export function LessonComplete({
           {perfect && (
             <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-reward px-2.5 py-0.5 text-xs font-extrabold text-reward-foreground">
               <Star aria-hidden="true" className="size-3.5 fill-current" />
-              <span lang="de">Perfekt!</span> No changes requested
+              <span lang={TARGET_LANG}>Perfekt!</span> No changes requested
             </span>
           )}
         </header>
@@ -240,7 +244,7 @@ export function LessonComplete({
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="font-semibold">
-                        {item.label} · <GermanText>{item.title}</GermanText>
+                        {item.label} · <TargetText>{item.title}</TargetText>
                       </p>
                       <p className="text-sm text-muted-foreground">
                         {item.firstTry} of {item.total} right first time
@@ -287,7 +291,7 @@ export function LessonComplete({
                   key={phrase}
                   className="rounded-lg bg-card px-3 py-1.5 shadow-[inset_0_0_0_1px_var(--border)]"
                 >
-                  <GermanText className="text-lg">{phrase}</GermanText>
+                  <TargetText className="text-lg">{phrase}</TargetText>
                 </li>
               ))}
             </ul>
@@ -348,7 +352,7 @@ export function LessonComplete({
               <p className="text-xs text-muted-foreground">{upNext.kicker}</p>
               <p
                 className="font-semibold"
-                lang={upNext.titleIsGerman ? "de" : undefined}
+                lang={upNext.titleInTarget ? TARGET_LANG : undefined}
               >
                 {upNext.title}
               </p>

@@ -1,6 +1,7 @@
 import { Flame, Snowflake } from "lucide-react"
 
 import { Mascot, type MascotMood } from "@/features/celebrations/mascot"
+import { MASCOT_NAME } from "@/features/celebrations/mascot-name"
 import { cn } from "@/lib/utils"
 
 import type { Habit } from "../data"
@@ -31,7 +32,7 @@ function copy(state: StreakState): {
         text:
           state.freezing > 0
             ? "Practise today and a streak freeze covers the day you missed."
-            : "One lesson today keeps the flame alive. Quietschi is getting sleepy.",
+            : `One lesson today keeps the flame alive. ${MASCOT_NAME} is dozing off.`,
       }
     case "lost":
       return {
@@ -42,7 +43,7 @@ function copy(state: StreakState): {
   }
 }
 
-/** Today at a glance: the streak, how Quietschi feels about it, and the daily goal. */
+/** Today at a glance: the streak, how Hamsti feels about it, and the daily goal. */
 export function TodayCard({ habit }: { habit: Habit }) {
   const { mood, title, text } = copy(habit.state)
   const count = streakCount(habit.state)

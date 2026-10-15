@@ -2,17 +2,17 @@
 
 `public.exercises_pool` holds a published copy of every exercise in the registered lessons, and
 **the lesson runner reads its exercises from it**. Any lesson the pool can't serve runs from
-`content/lessons` instead, so a missing import never blocks a learner.
+`content/courses/de/lessons` instead, so a missing import never blocks a learner.
 
 ```
-content/lessons/*.ts ─▶ validate (features/lessons/pool) ─▶ SQL transaction ─▶ exercises_pool ─▶ loader ─▶ lesson runner
+content/courses/de/lessons/*.ts ─▶ validate (features/lessons/pool) ─▶ SQL transaction ─▶ exercises_pool ─▶ loader ─▶ lesson runner
 ```
 
 ## Source of truth
 
-During the migration the typed lessons in `content/lessons/`, listed in
-`content/lessons/registry.ts`, are the only place exercises are written. The table is derived from
-them and is never edited by hand. Lessons on the curriculum map (`content/curriculum.ts`) that
+During the migration the typed lessons in `content/courses/de/lessons/`, listed in
+`content/courses/de/lessons/registry.ts`, are the only place exercises are written. The table is derived from
+them and is never edited by hand. Lessons on the curriculum map (`content/courses/de/curriculum.ts`) that
 aren't in the registry are planned, not built, and are never imported.
 
 ## Schema
@@ -167,11 +167,20 @@ are checked against.
   Sentry, tagged with the lesson and the reason.
 - The `lesson_completed` analytics event records which source actually served the lesson.
 - Other screens (mistakes, phrasebook, search, activity) still read titles and text from
-  `content/lessons`. They move when the session generator does.
+  `content/courses/de/lessons`. They move when the session generator does.
+
+## After the course-neutral rename
+
+Exercise content once named its text fields `de` and `en`; they are now `target` and `native`, and
+`optionsLanguage`/`meaningsLanguage` say `"target"`/`"native"` (see the README's Courses section). Rows
+imported before that still hold the old keys. The loader reads either shape, so nothing breaks, but
+run `bun run curriculum:ingest` once in every environment to rewrite them, then
+`bun run curriculum:verify`. After that, `withCourseNeutralKeys()` in `features/lessons/pool/records.ts`
+can be removed.
 
 ## Rolling back
 
-Set `LESSON_SOURCE=registry` and redeploy: the app then reads only `content/lessons` and never
+Set `LESSON_SOURCE=registry` and redeploy: the app then reads only `content/courses/de/lessons` and never
 queries the table. It needs no database change. To withdraw content without deploying,
 unpublish it (`update public.exercises_pool set is_active = false where lesson_id = '…'`); to remove
 the table entirely, `drop table public.exercises_pool;` touches no learner data.

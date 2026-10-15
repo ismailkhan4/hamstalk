@@ -1,5 +1,6 @@
 import { Info } from "lucide-react"
 
+import { TARGET_LANG } from "@/content/courses"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 
@@ -124,14 +125,16 @@ export function PlanStep({
                 </p>
                 <p
                   className="mt-1 font-bold"
-                  lang={mission.titleIsGerman ? "de" : undefined}
+                  lang={mission.titleInTarget ? TARGET_LANG : undefined}
                 >
                   {mission.title}
                 </p>
-                <p lang="de" className="font-voice text-[1.0625rem]">
-                  {mission.de}
+                <p lang={TARGET_LANG} className="font-voice text-[1.0625rem]">
+                  {mission.target}
                 </p>
-                <p className="text-sm text-muted-foreground">{mission.en}</p>
+                <p className="text-sm text-muted-foreground">
+                  {mission.native}
+                </p>
               </li>
             )
           })}

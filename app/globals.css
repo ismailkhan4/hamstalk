@@ -5,7 +5,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Klarlingo tokens, v3 "Quietschi": bright, rounded and playful.
+ * Klarlingo tokens, v3 "Hamsti": bright, rounded and playful.
  * Layer 1 primitives hold every hex value and are never used by components.
  * Layer 2 semantics are what components and utilities read.
  *
@@ -122,13 +122,12 @@
   --pflaume-d300: #c2b3ff;
   --beere-d400: #f07ccb;
   --beere-d300: #f5a6dd;
-  /* Quietschi, the duck. Only the mascot reads these. */
-  --duck-body: #ffd23f;
-  --duck-shade: #f2b705;
-  --duck-beak: #ff8c2a;
-  --duck-beak-shade: #e06c0b;
-  --duck-eye: #1d2b33;
-  --duck-cheek: #ff9aa8;
+  /* Hamsti, the hamster. Only the mascot reads these. */
+  --hamster-fur: #eda55a;
+  --hamster-fur-dark: #d18636;
+  --hamster-cream: #fde6c8;
+  --hamster-pink: #ff9aa8;
+  --hamster-eye: #1d2b33;
 }
 
 :root {
@@ -571,12 +570,11 @@ html[data-theme-transition]::view-transition-new(root) {
   --color-deep-raise: var(--deep-raise);
   --color-mint: var(--mint);
   --color-neutral-border: var(--neutral-border);
-  --color-duck-body: var(--duck-body);
-  --color-duck-shade: var(--duck-shade);
-  --color-duck-beak: var(--duck-beak);
-  --color-duck-beak-shade: var(--duck-beak-shade);
-  --color-duck-eye: var(--duck-eye);
-  --color-duck-cheek: var(--duck-cheek);
+  --color-hamster-fur: var(--hamster-fur);
+  --color-hamster-fur-dark: var(--hamster-fur-dark);
+  --color-hamster-cream: var(--hamster-cream);
+  --color-hamster-pink: var(--hamster-pink);
+  --color-hamster-eye: var(--hamster-eye);
 
   --font-display:
     var(--font-fredoka), var(--font-nunito), ui-rounded, ui-sans-serif,

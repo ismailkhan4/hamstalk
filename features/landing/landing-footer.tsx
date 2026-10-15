@@ -7,7 +7,7 @@ import { footerNote } from "./content"
 const links = [
   { href: "#week", label: "Your first week" },
   { href: "#growth", label: "Levels" },
-  { href: "#buddy", label: "Quietschi" },
+  { href: "#buddy", label: "Hamsti" },
   { href: "#faq", label: "FAQ" },
   { href: "/signin", label: "Sign in" },
 ]

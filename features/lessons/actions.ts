@@ -230,8 +230,8 @@ export async function savePhraseAction(
       user_id: ctx.user.id,
       phrase_key: phraseKey,
       lesson_id: parsed.data.lessonId,
-      de: personalise(line.de, learner),
-      en: personalise(line.en, learner),
+      de: personalise(line.target, learner),
+      en: personalise(line.native, learner),
     },
     { onConflict: "user_id,phrase_key" }
   )
@@ -243,8 +243,8 @@ export async function savePhraseAction(
       parsed.data.lessonId,
       phraseKey,
       {
-        de: personalise(line.de, learner),
-        en: personalise(line.en, learner),
+        target: personalise(line.target, learner),
+        native: personalise(line.native, learner),
         article: line.article,
         example: line.example,
       },

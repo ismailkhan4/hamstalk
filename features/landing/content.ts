@@ -13,7 +13,7 @@ export const cta = { start: "Start Monday", signIn: "Sign in" }
 export const hero = {
   kicker: "Monday, 09:00 · Kaffeesatz GmbH, Berlin",
   title: "Your new team speaks German.",
-  lede: "Klarlingo teaches you German one workday at a time: the standup, the bug, the coffee break. Five minutes a lesson, with a rubber duck in your corner.",
+  lede: "Klarlingo teaches you German one workday at a time: the standup, the bug, the coffee break. Five minutes a lesson, with a hamster cheering you on.",
   signInPrompt: "Already on the team?",
 }
 
@@ -34,7 +34,7 @@ export type Day = {
   /** What happens, in one or two sentences. */
   moment: string
   lines: Line[]
-  /** Quietschi's tip: the grammar behind the line that saved you. */
+  /** Hamsti's tip: the grammar behind the line that saved you. */
   tip: string
   level: Cefr
   mood: MascotMood
@@ -183,10 +183,16 @@ export const growth = {
 }
 
 export const buddy = {
-  title: "Meet Quietschi, your onboarding buddy.",
-  lede: "Every engineer explains their bugs to a rubber duck. Yours explains German back.",
+  title: "Meet Hamsti, your study buddy.",
+  /** Rendered as: before, the German word, after. */
+  lede: {
+    before: "In German, ",
+    word: "hamstern",
+    after:
+      " means to stockpile. Hamsti stockpiles every word you learn, and its cheeks fill up as your German grows.",
+  },
   moods: [
-    { mood: "happy", caption: "Cheers every right answer" },
+    { mood: "happy", caption: "Puffs its cheeks at every right answer" },
     { mood: "sad", caption: "Sulks a little when you slip" },
     { mood: "sleepy", caption: "Dozes off if you skip a day" },
     { mood: "dance", caption: "Dances when you finish a lesson" },

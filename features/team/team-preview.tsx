@@ -1,7 +1,7 @@
 "use client"
 
-import { getUnit } from "@/content/curriculum"
-import { getStandup } from "@/content/standup"
+import { getUnit } from "@/content/courses/de/curriculum"
+import { getStandup } from "@/content/courses/de/standup"
 import type { LessonProgress } from "@/features/path/model"
 
 import { ChatScreen } from "./chat-screen"

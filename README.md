@@ -51,9 +51,11 @@ table, column or nullability.
 Klarlingo is meant to feel like a game you want to come back to: bright, rounded and quick to
 celebrate. The pieces live in `features/celebrations/`:
 
-- **Quietschi** (`mascot.tsx`): the rubber-duck mascot, an animated SVG with eight moods (`idle`,
-  `happy`, `sad`, `thinking`, `cheer`, `dance`, `sleepy`, `onFire`). Screens only use
-  `<Mascot mood="…" />`, so a Rive file can replace the drawing later.
+- **Hamsti** (`mascot.tsx`): the hamster mascot. In German, _hamstern_ means to stockpile, and
+  Hamsti stockpiles the words you learn. An animated SVG with eight moods (`idle`, `happy`, `sad`,
+  `thinking`, `cheer`, `dance`, `sleepy`, `onFire`). Screens only use `<Mascot mood="…" />`, so a
+  Rive file can replace the drawing later. The name lives in `mascot-name.ts`, because server
+  components can't read plain values exported from a client module.
 - **Sound and vibration** (`feedback.ts`): `playFeedback("correct" | "incorrect" | "combo" | …)`.
   Sounds are synthesised with the Web Audio API; there are no audio files. Learners switch each
   off in Settings.
@@ -96,3 +98,23 @@ API directly, so the database, not the app, decides how much XP anything is wort
 between visits without writing anything. Keep the two in step. In development, `/dev/habit` shows
 every streak state, and `/dev/lesson?screen=complete&streak=7&earned=1&goal=1` shows the
 celebration.
+
+## Courses
+
+Klarlingo teaches German first, and is built so other languages can follow.
+
+- **A course** lives in `content/courses/<id>/`: its config (`course.ts`), curriculum, lessons and
+  team stories. `content/courses/index.ts` lists courses and sets `ACTIVE_COURSE`, the one the app
+  teaches (German, `de`, for now).
+- **The config** holds everything the shared screens say in the target language: right-answer
+  titles, combo and streak cheers, "lesson done" titles, the home greeting, the `lang` tag, the
+  speech locale and the story world. Screens read them from `ACTIVE_COURSE` and mark target-language
+  text with `TARGET_LANG` (`TargetText` does this for you). The interface itself stays in English.
+- **Content fields are course-neutral:** `target` is the language being learned and `native` is the
+  learner's language (English). Database columns keep their original names (`de`, `en`,
+  `example_de`); the data loaders translate at that boundary.
+- **Ids are globally unique.** Every new course prefixes its lesson and unit ids with its code
+  (`it-a1-u1-l1`); German keeps its original ids (`a1-u1-l1`). `courseOf(id)` tells them apart, so
+  no table needs a course column.
+- Not built yet, on purpose: choosing a course, a course switcher, and translating the interface.
+  They come with the second course.

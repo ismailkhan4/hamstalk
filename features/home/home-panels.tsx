@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import { Avatar } from "@/components/learning/avatar"
 import { initialsFor } from "@/components/learning/team-badge"
-import { getLevel } from "@/content/curriculum"
+import { getLevel } from "@/content/courses/de/curriculum"
 import {
   goalOptions,
   levelOptions,

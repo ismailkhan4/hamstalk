@@ -2,8 +2,8 @@
 
 import { z } from "zod"
 
-import { getUnit } from "@/content/curriculum"
-import { getStandup } from "@/content/standup"
+import { getUnit } from "@/content/courses/de/curriculum"
+import { getStandup } from "@/content/courses/de/standup"
 import { isMissingTable } from "@/features/onboarding/data"
 import { loadLessonProgress } from "@/features/path/data"
 import { isUnitCompleted } from "@/features/path/model"

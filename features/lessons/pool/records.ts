@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { findLesson, levels } from "@/content/curriculum"
+import { findLesson, levels } from "@/content/courses/de/curriculum"
 
 import {
   exerciseSchema,
@@ -111,7 +111,7 @@ function issueMessages(error: z.ZodError) {
 
 export type LessonPlace = { unitId: string; lessonPosition: number }
 
-/** Where a lesson sits in content/curriculum.ts. */
+/** Where a lesson sits in content/courses/de/curriculum.ts. */
 export function locateInCurriculum(lessonId: string): LessonPlace | null {
   const found = findLesson(lessonId)
   return found ? { unitId: found.unit.id, lessonPosition: found.index } : null
@@ -168,7 +168,8 @@ export function buildPoolRecords(
       issues.push({
         lessonId,
         exercise: null,
-        message: "Not on the curriculum map in content/curriculum.ts.",
+        message:
+          "Not on the curriculum map in content/courses/de/curriculum.ts.",
       })
       continue
     }
@@ -224,6 +225,35 @@ export const poolRowSchema = z.object({
 export type PoolRow = z.infer<typeof poolRowSchema>
 
 /** A row as the parity check reads it, published or not. */
+/**
+ * Rows imported before content was made course-neutral name text fields `de` and `en`; today they
+ * are `target` and `native`, and the language enums say "target"/"native". This reads either shape,
+ * so lessons keep coming from the pool until `bun run curriculum:ingest` rewrites the rows. Remove it
+ * once every environment has been re-imported.
+ */
+function withCourseNeutralKeys(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(withCourseNeutralKeys)
+  if (!value || typeof value !== "object") return value
+  return Object.fromEntries(
+    Object.entries(value).map(([key, inner]) => {
+      if (key === "optionsLanguage" || key === "meaningsLanguage")
+        return [
+          key,
+          inner === "de" ? "target" : inner === "en" ? "native" : inner,
+        ]
+      const renamed =
+        key === "de"
+          ? "target"
+          : key === "en"
+            ? "native"
+            : key === "titleIsGerman"
+              ? "titleInTarget"
+              : key
+      return [renamed, withCourseNeutralKeys(inner)]
+    })
+  )
+}
+
 export const storedRowSchema = poolRowSchema.extend({ is_active: z.boolean() })
 
 export type StoredRow = z.infer<typeof storedRowSchema>
@@ -246,7 +276,7 @@ export function recordsFromRows(
         `A row is malformed: ${issueMessages(row.error).join("; ")}`
       )
     const { content: rawContent, ...columns } = row.data
-    const content = exerciseSchema.safeParse(rawContent)
+    const content = exerciseSchema.safeParse(withCourseNeutralKeys(rawContent))
     if (!content.success) {
       return invalid(
         `${columns.source_key} is not a valid exercise: ${issueMessages(content.error).join("; ")}`

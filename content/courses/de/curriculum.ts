@@ -8,7 +8,7 @@ export type Skill =
 export type LessonMeta = {
   id: string
   title: string
-  titleIsGerman: boolean
+  titleInTarget: boolean
   /** One line in English: what the learner will be able to do. */
   goal: string
   minutes: number
@@ -17,7 +17,7 @@ export type LessonMeta = {
   /** Home's mission card, for lessons that have one designed. */
   mission?: {
     description: string
-    quote: { person: Person; initials: string; de: string; en: string }
+    quote: { person: Person; initials: string; target: string; native: string }
   }
 }
 
@@ -39,7 +39,7 @@ export type Unit = {
   milestone?: {
     summary: string
     canDo: string[]
-    standup: { de: string; en: string }
+    standup: { target: string; native: string }
   }
 }
 
@@ -55,10 +55,10 @@ const lessonsPlanned = (
   unitId: string,
   titles: [string, boolean][]
 ): LessonMeta[] => [
-  ...titles.map(([title, titleIsGerman], i) => ({
+  ...titles.map(([title, titleInTarget], i) => ({
     id: `${unitId}-l${i + 1}`,
     title,
-    titleIsGerman,
+    titleInTarget,
     goal: "",
     minutes: 7,
     exercises: 8,
@@ -67,7 +67,7 @@ const lessonsPlanned = (
   {
     id: `${unitId}-review`,
     title: "Unit review",
-    titleIsGerman: false,
+    titleInTarget: false,
     goal: "",
     minutes: 8,
     exercises: 8,
@@ -107,13 +107,16 @@ const a1Units: Unit[] = [
         "Say your name and catch someone else’s",
         "Thank someone, reply to thanks and say sorry",
       ],
-      standup: { de: "Guten Morgen, zusammen!", en: "Good morning, everyone!" },
+      standup: {
+        target: "Guten Morgen, zusammen!",
+        native: "Good morning, everyone!",
+      },
     },
     lessons: [
       {
         id: "a1-u1-l1",
         title: "Hallo!",
-        titleIsGerman: true,
+        titleInTarget: true,
         goal: "Say hello and goodbye",
         minutes: 6,
         exercises: 7,
@@ -124,15 +127,15 @@ const a1Units: Unit[] = [
           quote: {
             person: "mb",
             initials: "MB",
-            de: "Hallo!",
-            en: "Mia at reception is the first person you’ll greet.",
+            target: "Hallo!",
+            native: "Mia at reception is the first person you’ll greet.",
           },
         },
       },
       {
         id: "a1-u1-l2",
         title: "Guten Morgen, guten Tag",
-        titleIsGerman: true,
+        titleInTarget: true,
         goal: "Choose the greeting that fits the time of day",
         minutes: 7,
         exercises: 8,
@@ -143,15 +146,15 @@ const a1Units: Unit[] = [
           quote: {
             person: "bk",
             initials: "FK",
-            de: "Guten Morgen!",
-            en: "Frau Krüger at the bakery, 7:45 on your second day.",
+            target: "Guten Morgen!",
+            native: "Frau Krüger at the bakery, 7:45 on your second day.",
           },
         },
       },
       {
         id: "a1-u1-l3",
         title: "Ich bin …",
-        titleIsGerman: true,
+        titleInTarget: true,
         goal: "Say your name and catch someone else’s",
         minutes: 7,
         exercises: 7,
@@ -162,15 +165,15 @@ const a1Units: Unit[] = [
           quote: {
             person: "ao",
             initials: "AÖ",
-            de: "Ich bin Aylin. Und du?",
-            en: "Aylin at the team table, at lunch.",
+            target: "Ich bin Aylin. Und du?",
+            native: "Aylin at the team table, at lunch.",
           },
         },
       },
       {
         id: "a1-u1-l4",
         title: "Danke und bitte",
-        titleIsGerman: true,
+        titleInTarget: true,
         goal: "Thank someone, reply to thanks and say sorry",
         minutes: 7,
         exercises: 8,
@@ -181,15 +184,15 @@ const a1Units: Unit[] = [
           quote: {
             person: "jk",
             initials: "JK",
-            de: "Danke, %N!",
-            en: "Jonas, after you helped him find a bug.",
+            target: "Danke, %N!",
+            native: "Jonas, after you helped him find a bug.",
           },
         },
       },
       {
         id: "a1-u1-review",
         title: "Unit review",
-        titleIsGerman: false,
+        titleInTarget: false,
         goal: "Reception, first morning: listen to four greetings and reply to each",
         minutes: 8,
         exercises: 8,
@@ -200,8 +203,8 @@ const a1Units: Unit[] = [
           quote: {
             person: "mb",
             initials: "MB",
-            de: "Guten Morgen!",
-            en: "Mia at reception, ready for a review of your first week.",
+            target: "Guten Morgen!",
+            native: "Mia at reception, ready for a review of your first week.",
           },
         },
       },
@@ -237,13 +240,16 @@ const a1Units: Unit[] = [
         "Use du with teammates and Sie with visitors",
         "Introduce a colleague and say Freut mich!",
       ],
-      standup: { de: "Gut, danke. Und dir?", en: "Fine, thanks. And you?" },
+      standup: {
+        target: "Gut, danke. Und dir?",
+        native: "Fine, thanks. And you?",
+      },
     },
     lessons: [
       {
         id: "a1-u2-l1",
         title: "Wie geht’s?",
-        titleIsGerman: true,
+        titleInTarget: true,
         goal: "Ask how someone is and answer back",
         minutes: 7,
         exercises: 8,
@@ -254,15 +260,15 @@ const a1Units: Unit[] = [
           quote: {
             person: "jk",
             initials: "JK",
-            de: "Guten Morgen! Wie geht’s?",
-            en: "Jonas in the team kitchen, before the day starts.",
+            target: "Guten Morgen! Wie geht’s?",
+            native: "Jonas in the team kitchen, before the day starts.",
           },
         },
       },
       {
         id: "a1-u2-l2",
         title: "du oder Sie?",
-        titleIsGerman: true,
+        titleInTarget: true,
         goal: "Choose between du and Sie when you ask how someone is",
         minutes: 7,
         exercises: 8,
@@ -273,15 +279,15 @@ const a1Units: Unit[] = [
           quote: {
             person: "lf",
             initials: "LF",
-            de: "Guten Tag, Herr Schulz. Wie geht es Ihnen?",
-            en: "Lena, greeting a visitor in the kitchen.",
+            target: "Guten Tag, Herr Schulz. Wie geht es Ihnen?",
+            native: "Lena, greeting a visitor in the kitchen.",
           },
         },
       },
       {
         id: "a1-u2-l3",
         title: "Das ist Lena",
-        titleIsGerman: true,
+        titleInTarget: true,
         goal: "Introduce a colleague and say who is who",
         minutes: 7,
         exercises: 8,
@@ -292,15 +298,15 @@ const a1Units: Unit[] = [
           quote: {
             person: "lf",
             initials: "LF",
-            de: "Das ist meine Kollegin Anna.",
-            en: "Lena, at the team kick-off.",
+            target: "Das ist meine Kollegin Anna.",
+            native: "Lena, at the team kick-off.",
           },
         },
       },
       {
         id: "a1-u2-l4",
         title: "Freut mich!",
-        titleIsGerman: true,
+        titleInTarget: true,
         goal: "Say you are glad to meet someone and answer when they say it to you",
         minutes: 7,
         exercises: 8,
@@ -311,15 +317,15 @@ const a1Units: Unit[] = [
           quote: {
             person: "aw",
             initials: "AW",
-            de: "Hallo, ich bin Anna. Freut mich!",
-            en: "Anna, in her first week.",
+            target: "Hallo, ich bin Anna. Freut mich!",
+            native: "Anna, in her first week.",
           },
         },
       },
       {
         id: "a1-u2-review",
         title: "Unit review",
-        titleIsGerman: false,
+        titleInTarget: false,
         goal: "Team lunch, first week: check in, choose du or Sie, introduce and be polite",
         minutes: 8,
         exercises: 8,
@@ -330,8 +336,9 @@ const a1Units: Unit[] = [
           quote: {
             person: "lf",
             initials: "LF",
-            de: "Hallo, %N! Wie geht’s?",
-            en: "Lena at the team lunch, ready for a review of your second week.",
+            target: "Hallo, %N! Wie geht’s?",
+            native:
+              "Lena at the team lunch, ready for a review of your second week.",
           },
         },
       },
@@ -360,7 +367,7 @@ const a1Units: Unit[] = [
     grammar:
       "sein and heißen: ich bin, du bist · ich heiße, du heißt. No article before jobs. First look at verb second: Heute arbeite ich …",
     skills: ["Speaking", "Listening", "Reading", "Vocabulary"],
-        milestone: {
+    milestone: {
       summary:
         "You can introduce yourself with your name, your job and where you’re from, and ask a colleague the same.",
       canDo: [
@@ -369,15 +376,15 @@ const a1Units: Unit[] = [
         "Say where you’re from and which languages you speak",
       ],
       standup: {
-        de: "Heute arbeite ich an einer neuen Funktion.",
-        en: "Today I’m working on a new feature.",
+        target: "Heute arbeite ich an einer neuen Funktion.",
+        native: "Today I’m working on a new feature.",
       },
     },
     lessons: [
       {
         id: "a1-u3-l1",
         title: "Wie heißt du?",
-        titleIsGerman: true,
+        titleInTarget: true,
         goal: "Ask someone’s name and give yours, with du and with Sie",
         minutes: 7,
         exercises: 8,
@@ -388,15 +395,15 @@ const a1Units: Unit[] = [
           quote: {
             person: "cm",
             initials: "CM",
-            de: "Hallo! Wie heißt du?",
-            en: "Clara at the coffee machine.",
+            target: "Hallo! Wie heißt du?",
+            native: "Clara at the coffee machine.",
           },
         },
       },
       {
         id: "a1-u3-l2",
         title: "Jobs on the team",
-        titleIsGerman: false,
+        titleInTarget: false,
         goal: "Say what you do, and say what a teammate does",
         minutes: 7,
         exercises: 8,
@@ -407,15 +414,15 @@ const a1Units: Unit[] = [
           quote: {
             person: "lf",
             initials: "LF",
-            de: "Ich bin Teamleiterin.",
-            en: "Lena, at the kick-off.",
+            target: "Ich bin Teamleiterin.",
+            native: "Lena, at the kick-off.",
           },
         },
       },
       {
         id: "a1-u3-l3",
         title: "Meet your team",
-        titleIsGerman: false,
+        titleInTarget: false,
         goal: "Introduce yourself, say what you do and say where you are from",
         minutes: 7,
         exercises: 8,
@@ -426,15 +433,15 @@ const a1Units: Unit[] = [
           quote: {
             person: "aw",
             initials: "AW",
-            de: "Hallo! Ich heiße Anna. Ich bin Softwareentwicklerin.",
-            en: "Anna, on her first day.",
+            target: "Hallo! Ich heiße Anna. Ich bin Softwareentwicklerin.",
+            native: "Anna, on her first day.",
           },
         },
       },
       {
         id: "a1-u3-l4",
         title: "Woher kommst du?",
-        titleIsGerman: true,
+        titleInTarget: true,
         goal: "Ask where someone is from, say where you’re from and talk about the languages you speak",
         minutes: 10,
         exercises: 10,
@@ -445,15 +452,15 @@ const a1Units: Unit[] = [
           quote: {
             person: "cm",
             initials: "CM",
-            de: "Hallo! Ich bin Clara, ich bin neu im Team.",
-            en: "Clara Martin starts in the design team today.",
+            target: "Hallo! Ich bin Clara, ich bin neu im Team.",
+            native: "Clara Martin starts in the design team today.",
           },
         },
       },
       {
         id: "a1-u3-review",
         title: "Unit review",
-        titleIsGerman: false,
+        titleInTarget: false,
         goal: "Introduce yourself to the whole team: name, job, where you’re from and what you speak",
         minutes: 8,
         exercises: 8,
@@ -464,8 +471,8 @@ const a1Units: Unit[] = [
           quote: {
             person: "lf",
             initials: "LF",
-            de: "Willkommen im Team!",
-            en: "Lena, at your first team meeting.",
+            target: "Willkommen im Team!",
+            native: "Lena, at your first team meeting.",
           },
         },
       },

@@ -1,6 +1,6 @@
 import { Lightbulb } from "lucide-react"
 
-import { GermanText } from "@/components/learning/german-text"
+import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
 
 import { personalise, type TipExercise } from "../schema"
@@ -59,9 +59,9 @@ export function TipView({ exercise, learner, onDone }: TipViewProps) {
                           {cell}
                         </span>
                       ) : (
-                        <GermanText className="text-lg">
+                        <TargetText className="text-lg">
                           {personalise(cell, learner)}
-                        </GermanText>
+                        </TargetText>
                       )}
                     </td>
                   ))}
@@ -72,12 +72,12 @@ export function TipView({ exercise, learner, onDone }: TipViewProps) {
         </div>
         <ul className="mt-6 flex flex-col gap-3">
           {exercise.examples.map((example) => (
-            <li key={example.de}>
-              <GermanText as="p" className="text-xl">
-                {personalise(example.de, learner)}
-              </GermanText>
+            <li key={example.target}>
+              <TargetText as="p" className="text-xl">
+                {personalise(example.target, learner)}
+              </TargetText>
               <p className="text-[0.9375rem] text-muted-foreground">
-                {personalise(example.en, learner)}
+                {personalise(example.native, learner)}
               </p>
             </li>
           ))}

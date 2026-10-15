@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 
+import { TARGET_LANG } from "@/content/courses"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -86,7 +87,7 @@ export function BuildView({
               aria-label={`${tile(i)}, word ${position + 1}${answering ? ". Press to remove." : ""}`}
               className="min-h-12 rounded-xl border-2 border-selected-border bg-selected px-4 font-voice text-[1.3125rem] font-semibold text-selected-text transition-transform duration-(--duration-instant) active:scale-[0.97] motion-safe:animate-bump"
             >
-              <span lang="de">{tile(i)}</span>
+              <span lang={TARGET_LANG}>{tile(i)}</span>
             </button>
           ))}
         </div>
@@ -100,7 +101,7 @@ export function BuildView({
                 onClick={() => setPlaced([...placed, i])}
                 className="min-h-12 rounded-xl border-2 border-border bg-card px-4 font-voice text-[1.3125rem] font-semibold transition-[transform,background-color,border-color] duration-(--duration-instant) hover:border-input hover:bg-background-subtle active:scale-[0.97] disabled:opacity-60"
               >
-                <span lang="de">{tile(i)}</span>
+                <span lang={TARGET_LANG}>{tile(i)}</span>
               </button>
             </li>
           ))}
@@ -130,7 +131,7 @@ export function BuildView({
         <FeedbackFooter
           result="correct"
           title={rightTitle(index)}
-          titleLang="de"
+          titleLang={TARGET_LANG}
           action={
             <Button
               size="lg"

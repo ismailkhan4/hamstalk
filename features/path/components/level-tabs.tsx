@@ -1,7 +1,7 @@
 import { Lock } from "lucide-react"
 import Link from "next/link"
 
-import { levels, type CefrLevel } from "@/content/curriculum"
+import { levels, type CefrLevel } from "@/content/courses/de/curriculum"
 import { cn } from "@/lib/utils"
 
 type LevelTabsProps = { selected: CefrLevel; home: CefrLevel; basePath: string }
