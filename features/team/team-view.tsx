@@ -155,7 +155,7 @@ export function TeamView({
                       <Lock aria-hidden="true" className="size-4" />
                       Opens when you finish Unit {featuredUnit.number}.
                       <Link
-                        href={`/path?unit=${featuredUnit.id}`}
+                        href={`/path?level=${featuredUnit.level.toLowerCase()}#${featuredUnit.id}`}
                         className="font-semibold text-primary-text underline underline-offset-[3px]"
                       >
                         See the unit

@@ -1,7 +1,6 @@
-import { ArrowLeft, Compass } from "lucide-react"
+import { Compass } from "lucide-react"
 import Link from "next/link"
 
-import { cn } from "@/lib/utils"
 import { AppShell } from "@/components/layout/app-shell"
 import {
   getLevel,
@@ -10,52 +9,49 @@ import {
   type CefrLevel,
 } from "@/content/courses/de/curriculum"
 import type { Learner } from "@/features/learner/load-learner"
-import { LevelTabs } from "./level-tabs"
-import { PathList } from "./path-list"
-import { UnitPanel } from "./unit-panel"
-import { completedUnitCount, currentUnitNumber, homeLevel } from "../model"
 
-type PathViewProps = Pick<
-  Learner,
-  "name" | "firstName" | "preferences" | "progress"
-> & {
+import { completedUnitCount, homeLevel, nextLesson } from "../model"
+import { transitLine } from "../transit"
+import { LevelTabs } from "./level-tabs"
+import { LineLegend } from "./line-legend"
+import { LINE_COLOR, TransitLine } from "./transit-line"
+
+type PathViewProps = Pick<Learner, "name" | "preferences" | "progress"> & {
   email: string
   counts?: Learner["counts"]
+  completedStandups: string[]
   params: { level?: string | string[]; unit?: string | string[] }
   /** Where the path lives, so links stay inside development previews. */
   basePath?: string
 }
 
+/** The learning path as a line map: one line per level, the learner's station marked. */
 export function PathView({
   name,
-  firstName,
   email,
   preferences,
   progress,
   counts,
+  completedStandups,
   params,
   basePath = "/path",
 }: PathViewProps) {
   const home = homeLevel(preferences.startLevel)
+  // An older link may name a unit instead of a level: open that unit's line.
+  const linkedUnit =
+    typeof params.unit === "string" ? getUnit(params.unit) : null
   const requested = levels.find(
     (level) => level.code.toLowerCase() === params.level
   )?.code
-  const selectedLevel: CefrLevel = requested ?? home
+  const selectedLevel: CefrLevel = requested ?? linkedUnit?.level ?? home
   const level = getLevel(selectedLevel)
-
-  const requestedUnit =
-    typeof params.unit === "string" ? getUnit(params.unit) : null
-  const current = level.units.find(
-    (unit) =>
-      unit.number === currentUnitNumber(preferences.startLevel, progress)
+  const line = transitLine(
+    selectedLevel,
+    preferences.startLevel,
+    progress,
+    completedStandups
   )
-  const unit =
-    requestedUnit && requestedUnit.level === selectedLevel
-      ? requestedUnit
-      : (current ?? level.units[0])
-  const unitChosen = Boolean(
-    requestedUnit && requestedUnit.level === selectedLevel
-  )
+  const next = nextLesson(preferences.startLevel, progress)
   const doneUnits = completedUnitCount(selectedLevel, progress)
 
   return (
@@ -64,94 +60,72 @@ export function PathView({
         id="main"
         className="mx-auto max-w-(--content-max) px-4 py-8 sm:px-6 lg:px-10"
       >
-        <h1 className="font-display text-h1 font-bold">Learning path</h1>
-        <p className="mt-2 max-w-[62ch] text-body-lg text-secondary-text">
-          From your first Hallo to explaining trade-offs. The four levels follow
-          the CEFR, and each ends with a checkpoint that shows what you can
-          actually do.
+        <h1 className="font-display text-h1 font-semibold">Learning path</h1>
+        <p className="mt-2 max-w-[62ch] text-body-lg font-semibold text-secondary-text">
+          Your route from the first Hallo to B2. Each level is a line, each
+          lesson a station, and every unit ends at the team standup.
         </p>
         <div className="mt-6 max-w-3xl">
           <LevelTabs selected={selectedLevel} home={home} basePath={basePath} />
         </div>
 
-        <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,400px)] xl:gap-14">
-          <div className={cn("min-w-0", unitChosen && "hidden lg:block")}>
-            <h2 className="font-display text-h2 font-bold">
-              {level.code} · {level.name}
-            </h2>
-            <p className="mt-1 text-secondary-text">{level.description}</p>
-            <p className="mt-3 text-sm text-muted-foreground">
+        <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,320px)] xl:gap-14">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-3">
+              <span
+                aria-hidden="true"
+                className="grid h-9 min-w-12 place-items-center rounded-lg px-2 font-display text-lg font-semibold text-[#1d2b33]"
+                style={{ background: LINE_COLOR[selectedLevel] }}
+              >
+                U{line.number}
+              </span>
+              <h2 className="font-display text-h2 font-semibold">
+                {level.code} · {level.name}
+              </h2>
+            </div>
+            <p className="mt-2 font-semibold text-secondary-text">
+              {level.description}
+            </p>
+            <p className="mt-2 text-sm font-bold text-muted-foreground">
               {doneUnits} of {level.units.length} units completed
             </p>
-            <div
-              role="progressbar"
-              aria-label={`${level.code} units completed`}
-              aria-valuemin={0}
-              aria-valuemax={level.units.length}
-              aria-valuenow={doneUnits}
-              className="mt-2 h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-muted"
-            >
-              <div
-                className="h-full rounded-full bg-primary"
-                style={{ width: `${(doneUnits / level.units.length) * 100}%` }}
-              />
-            </div>
 
-            {selectedLevel !== "A1" ? (
-              <p className="mt-6 rounded-xl border border-primary-border bg-primary-subtle p-4 text-sm text-primary-text">
+            {selectedLevel !== "A1" && (
+              <p className="mt-5 rounded-2xl border-2 border-primary-border bg-primary-subtle p-4 text-sm font-semibold text-primary-text">
                 <b className="block">Preview</b>
                 {selectedLevel === home
-                  ? `This is your suggested starting level. ${selectedLevel} lessons are planned but not built yet, so nothing here can be started. A1 lessons open first.`
-                  : `${selectedLevel} lessons are planned but not built yet. This shows what the level will cover.`}
+                  ? `This is your suggested starting level. ${selectedLevel} lessons are planned but not built yet, so its line is still under construction. A1 lessons open first.`
+                  : `${selectedLevel} lessons are planned but not built yet. This shows the route the line will take.`}
               </p>
-            ) : (
-              <p className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-dashed border-input p-4 text-sm">
+            )}
+
+            <div className="mt-4">
+              <TransitLine
+                line={line}
+                resumeAt={next?.resumeAt ?? null}
+                guideHref={(unitId) => `${basePath}/guide/${unitId}`}
+              />
+            </div>
+          </div>
+
+          <aside className="flex flex-col gap-6 lg:sticky lg:top-6 lg:self-start">
+            <LineLegend level={selectedLevel} />
+            {selectedLevel === "A1" && (
+              <p className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-2xl border-2 border-dashed border-input p-4 text-sm font-semibold">
                 <Compass
                   aria-hidden="true"
                   className="size-4 text-primary-text"
                 />
-                Not sure A1 is the right place for you?
+                Not sure A1 is your stop?
                 <Link
                   href="/placement"
-                  className="font-semibold text-primary-text underline underline-offset-[3px]"
+                  className="font-extrabold text-primary-text underline underline-offset-[3px]"
                 >
                   Take the 6-minute placement check
                 </Link>
               </p>
             )}
-
-            <div className="mt-6">
-              <PathList
-                level={level}
-                startLevel={preferences.startLevel}
-                progress={progress}
-                selectedUnitId={unit?.id ?? null}
-                basePath={basePath}
-              />
-            </div>
-          </div>
-          {unit && (
-            <div
-              className={cn(
-                "lg:sticky lg:top-6 lg:block lg:self-start",
-                !unitChosen && "hidden"
-              )}
-            >
-              <Link
-                href={`${basePath}?level=${selectedLevel.toLowerCase()}`}
-                className="mb-4 inline-flex min-h-11 items-center gap-2 text-[0.9375rem] font-semibold text-secondary-text hover:text-foreground lg:hidden"
-              >
-                <ArrowLeft aria-hidden="true" className="size-[18px]" />
-                Learning path
-              </Link>
-              <UnitPanel
-                unit={unit}
-                level={preferences.startLevel}
-                progress={progress}
-                firstName={firstName}
-              />
-            </div>
-          )}
+          </aside>
         </div>
       </main>
     </AppShell>

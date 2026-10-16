@@ -32,6 +32,12 @@ export type Course = {
     reviewDone: string
     unitDone: (unit: number) => string
     greeting: (name: string) => string
+    /** The "you are here" sign on the path's line map. */
+    youAreHere: string
+    /** A level's last stop on the line map, e.g. "Endstation". */
+    terminus: string
+    /** An unbuilt stretch of the line, e.g. "Baustelle" (construction site). */
+    underConstruction: string
   }
   /** The workplace story the course's lessons are set in. */
   world: { company: string; city: string }

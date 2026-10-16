@@ -24,6 +24,9 @@ export const german: Course = {
     reviewDone: "Wiederholung geschafft!",
     unitDone: (unit) => `Einheit ${unit} geschafft!`,
     greeting: (name) => `Hallo, ${name}!`,
+    youAreHere: "Du bist hier",
+    terminus: "Endstation",
+    underConstruction: "Baustelle",
   },
   world: { company: "Kaffeesatz GmbH", city: "Berlin" },
 }

@@ -99,6 +99,25 @@ between visits without writing anything. Keep the two in step. In development, `
 every streak state, and `/dev/lesson?screen=complete&streak=7&earned=1&goal=1` shows the
 celebration.
 
+## The learning path
+
+The path is drawn as a U-Bahn line map (`features/path/`). Each level is a line (A1 is U1, A2 is U2,
+and so on), each lesson is a station, a unit review is an interchange, the team standup is the last
+stop of every unit, and the level checkpoint is the terminus (Endstation). The track is solid behind
+the learner and faded ahead. Hamsti marks the current station ("Du bist hier"), and units with no
+lessons built yet are drawn as a Baustelle.
+
+- `transit.ts` turns progress into the line. It is pure, so the map and Home use the same answer.
+- `components/transit-line.tsx` draws the full map at `/path?level=a1`. Each unit is an anchor, so
+  links go to `/path?level=a1#a1-u2`.
+- `components/line-strip.tsx` is Home's piece of the map: the current unit, left to right.
+- `/path/guide/<unitId>` is the unit guide: goals, words, the grammar, every lesson's rule table, and
+  the standup line.
+- Line colours are the `--line-a1` to `--line-b2` tokens in `app/globals.css`.
+
+In development, `/dev/path?stage=unit2` (`new`, `unit2` or `done`, plus `&level=a2`), `/dev/home`
+and `/dev/path/guide/a1-u1` show these screens with sample progress.
+
 ## Courses
 
 Klarlingo teaches German first, and is built so other languages can follow.

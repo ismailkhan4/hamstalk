@@ -1,5 +1,6 @@
 "use server"
 
+import * as Sentry from "@sentry/nextjs"
 import { z } from "zod"
 
 import { getUnit } from "@/content/courses/de/curriculum"
@@ -14,7 +15,7 @@ import { awardXp } from "@/features/rewards/award"
 
 export type StandupResult = { ok: true } | { ok: false; message: string }
 
-const input = z.object({ unitId: z.string().min(1).max(32) })
+const unitIdSchema = z.string().min(1).max(32)
 
 const FAILED =
   "Your standup wasn’t saved. Check your connection and finish it again."
@@ -23,9 +24,10 @@ const FAILED =
 export async function completeStandupAction(
   raw: unknown
 ): Promise<StandupResult> {
-  const parsed = input.safeParse(raw)
+  // Called as completeStandupAction(unitId) by the standup screen.
+  const parsed = unitIdSchema.safeParse(raw)
   if (!parsed.success) return { ok: false, message: FAILED }
-  const { unitId } = parsed.data
+  const unitId = parsed.data
   const user = await requireUser("/team")
   const unit = getUnit(unitId)
   if (!unit || !getStandup(unitId))
@@ -47,13 +49,21 @@ export async function completeStandupAction(
     },
     { onConflict: "user_id,unit_id" }
   )
-  if (error)
+  if (error) {
+    console.error(
+      `standup_completions upsert failed: ${error.code ?? "unknown"} ${error.message}`
+    )
+    Sentry.captureMessage(`standup save failed: ${error.code ?? "unknown"}`, {
+      level: "error",
+      tags: { code: error.code, unit: unitId },
+    })
     return {
       ok: false,
       message: isMissingTable(error)
         ? "The database isn’t set up yet."
         : FAILED,
     }
+  }
   trackServer(user.id, "standup_completed", { unit_id: unitId })
   // No refresh here: the standup page re-picks the next standup on render, which would pull the
   // learner off their finished screen. The badges catch up on the next page.

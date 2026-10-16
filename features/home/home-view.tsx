@@ -3,18 +3,24 @@ import { Suspense } from "react"
 import { ACTIVE_COURSE, TARGET_LANG } from "@/content/courses"
 import { AppShell } from "@/components/layout/app-shell"
 import { isLessonAvailable } from "@/content/courses/de/availability"
-import { HowItWorks, PathStrip, PlanPanel, TeamCard } from "./home-panels"
+import { HowItWorks, PlanPanel, TeamCard } from "./home-panels"
 import { MissionCard } from "./mission-card"
 import { dayAtCompany } from "@/features/learner/day-at-company"
 import type { Learner } from "@/features/learner/load-learner"
 import { isPreviewLevel } from "@/features/onboarding/plan"
 import { currentUnitNumber, homeLevel, nextLesson } from "@/features/path/model"
+import { LineStrip } from "@/features/path/components/line-strip"
+import { currentSection, transitLine } from "@/features/path/transit"
 import { TodayPanel } from "@/features/streaks/components/today-panel"
 
 type HomeViewProps = Pick<
   Learner,
   "name" | "firstName" | "preferences" | "progress"
-> & { email: string; counts?: Learner["counts"] }
+> & {
+  email: string
+  counts?: Learner["counts"]
+  completedStandups: string[]
+}
 
 export function HomeView({
   name,
@@ -23,7 +29,15 @@ export function HomeView({
   preferences,
   progress,
   counts,
+  completedStandups,
 }: HomeViewProps) {
+  const line = transitLine(
+    "A1",
+    preferences.startLevel,
+    progress,
+    completedStandups
+  )
+  const section = currentSection(line)
   const next = nextLesson(preferences.startLevel, progress)
   const currentUnit = currentUnitNumber(preferences.startLevel, progress)
   const preview = preferences.startLevel
@@ -81,6 +95,7 @@ export function HomeView({
           <Suspense fallback={null}>
             <TodayPanel />
           </Suspense>
+          {section && <LineStrip line={line} section={section} />}
           {next && (
             <MissionCard
               next={next}
@@ -100,7 +115,6 @@ export function HomeView({
         >
           <PlanPanel preferences={preferences} />
           <HowItWorks />
-          <PathStrip currentUnit={currentUnit} />
         </aside>
       </main>
     </AppShell>
