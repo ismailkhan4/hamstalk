@@ -50,6 +50,18 @@ export const german: Course = {
     finalWhistle: "Abpfiff",
   },
   world: { company: "Kaffeesatz GmbH", city: "Berlin" },
+  // Paste voice ids from your ElevenLabs Voice Library: native German voices that fit each person.
+  // Characters left empty use the narrator's voice.
+  voices: {
+    narrator: "pFZP5JQG7iQjIQuC4Bku", // Words and prompts: clear, neutral, mid-pace
+    lf: "pFZP5JQG7iQjIQuC4Bku", // Lena Fischer, team lead: calm, clear, thirties
+    jk: "onwK4e9ZLuTAKqWW03F9", // Jonas Krüger, backend: quick, friendly, late twenties
+    ao: "pFZP5JQG7iQjIQuC4Bku", // Aylin Öztürk, design: curious, direct
+    aw: "onwK4e9ZLuTAKqWW03F9", // Anna Weber, mobile developer: young, relaxed
+    mb: "onwK4e9ZLuTAKqWW03F9", // Mia Braun, reception: warm, welcoming
+    bk: "onwK4e9ZLuTAKqWW03F9", // Frau Krüger, bakery: older, polite
+    cm: "pFZP5JQG7iQjIQuC4Bku", // Clara Meyer, design: warm, chatty
+  },
   pacers: [
     { id: "lf", name: "Lena F.", initials: "LF", role: "Team lead" },
     { id: "jk", name: "Jonas K.", initials: "JK", role: "Backend" },

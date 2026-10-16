@@ -51,6 +51,10 @@ export type AnalyticsEvents = {
     first_try: number
     passed: boolean | null
   }
+  /** Hamsti explained a missed answer. */
+  answer_explained: { lesson_id: string }
+  /** A roleplay with a team character was finished. */
+  roleplay_completed: { scenario: string; turns: number; score: number }
   /** A quest from today's plan was finished and paid out. */
   quest_completed: { quest: string; reward: number }
   /** A lanyard pin tier was unlocked. */

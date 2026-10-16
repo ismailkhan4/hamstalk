@@ -213,6 +213,7 @@ export function ConversationView({
               </h2>
               <ListenButton
                 text={personalise(turn.line, learner)}
+                speaker={turn.speaker.person}
                 label={`Hear ${turn.speaker.label.split(" ")[0]} again`}
               />
             </div>

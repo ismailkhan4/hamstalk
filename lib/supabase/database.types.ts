@@ -498,6 +498,11 @@ export type Database = {
       my_league: { Args: Record<PropertyKey, never>; Returns: Json }
       my_profile: { Args: Record<PropertyKey, never>; Returns: Json }
       public_profile: { Args: { p_handle: string }; Returns: Json }
+      ai_allow: { Args: { p_kind: string }; Returns: boolean }
+      tts_allow: {
+        Args: { p_chars: number; p_daily_chars: number }
+        Returns: boolean
+      }
       finish_practice: {
         Args: { p_id: string; p_outcomes: string[] }
         Returns: Json

@@ -126,6 +126,46 @@ and the lanyard, `/dev/home?stash=low` shows Home with them, `/dev/lesson?akku=1
 on its last bar (`akku=0` shows the empty screen), and `/dev/lesson?screen=complete&stash=1` shows
 the end of a lesson with nuts, quests and a pin.
 
+## Recorded speech (ElevenLabs)
+
+Every listen button plays the line in its speaker's own voice, recorded with ElevenLabs
+(`eleven_v4`). It falls back to the browser's voice when there's no recording.
+
+- **Cast:** voice ids live in `voices` in `content/courses/<id>/course.ts`, one per character plus
+  a `narrator` for words and prompts. They aren't secret. An empty id uses the narrator.
+- **Storage:** recordings live in the public Supabase bucket `tts`, created by
+  `supabase/migrations/audio.sql`. Each file is named by a hash of model, voice, speed and text, so
+  a line is never paid for twice, and changing a voice re-records only that voice's lines.
+- **Recorded ahead:** `bun run audio:generate` lists the missing fixed lines and their character
+  count; `--write` records and uploads them. Run it after content changes.
+- **Recorded on demand:** lines with the learner's name are recorded on first play by `/api/tts`
+  (signed-in learners only), then reused by everyone with that name. Each learner can record 200
+  new lines a day, and the whole app stays within `TTS_DAILY_CHAR_BUDGET` characters a day.
+
+Setup: apply `audio.sql`, set `ELEVENLABS_API_KEY` and `SUPABASE_SECRET_KEY`, paste the voice ids,
+then run `bun run audio:generate --write`.
+
+## AI: Explain my answer and roleplays
+
+Set `ANTHROPIC_API_KEY` (server only) and apply `supabase/migrations/ai.sql` after
+`adaptive.sql`. Without the key, both features hide themselves. Calls go through the Anthropic SDK
+(`lib/ai/claude.ts`) to `claude-opus-5-5` at low effort, with server-side refusal fallback
+(`fallbacks: "default"`). Set `KLARLINGO_AI_MODEL` to use another model.
+
+- **Explain my answer** (`features/ai/explain.ts`): "Why? Ask Hamsti" on each entry in the
+  mistakes notebook (the end of a lesson links there). Hamsti explains that exact answer: why it
+  didn't fit, the rule, and one new example. It's offered after the answer is shown, never before
+  the second try.
+- **Roleplays** (`content/courses/<id>/roleplays.ts`, `/team/roleplay/<id>`): short typed
+  conversations with a team character, unlocked when their unit is finished. The character
+  answers in simple sentences, ticks off the learner's goals, and gently corrects slips. The end
+  brings stars, highlights and fixes. A finished roleplay counts as a practice session: 15 XP,
+  within the shared limit of five XP-earning sessions a day.
+- **Limits:** `ai_allow()` caps each learner at 40 explanations and 80 roleplay replies a day. A
+  roleplay ends after 8 learner messages. Replies use structured outputs, validated by zod.
+
+In development, `/dev/roleplay` plays a roleplay with scripted replies and no AI.
+
 ## The adaptive engine: FSRS, the learner model and practice
 
 Apply `supabase/migrations/adaptive.sql` after `reminders.sql`. It also replaces `award_xp()` with

@@ -17,9 +17,11 @@
     "curriculum:check": "bun scripts/ingest-curriculum.ts check",
     "curriculum:sql": "bun scripts/ingest-curriculum.ts sql",
     "curriculum:ingest": "bun scripts/ingest-curriculum.ts ingest",
-    "curriculum:verify": "bun scripts/ingest-curriculum.ts verify"
+    "curriculum:verify": "bun scripts/ingest-curriculum.ts verify",
+    "audio:generate": "bun scripts/generate-audio.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0",
     "@base-ui/react": "^1.9.0",
     "@hookform/resolvers": "^5.9.1",
     "@opentelemetry/api-logs": "^0.223.0",

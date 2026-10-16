@@ -366,7 +366,15 @@ export function LessonComplete({
             ? "1 mistake from this"
             : `${mistakeCount} mistakes from this`}{" "}
           {review ? "review" : "lesson"} {mistakeCount === 1 ? "is" : "are"}{" "}
-          saved to your mistakes notebook.
+          saved to your mistakes notebook.{" "}
+          {!practice && (
+            <Link
+              href={`/mistakes?lesson=${lesson.id}`}
+              className="font-bold text-primary-text hover:underline"
+            >
+              See why
+            </Link>
+          )}
         </p>
       )}
 

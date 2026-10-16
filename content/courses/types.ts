@@ -69,4 +69,10 @@ export type Course = {
     initials: string
     role: string
   }[]
+  /**
+   * ElevenLabs voice ids, one per character (keys match the avatars) plus a narrator for words and
+   * prompts. Not secret. An empty id falls back to the narrator; with no narrator the app uses the
+   * browser's voice.
+   */
+  voices: Readonly<Record<string, string>>
 }

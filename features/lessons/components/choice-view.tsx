@@ -10,6 +10,7 @@ import {
 import { TARGET_LANG } from "@/content/courses"
 import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
+import { speakerFromCaption } from "@/lib/tts/core"
 import { cn } from "@/lib/utils"
 
 import { check, retry, startAttempt, type Attempt } from "../engine/attempt"
@@ -102,7 +103,8 @@ export function ChoiceView({
           <div className="mt-6 rounded-xl border border-border bg-card p-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <ListenButton
-                text={exercise.listening.clip}
+                text={personalise(exercise.listening.clip, learner)}
+                speaker={speakerFromCaption(exercise.listening.meta)}
                 label="Play"
                 slow
                 variant="outline"

@@ -5,6 +5,7 @@ import { loadLearner } from "@/features/learner/load-learner"
 import { loadMistakes } from "@/features/mistakes/data"
 import { MistakesClient } from "@/features/mistakes/mistakes-client"
 import { DatabaseNotReady } from "@/features/onboarding/database-not-ready"
+import { aiEnabled } from "@/lib/ai/claude"
 import { createClient } from "@/lib/supabase/server"
 
 export const metadata: Metadata = { title: "Mistakes notebook" }
@@ -32,6 +33,7 @@ export default async function MistakesPage({ searchParams }: Props) {
         <div className="max-w-3xl">
           <MistakesClient
             mistakes={mistakes}
+            ai={aiEnabled()}
             lessonFilter={
               typeof params.lesson === "string" ? params.lesson : null
             }

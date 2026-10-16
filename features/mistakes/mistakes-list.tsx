@@ -13,6 +13,9 @@ import { ACTIVE_COURSE, TARGET_LANG } from "@/content/courses"
 import { optionOrder } from "@/features/lessons/engine/shuffle"
 import { cn } from "@/lib/utils"
 
+import { AskWhy } from "@/features/ai/ask-why"
+import type { ExplainResult } from "@/features/ai/explain"
+
 import type { Mistake } from "./data"
 
 type RetryResult =
@@ -24,6 +27,8 @@ type MistakesListProps = {
   onRetry: (itemKey: string, selection: number) => Promise<RetryResult>
   /** Show only one lesson's mistakes, as when arriving from a completion screen. */
   lessonFilter?: string | null
+  /** Hamsti explains a mistake with AI; absent when AI isn't switched on. */
+  onExplain?: (mistake: Mistake) => Promise<ExplainResult>
 }
 
 type CardState = {
@@ -39,11 +44,13 @@ function Card({
   state,
   onOpen,
   onPick,
+  onExplain,
 }: {
   mistake: Mistake
   state: CardState
   onOpen: () => void
   onPick: (selection: number) => void
+  onExplain?: (mistake: Mistake) => Promise<ExplainResult>
 }) {
   const learned = state.learned
   return (
@@ -75,6 +82,7 @@ function Card({
       <p className="mt-3 max-w-[64ch] text-[0.9375rem] text-secondary-text">
         {mistake.reason}
       </p>
+      {onExplain && <AskWhy explain={() => onExplain(mistake)} />}
 
       {learned ? (
         <p className="mt-4 flex items-center gap-2 text-sm font-semibold text-success-text">
@@ -168,6 +176,7 @@ export function MistakesList({
   mistakes,
   onRetry,
   lessonFilter = null,
+  onExplain,
 }: MistakesListProps) {
   const [topic, setTopic] = useState<string | null>(null)
   const [states, setStates] = useState<Record<string, CardState>>({})
@@ -301,6 +310,7 @@ export function MistakesList({
               state={stateOf(mistake)}
               onOpen={() => update(mistake, { open: true })}
               onPick={(selection) => void pick(mistake, selection)}
+              onExplain={onExplain}
             />
           ))}
         </ul>
