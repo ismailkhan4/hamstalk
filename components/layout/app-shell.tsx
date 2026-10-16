@@ -5,6 +5,7 @@ import { Logo, LogoSymbol } from "@/components/brand/logo"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { initialsFor } from "@/components/learning/team-badge"
 
+import { StashStats } from "@/features/economy/components/stash-stats"
 import type { NotebookCounts } from "@/features/review/data"
 import { HabitStats } from "@/features/streaks/components/habit-stats"
 
@@ -45,7 +46,10 @@ export function AppShell({ name, email, counts, children }: AppShellProps) {
             <Bell aria-hidden="true" className="size-5" />
           </Link>
         </div>
-        <HabitStats className="mt-4 -ml-1 self-start" />
+        <div className="mt-4 -ml-1 flex flex-wrap items-center">
+          <HabitStats />
+          <StashStats />
+        </div>
         <form role="search" action="/search" className="relative mt-4">
           <label htmlFor="sidebar-search" className="sr-only">
             Search lessons, words and phrases
@@ -91,26 +95,28 @@ export function AppShell({ name, email, counts, children }: AppShellProps) {
         </div>
       </aside>
 
-      <header className="sticky top-0 z-(--z-header) flex h-14 items-center justify-between border-b border-border-subtle bg-background/95 px-4 backdrop-blur lg:hidden">
+      <header className="sticky top-0 z-(--z-header) flex h-14 items-center justify-between border-b border-border-subtle bg-background/95 px-3 backdrop-blur sm:px-4 lg:hidden">
         <Link href="/home" aria-label="Klarlingo home">
           {/* Narrow phones keep just the mark, to leave room for the streak. */}
           <LogoSymbol className="size-[30px] sm:hidden" />
           <Logo className="max-sm:hidden" symbolClassName="size-[30px]" />
         </Link>
-        <div className="flex items-center gap-1">
-          <HabitStats className="gap-2 px-1.5" />
+        <div className="flex items-center sm:gap-1">
+          {/* Narrow phones tighten everything so the streak, nuts and Akku all fit. */}
+          <HabitStats className="gap-1 px-1 sm:gap-2 sm:px-1.5" />
+          <StashStats className="gap-1 px-1 sm:gap-2 sm:px-1.5" />
           <ThemeToggle className="max-sm:hidden" />
           <Link
             href="/notifications"
             aria-label="Notifications"
-            className="grid size-11 place-items-center rounded-lg text-secondary-text hover:bg-accent hover:text-foreground"
+            className="grid size-10 place-items-center rounded-lg text-secondary-text hover:bg-accent hover:text-foreground sm:size-11"
           >
             <Bell aria-hidden="true" className="size-5" />
           </Link>
           <Link
             href="/search"
             aria-label="Search"
-            className="grid size-11 place-items-center rounded-lg text-secondary-text hover:bg-accent hover:text-foreground"
+            className="grid size-10 place-items-center rounded-lg text-secondary-text hover:bg-accent hover:text-foreground sm:size-11"
           >
             <Search aria-hidden="true" className="size-5" />
           </Link>

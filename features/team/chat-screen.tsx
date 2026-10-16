@@ -101,7 +101,7 @@ export function ChatScreen({ shell, firstName }: Props) {
                   <Languages aria-hidden="true" data-icon="inline-start" />
                   {translation ? "Hide translation" : "Show translation"}
                 </Button>
-                <ListenButton text={message} label="Listen" />
+                <ListenButton text={message} label="Listen" speaker="jk" />
               </div>
               <ul
                 aria-label="Words you may need"

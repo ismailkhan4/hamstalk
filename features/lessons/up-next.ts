@@ -93,6 +93,6 @@ export function lessonKicker(lessonId: string) {
 export function pathHrefFor(lessonId: string) {
   const found = findLesson(lessonId)
   return found
-    ? `/path?level=${found.level.code.toLowerCase()}&unit=${found.unit.id}`
+    ? `/path?level=${found.level.code.toLowerCase()}#${found.unit.id}`
     : "/path"
 }

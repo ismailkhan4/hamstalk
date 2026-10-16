@@ -67,7 +67,9 @@ export function searchAll(
             title: lesson.title,
             titleInTarget: lesson.kind === "lesson" && lesson.titleInTarget,
             detail: `Unit ${unit.number} · ${unit.title}${available ? "" : " · planned"}`,
-            href: available ? `/learn/${lesson.id}` : `/path?unit=${unit.id}`,
+            href: available
+              ? `/learn/${lesson.id}`
+              : `/path?level=${unit.level.toLowerCase()}#${unit.id}`,
             available,
           },
         ]

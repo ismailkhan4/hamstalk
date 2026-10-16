@@ -445,3 +445,9 @@ export function parityReport(
   }
   return { matching, differences }
 }
+
+/** One published exercise, or null when its stored content doesn't validate. */
+export function exerciseFromContent(content: unknown): Exercise | null {
+  const parsed = exerciseSchema.safeParse(withCourseNeutralKeys(content))
+  return parsed.success ? parsed.data : null
+}

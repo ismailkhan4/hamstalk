@@ -18,6 +18,7 @@ import { getStandup, standups } from "@/content/courses/de/standup"
 import { dayAtCompany } from "@/features/learner/day-at-company"
 import type { NotebookCounts } from "@/features/review/data"
 import { isUnitCompleted, type LessonProgress } from "@/features/path/model"
+import { RoleplayList } from "@/features/roleplay/components/roleplay-list"
 import { cn } from "@/lib/utils"
 
 import { playableStandup, standupState, type StandupState } from "./model"
@@ -60,6 +61,8 @@ type TeamViewProps = {
   counts?: NotebookCounts
   startedAt: string | null
   progress: LessonProgress[]
+  /** Whether AI roleplays are switched on. */
+  ai?: boolean
   completedStandups: string[]
 }
 
@@ -76,6 +79,7 @@ export function TeamView({
   counts,
   startedAt,
   progress,
+  ai = false,
   completedStandups,
 }: TeamViewProps) {
   const units = getLevel("A1").units
@@ -155,7 +159,7 @@ export function TeamView({
                       <Lock aria-hidden="true" className="size-4" />
                       Opens when you finish Unit {featuredUnit.number}.
                       <Link
-                        href={`/path?unit=${featuredUnit.id}`}
+                        href={`/path?level=${featuredUnit.level.toLowerCase()}#${featuredUnit.id}`}
                         className="font-semibold text-primary-text underline underline-offset-[3px]"
                       >
                         See the unit
@@ -248,6 +252,8 @@ export function TeamView({
               These are practice tasks. The tickets and messages are made up,
               and nothing you answer is sent to a person or saved.
             </p>
+
+            <RoleplayList progress={progress} ai={ai} />
 
             <section aria-labelledby="ladder" className="mt-10">
               <h2 id="ladder" className="font-display text-h2 font-bold">

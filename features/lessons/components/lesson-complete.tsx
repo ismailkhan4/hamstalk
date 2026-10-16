@@ -24,6 +24,7 @@ import { buttonVariants } from "@/components/ui/button-variants"
 import { celebrate } from "@/features/celebrations/confetti"
 import { CountUp } from "@/features/celebrations/count-up"
 import { playFeedback } from "@/features/celebrations/feedback"
+import { StashSummary } from "@/features/economy/components/stash-summary"
 import { Mascot } from "@/features/celebrations/mascot"
 import { MASCOT_NAME } from "@/features/celebrations/mascot-name"
 import { isCelebration, type Rewards } from "@/features/rewards/payload"
@@ -66,6 +67,14 @@ type LessonCompleteProps = {
   saveProblem: string | null
   saving: boolean
   onRetrySave: () => void
+  /** Asks about reminders after a first-time lesson; rendered by the page. */
+  reminderPrompt?: React.ReactNode
+  /** A practice session, and for an Express run whether it passed (null while saving). */
+  practice?: {
+    kind: "smart" | "mistakes" | "express"
+    unitNumber?: number
+    passed: boolean | null
+  }
 }
 
 export function LessonComplete({
@@ -82,6 +91,8 @@ export function LessonComplete({
   saveProblem,
   saving,
   onRetrySave,
+  reminderPrompt,
+  practice,
 }: LessonCompleteProps) {
   const review = lesson.kind === "review"
   const perfect = summary.graded > 0 && summary.firstTry === summary.graded
@@ -115,7 +126,8 @@ export function LessonComplete({
 
   // Before the server answers, show what this lesson should earn; then exactly what it did.
   const expectedXp = replay ? 10 : summary.xp + (perfect ? 10 : 0)
-  const xp = rewards?.awarded ?? expectedXp
+  const boosted = rewards?.boosted ?? 0
+  const xp = (rewards?.awarded ?? expectedXp) + boosted
 
   return (
     <main
@@ -146,7 +158,12 @@ export function LessonComplete({
             : ACTIVE_COURSE.phrases.lessonDone}
         </h1>
         <p className="mt-1 text-lg font-semibold text-secondary-text">
-          {review ? "Review complete" : "Lesson complete"}: {lesson.title}
+          {practice
+            ? "Practice complete"
+            : review
+              ? "Review complete"
+              : "Lesson complete"}
+          : {lesson.title}
         </p>
       </div>
 
@@ -197,10 +214,17 @@ export function LessonComplete({
         <dl className="divide-y-2 divide-border-subtle">
           <Check label="XP earned" icon={Zap} tone="reward">
             <CountUp key={xp} to={xp} prefix="+" /> XP
-            {!replay && perfect && (
-              <span className="ml-2 text-xs font-bold text-muted-foreground">
-                incl. +10 perfect
+            {boosted > 0 ? (
+              <span className="ml-2 text-xs font-bold text-reward-text">
+                doubled
               </span>
+            ) : (
+              !replay &&
+              perfect && (
+                <span className="ml-2 text-xs font-bold text-muted-foreground">
+                  incl. +10 perfect
+                </span>
+              )
             )}
           </Check>
           <Check label="Right first time" icon={Target} tone="primary">
@@ -222,6 +246,35 @@ export function LessonComplete({
           All checks have passed
         </p>
       </section>
+      {practice?.kind === "express" && practice.passed !== null && (
+        <section
+          aria-live="polite"
+          className={cn(
+            "mt-6 flex items-center gap-4 rounded-3xl border-2 p-5 motion-safe:animate-rise",
+            practice.passed
+              ? "border-reward-border bg-reward-subtle"
+              : "border-border bg-card"
+          )}
+        >
+          <Mascot mood={practice.passed ? "cheer" : "thinking"} size={64} />
+          <div>
+            <h2 className="font-display text-xl font-semibold">
+              {practice.passed ? "Express passed!" : "Not this time"}
+            </h2>
+            <p className="font-semibold text-secondary-text">
+              {practice.passed
+                ? `Unit ${practice.unitNumber ?? ""} now runs on a gold line on your map.`
+                : "You need 8 of 10 right first time. Ride it again whenever you like."}
+            </p>
+          </div>
+        </section>
+      )}
+      <StashSummary
+        rewards={rewards}
+        className="mt-6 motion-safe:animate-rise"
+        style={{ animationDelay: "450ms" }}
+      />
+      {!replay && reminderPrompt}
       {replay && (
         <p className="mt-2 text-sm text-muted-foreground">
           Replays earn 10 practice XP, once a day per lesson.
@@ -265,37 +318,41 @@ export function LessonComplete({
         </section>
       ) : (
         <>
-          <section aria-labelledby="can-now" className="mt-8">
-            <h2 id="can-now" className="font-semibold">
-              You can now
-            </h2>
-            <ul className="mt-3 flex flex-col gap-2">
-              {lesson.canDo.map((item) => (
-                <li key={item} className="flex gap-3">
-                  <CheckIcon
-                    aria-hidden="true"
-                    className="mt-1 size-4 shrink-0 text-primary-text"
-                  />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section aria-labelledby="practised" className="mt-8">
-            <h2 id="practised" className="font-semibold">
-              Phrases you practised
-            </h2>
-            <ul className="mt-3 flex flex-wrap gap-2">
-              {lesson.practised.map((phrase) => (
-                <li
-                  key={phrase}
-                  className="rounded-lg bg-card px-3 py-1.5 shadow-[inset_0_0_0_1px_var(--border)]"
-                >
-                  <TargetText className="text-lg">{phrase}</TargetText>
-                </li>
-              ))}
-            </ul>
-          </section>
+          {lesson.canDo.length > 0 && (
+            <section aria-labelledby="can-now" className="mt-8">
+              <h2 id="can-now" className="font-semibold">
+                You can now
+              </h2>
+              <ul className="mt-3 flex flex-col gap-2">
+                {lesson.canDo.map((item) => (
+                  <li key={item} className="flex gap-3">
+                    <CheckIcon
+                      aria-hidden="true"
+                      className="mt-1 size-4 shrink-0 text-primary-text"
+                    />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {lesson.practised.length > 0 && (
+            <section aria-labelledby="practised" className="mt-8">
+              <h2 id="practised" className="font-semibold">
+                Phrases you practised
+              </h2>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {lesson.practised.map((phrase) => (
+                  <li
+                    key={phrase}
+                    className="rounded-lg bg-card px-3 py-1.5 shadow-[inset_0_0_0_1px_var(--border)]"
+                  >
+                    <TargetText className="text-lg">{phrase}</TargetText>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </>
       )}
 
@@ -309,7 +366,15 @@ export function LessonComplete({
             ? "1 mistake from this"
             : `${mistakeCount} mistakes from this`}{" "}
           {review ? "review" : "lesson"} {mistakeCount === 1 ? "is" : "are"}{" "}
-          saved to your mistakes notebook.
+          saved to your mistakes notebook.{" "}
+          {!practice && (
+            <Link
+              href={`/mistakes?lesson=${lesson.id}`}
+              className="font-bold text-primary-text hover:underline"
+            >
+              See why
+            </Link>
+          )}
         </p>
       )}
 
@@ -376,7 +441,7 @@ export function LessonComplete({
           href={pathHref}
           className={buttonVariants({ variant: "outline", size: "lg" })}
         >
-          Back to learning path
+          {practice ? "More practice" : "Back to learning path"}
         </Link>
         <Link
           href="/home"

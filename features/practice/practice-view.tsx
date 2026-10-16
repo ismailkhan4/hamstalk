@@ -17,6 +17,7 @@ import { findLesson } from "@/content/courses/de/curriculum"
 import { getLesson } from "@/content/courses/de/lessons/registry"
 import type { NotebookCounts, ReviewOverview } from "@/features/review/data"
 import { StrengthBars } from "@/features/review/strength-bars"
+import { PracticeModes } from "@/features/session-generator/components/practice-modes"
 import type { LessonProgress } from "@/features/path/model"
 import { cn } from "@/lib/utils"
 
@@ -26,6 +27,8 @@ type PracticeViewProps = {
   counts: NotebookCounts
   overview: ReviewOverview
   progress: LessonProgress[]
+  /** Units whose Express run is passed. */
+  expressPassed?: string[]
 }
 
 function finishedLessons(progress: LessonProgress[]) {
@@ -90,6 +93,7 @@ export function PracticeView({
   counts,
   overview,
   progress,
+  expressPassed = [],
 }: PracticeViewProps) {
   const due = overview.due.length
   const lessons = finishedLessons(progress)
@@ -105,6 +109,12 @@ export function PracticeView({
           Short sessions for what you need today. Everything here uses words you
           have already met.
         </p>
+
+        <PracticeModes
+          progress={progress}
+          mistakes={counts.mistakes}
+          expressPassed={expressPassed}
+        />
 
         <section
           aria-labelledby="review-title"
@@ -263,7 +273,7 @@ export function PracticeView({
               Practise a finished lesson
             </h2>
             <p className="mt-1 text-secondary-text">
-              Replays don’t change your progress or points.
+              Replays earn a little practice XP and don’t change your progress.
             </p>
             <ul className="mt-4 divide-y divide-border-subtle border-y border-border-subtle">
               {lessons.map((lesson) => (

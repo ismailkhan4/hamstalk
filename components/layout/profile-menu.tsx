@@ -1,7 +1,14 @@
 "use client"
 
 import { Menu } from "@base-ui/react/menu"
-import { ChevronUp, History, ListChecks, LogOut, Settings } from "lucide-react"
+import {
+  ChevronUp,
+  CircleUserRound,
+  History,
+  ListChecks,
+  LogOut,
+  Settings,
+} from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useTransition } from "react"
 
@@ -69,6 +76,16 @@ export function ProfileMenu({
               <p className="truncate text-xs text-muted-foreground">{email}</p>
             </div>
             <Menu.Separator className="my-1 h-px bg-border-subtle" />
+            <Menu.Item
+              className={itemClass}
+              onClick={() => router.push("/profile")}
+            >
+              <CircleUserRound
+                aria-hidden="true"
+                className="size-[18px] text-muted-foreground"
+              />
+              Your public profile
+            </Menu.Item>
             <Menu.Item
               className={itemClass}
               onClick={() => router.push("/settings")}

@@ -28,6 +28,8 @@ function contentSecurityPolicy() {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self'",
+    // Recorded speech is served from Supabase Storage.
+    ["media-src 'self'", supabaseOrigin()].filter(Boolean).join(" "),
     // PostHog needs no entry: it's proxied through /ingest on our own origin.
     ["connect-src 'self'", ...connect].join(" "),
     "worker-src 'self' blob:",

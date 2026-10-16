@@ -6,7 +6,7 @@ import { z } from "zod"
  */
 export const rewardsSchema = z.object({
   awarded: z.number().int().min(0),
-  source: z.enum(["lesson", "lesson_replay", "review", "standup"]),
+  source: z.enum(["lesson", "lesson_replay", "review", "standup", "practice"]),
   xpToday: z.number().int().min(0),
   goalXp: z.number().int().positive(),
   goalReached: z.boolean(),
@@ -19,11 +19,30 @@ export const rewardsSchema = z.object({
     freezeEarned: z.boolean(),
     freezes: z.number().int().min(0).max(2),
   }),
+  // From earn() (economy.sql). Absent when only award_xp() is set up.
+  boosted: z.number().int().min(0).default(0),
+  nuts: z
+    .object({
+      earned: z.number().int().min(0),
+      balance: z.number().int().min(0),
+    })
+    .nullable()
+    .default(null),
+  quests: z
+    .array(z.object({ id: z.string(), reward: z.number().int() }))
+    .default([]),
+  pins: z
+    .array(z.object({ pin: z.string(), tier: z.number().int().min(1) }))
+    .default([]),
+  akku: z.number().int().min(0).max(5).nullable().default(null),
+  akkuCharged: z.boolean().default(false),
 })
 
 export type Rewards = z.infer<typeof rewardsSchema>
+export type RewardsInput = z.input<typeof rewardsSchema>
 
-export type XpSource = "lesson" | "lesson_replay" | "review" | "standup"
+export type XpSource =
+  "lesson" | "lesson_replay" | "review" | "standup" | "practice"
 
 /** Whether there is anything worth stopping the learner for. */
 export function isCelebration(rewards: Rewards | null | undefined) {

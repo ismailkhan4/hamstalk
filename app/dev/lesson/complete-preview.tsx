@@ -2,7 +2,7 @@
 
 import { getLesson } from "@/content/courses/de/lessons/registry"
 import { LessonComplete } from "@/features/lessons/components/lesson-complete"
-import type { Rewards } from "@/features/rewards/payload"
+import { rewardsSchema, type Rewards } from "@/features/rewards/payload"
 import {
   recordOutcome,
   startSession,
@@ -16,14 +16,16 @@ export type PreviewRewards = {
   frozen?: number
   earned?: boolean
   goal?: boolean
+  /** Nuts, finished quests and a new pin. */
+  stash?: boolean
 }
 
 const MILESTONES = [3, 7, 14, 30, 50, 100]
 
 function previewRewards(input: PreviewRewards): Rewards | null {
-  if (input.streak === undefined && !input.goal) return null
+  if (input.streak === undefined && !input.goal && !input.stash) return null
   const after = input.streak ?? 4
-  return {
+  return rewardsSchema.parse({
     awarded: 30,
     source: "lesson",
     xpToday: 30,
@@ -38,7 +40,15 @@ function previewRewards(input: PreviewRewards): Rewards | null {
       freezeEarned: Boolean(input.earned),
       freezes: input.earned ? 1 : 0,
     },
-  }
+    nuts: input.stash ? { earned: 55, balance: 240 } : null,
+    quests: input.stash
+      ? [
+          { id: "xp-30", reward: 15 },
+          { id: "lessons-1", reward: 10 },
+        ]
+      : [],
+    pins: input.stash ? [{ pin: "stations", tier: 1 }] : [],
+  })
 }
 
 export function CompletePreview({

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 import { check, retry, startAttempt, type Attempt } from "../engine/attempt"
+import { useMaxTries } from "../engine/tries-context"
 import { buildText, gradeBuild } from "../engine/grading"
 import { buildMistake } from "../engine/mistakes"
 import { personalise, type BuildExercise } from "../schema"
@@ -26,6 +27,7 @@ export function BuildView({
 }: BuildViewProps) {
   const [placed, setPlaced] = useState<number[]>([])
   const [attempt, setAttempt] = useState<Attempt>(startAttempt)
+  const maxTries = useMaxTries()
   const answering = attempt.phase === "answering"
   const need = exercise.answer.length
   const complete = placed.length === need
@@ -36,7 +38,7 @@ export function BuildView({
   const answerText = personalise(buildText(exercise, exercise.answer), learner)
 
   function onCheck() {
-    const next = check(attempt, gradeBuild(exercise, placed))
+    const next = check(attempt, gradeBuild(exercise, placed), maxTries)
     setAttempt(next)
     if (next.phase === "wrong")
       onMiss(buildMistake(lessonId, index, exercise, placed))

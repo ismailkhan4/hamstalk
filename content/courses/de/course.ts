@@ -24,6 +24,51 @@ export const german: Course = {
     reviewDone: "Wiederholung geschafft!",
     unitDone: (unit) => `Einheit ${unit} geschafft!`,
     greeting: (name) => `Hallo, ${name}!`,
+    youAreHere: "Du bist hier",
+    terminus: "Endstation",
+    underConstruction: "Baustelle",
+    dailyPlan: "Tagesplan",
+    stash: "Vorrat",
+    akku: "Akku",
+    akkuEmpty: "Akku leer",
+    league: "Liga",
+    divisions: [
+      "Kreisklasse",
+      "Kreisliga",
+      "Bezirksliga",
+      "Landesliga",
+      "Verbandsliga",
+      "Oberliga",
+      "Regionalliga",
+      "3. Liga",
+      "2. Bundesliga",
+      "Bundesliga",
+    ],
+    promoted: "Aufstieg!",
+    stayed: "Klassenerhalt",
+    relegated: "Abstieg",
+    finalWhistle: "Abpfiff",
   },
   world: { company: "Kaffeesatz GmbH", city: "Berlin" },
+  // Paste voice ids from your ElevenLabs Voice Library: native German voices that fit each person.
+  // Characters left empty use the narrator's voice.
+  voices: {
+    narrator: "pFZP5JQG7iQjIQuC4Bku", // Words and prompts: clear, neutral, mid-pace
+    lf: "pFZP5JQG7iQjIQuC4Bku", // Lena Fischer, team lead: calm, clear, thirties
+    jk: "onwK4e9ZLuTAKqWW03F9", // Jonas Krüger, backend: quick, friendly, late twenties
+    ao: "pFZP5JQG7iQjIQuC4Bku", // Aylin Öztürk, design: curious, direct
+    aw: "onwK4e9ZLuTAKqWW03F9", // Anna Weber, mobile developer: young, relaxed
+    mb: "onwK4e9ZLuTAKqWW03F9", // Mia Braun, reception: warm, welcoming
+    bk: "onwK4e9ZLuTAKqWW03F9", // Frau Krüger, bakery: older, polite
+    cm: "pFZP5JQG7iQjIQuC4Bku", // Clara Meyer, design: warm, chatty
+  },
+  pacers: [
+    { id: "lf", name: "Lena F.", initials: "LF", role: "Team lead" },
+    { id: "jk", name: "Jonas K.", initials: "JK", role: "Backend" },
+    { id: "ao", name: "Aylin Ö.", initials: "AÖ", role: "Design" },
+    { id: "aw", name: "Anna W.", initials: "AW", role: "Mobile app" },
+    { id: "mb", name: "Mia B.", initials: "MB", role: "Reception" },
+    { id: "bk", name: "Frau Krüger", initials: "FK", role: "Bakery" },
+    { id: "cm", name: "Clara M.", initials: "CM", role: "Design" },
+  ],
 }

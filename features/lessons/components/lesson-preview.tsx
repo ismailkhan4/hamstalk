@@ -11,7 +11,11 @@ import {
 } from "../engine/fixtures"
 import { getLesson } from "@/content/courses/de/lessons/registry"
 
-import { LessonRunner, type LessonActions } from "./lesson-runner"
+import {
+  LessonRunner,
+  type LessonActions,
+  type LessonRunnerProps,
+} from "./lesson-runner"
 
 const listening = exerciseSchema.parse({
   type: "choice",
@@ -86,6 +90,14 @@ type PreviewProps = {
   replay?: boolean
   resume?: boolean
   lessonId?: string
+  /** The Akku and nuts at the start; omit for no stash at all. */
+  stash?: LessonRunnerProps["stash"]
+  /** A built lesson to play instead of a registered one, e.g. a practice session. */
+  lesson?: LessonRunnerProps["lesson"]
+  tries?: number
+  practice?: LessonRunnerProps["practice"]
+  /** What finishing reports, e.g. an Express pass. */
+  passed?: boolean | null
 }
 
 /** Development only: the real runner with stand-in actions, so every state can be checked without an account. */
@@ -94,8 +106,14 @@ export function LessonPreview({
   replay = false,
   resume = false,
   lessonId,
+  stash = null,
+  lesson: built,
+  tries,
+  practice,
+  passed = null,
 }: PreviewProps) {
-  const lesson = (lessonId ? getLesson(lessonId) : null) ?? previewLesson
+  const lesson =
+    built ?? (lessonId ? getLesson(lessonId) : null) ?? previewLesson
   const result = failSaves
     ? {
         ok: false as const,
@@ -105,9 +123,11 @@ export function LessonPreview({
     : { ok: true as const }
   const actions: LessonActions = {
     saveProgress: async () => result,
-    complete: async () => result,
+    complete: async () => (result.ok ? { ...result, passed } : result),
     recordMistake: async () => ({ ok: true }),
     savePhrase: async () => ({ ok: true }),
+    drainAkku: async () => null,
+    rechargeAkku: async () => ({ ok: true }),
   }
   return (
     <LessonRunner
@@ -143,6 +163,9 @@ export function LessonPreview({
       exitHref="/styleguide"
       pathHref="/styleguide/path"
       actions={actions}
+      stash={stash}
+      tries={tries}
+      practice={practice}
     />
   )
 }
