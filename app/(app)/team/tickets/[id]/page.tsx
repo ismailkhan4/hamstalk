@@ -6,7 +6,7 @@ import { DatabaseNotReady } from "@/features/onboarding/database-not-ready"
 import { loadTaskLearner } from "@/features/team/task-access"
 import { TicketScreen } from "@/features/team/ticket-screen"
 
-export const metadata: Metadata = { title: "Ticket KLAR-142" }
+export const metadata: Metadata = { title: "Ticket HAMS-142" }
 
 type Props = { params: Promise<{ id: string }> }
 

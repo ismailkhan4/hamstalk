@@ -15,7 +15,7 @@ export const SPEECH_PASS = 0.8
 /** Below this confidence (about 55%) a heard word is marked "say it again", but still counts. */
 export const UNSURE_LOGPROB = Math.log(0.55)
 
-const NUMBERS = [
+const ONES = [
   "null",
   "eins",
   "zwei",
@@ -36,12 +36,40 @@ const NUMBERS = [
   "siebzehn",
   "achtzehn",
   "neunzehn",
+]
+const TENS = [
+  "",
+  "",
   "zwanzig",
+  "dreißig",
+  "vierzig",
+  "fünfzig",
+  "sechzig",
+  "siebzig",
+  "achtzig",
+  "neunzig",
 ]
 
 /**
- * Lower case, ß as ss, umlauts as ae/oe/ue (so "Buero" = "Büro"), no punctuation, and digits up to
- * 20 as words ("8 Uhr" = "acht Uhr").
+ * A number from 0 to 999 as one German word: 42 is "zweiundvierzig", ones before tens. Speech
+ * recognition writes numbers either way, so both sides are compared as words.
+ */
+export function germanNumber(n: number): string {
+  if (n < 20) return ONES[n]!
+  if (n < 100) {
+    const one = n % 10
+    const ten = TENS[Math.floor(n / 10)]!
+    return one === 0 ? ten : `${one === 1 ? "ein" : ONES[one]}und${ten}`
+  }
+  const rest = n % 100
+  const hundreds = Math.floor(n / 100)
+  return `${hundreds === 1 ? "" : ONES[hundreds]}hundert${rest ? germanNumber(rest) : ""}`
+}
+
+/**
+ * Lower case, ß as ss, umlauts as ae/oe/ue (so "Buero" = "Büro"), no punctuation, and numbers up
+ * to 999 as words ("8 Uhr" = "acht Uhr", "Ticket 42" = "Ticket zweiundvierzig"). Phone-style
+ * digits ("0151") become one word per digit, and zwo, the phone word for two, counts as zwei.
  */
 export function speechWords(text: string, locale = "de"): string[] {
   return text
@@ -55,11 +83,15 @@ export function speechWords(text: string, locale = "de"): string[] {
     .split(/[\s-]+/)
     .map((word) => word.replace(/^'+|'+$/g, ""))
     .filter(Boolean)
-    .map((word) =>
-      /^\d+$/.test(word) && Number(word) <= 20
-        ? speechWords(NUMBERS[Number(word)]!, locale)[0]!
-        : word
-    )
+    .flatMap((word) => {
+      if (!/^\d+$/.test(word)) return [word === "zwo" ? "zwei" : word]
+      // Phone numbers and codes ("0151") are read digit by digit, other numbers as one word.
+      const digits =
+        word.length > 3 || (word.length > 1 && word.startsWith("0"))
+      return (digits ? [...word].map(Number) : [Number(word)]).map(
+        (n) => speechWords(germanNumber(n), locale)[0]!
+      )
+    })
 }
 
 function oneEditApart(a: string, b: string) {
@@ -107,10 +139,13 @@ export type SpeechGrade = {
 function gradeLine(line: string, heard: HeardWord[]): SpeechGrade {
   const shown = line.split(/\s+/).filter((word) => speechWords(word).length)
   const expected = shown.map((word) => speechWords(word).join(" "))
-  const said = heard.map((word) => ({
-    word: speechWords(word.text).join(" "),
-    logprob: word.logprob,
-  }))
+  // One heard word can be several spoken ones ("0151" is four digits), each as sure as the whole.
+  const said = heard.flatMap((word) =>
+    speechWords(word.text).map((part) => ({
+      word: part,
+      logprob: word.logprob,
+    }))
+  )
 
   const rows = expected.length + 1
   const cols = said.length + 1

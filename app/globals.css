@@ -122,12 +122,15 @@
   --pflaume-d300: #c2b3ff;
   --beere-d400: #f07ccb;
   --beere-d300: #f5a6dd;
-  /* Hamsti, the hamster. Only the mascot reads these. */
+  /* Hamsti, the hamster. Only the mascot and the logo read these. */
   --hamster-fur: #eda55a;
   --hamster-fur-dark: #d18636;
   --hamster-cream: #fde6c8;
   --hamster-pink: #ff9aa8;
   --hamster-eye: #1d2b33;
+  /* The logo's chat bubble and its ink. The same in both themes, like an app icon. */
+  --logo-paper: #fff7ec;
+  --logo-ink: var(--klee-900);
 }
 
 :root {

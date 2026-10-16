@@ -200,9 +200,9 @@ export function TeamView({
                 {
                   icon: <Ticket aria-hidden="true" className="size-4" />,
                   kind: "Task · 11:00",
-                  title: "Ticket KLAR-142: test the new sign-in",
+                  title: "Ticket HAMS-142: test the new sign-in",
                   text: "Read the ticket and tell Lena what you’re doing today.",
-                  href: "/team/tickets/KLAR-142",
+                  href: "/team/tickets/HAMS-142",
                   action: "Open ticket",
                 },
                 {

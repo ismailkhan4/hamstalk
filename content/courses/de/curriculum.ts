@@ -500,12 +500,116 @@ const a1Units: Unit[] = [
     grammar:
       "Times with um and am. After a time word the verb stays second: Um zehn beginnt das Meeting.",
     skills: ["Listening", "Speaking", "Vocabulary"],
-    lessons: lessonsPlanned("a1-u4", [
-      ["Zahlen 0 bis 100", true],
-      ["Wie spät ist es?", true],
-      ["Termine", true],
-      ["Datum und Telefon", true],
-    ]),
+    milestone: {
+      summary:
+        "You can catch numbers, tell the time, and say on which day and at what time you’re free or busy.",
+      canDo: [
+        "Understand ticket, room and phone numbers",
+        "Say when a meeting starts, with um and halb",
+        "Say when you have an appointment, keeping the verb second",
+      ],
+      standup: {
+        target: "Um zehn habe ich einen Termin.",
+        native: "At ten I have an appointment.",
+      },
+    },
+    lessons: [
+      {
+        id: "a1-u4-l1",
+        title: "Zahlen 0 bis 100",
+        titleInTarget: true,
+        goal: "Count to 100 and catch ticket and room numbers",
+        minutes: 8,
+        exercises: 10,
+        kind: "lesson",
+        mission: {
+          description:
+            "From zwölf to zweiundvierzig in ten short exercises: rooms, tickets and the team, all by number.",
+          quote: {
+            person: "jk",
+            initials: "JK",
+            target: "Schau mal: Ticket zweiundvierzig.",
+            native: "Jonas, on your second day.",
+          },
+        },
+      },
+      {
+        id: "a1-u4-l2",
+        title: "Wie spät ist es?",
+        titleInTarget: true,
+        goal: "Ask the time, tell it, and say when something starts",
+        minutes: 8,
+        exercises: 10,
+        kind: "lesson",
+        mission: {
+          description:
+            "Wie spät ist es? and halb zehn in ten short exercises: the stand-up, a meeting and a coffee, all on the clock.",
+          quote: {
+            person: "lf",
+            initials: "LF",
+            target: "Das Stand-up ist um halb zehn.",
+            native: "Lena, checking the calendar.",
+          },
+        },
+      },
+      {
+        id: "a1-u4-l3",
+        title: "Termine",
+        titleInTarget: true,
+        goal: "Name the weekdays and say when you have an appointment",
+        minutes: 8,
+        exercises: 10,
+        kind: "lesson",
+        mission: {
+          description:
+            "Days, heute and morgen in ten short exercises, with the verb in second place when your calendar fills up.",
+          quote: {
+            person: "mb",
+            initials: "MB",
+            target: "Morgen um zehn haben Sie einen Termin.",
+            native: "Mia, at reception.",
+          },
+        },
+      },
+      {
+        id: "a1-u4-l4",
+        title: "Datum und Telefon",
+        titleInTarget: true,
+        goal: "Say a date and give your phone number",
+        minutes: 9,
+        exercises: 10,
+        kind: "lesson",
+        mission: {
+          description:
+            "der erste, am dritten and zwo in ten short exercises: Frau Wagner from HR fills in your details.",
+          quote: {
+            person: "mb",
+            initials: "FW",
+            target: "Wie ist Ihre Telefonnummer?",
+            native: "Frau Wagner, from HR.",
+          },
+        },
+      },
+      {
+        id: "a1-u4-review",
+        title: "Unit review",
+        titleInTarget: false,
+        goal: "Plan your week with Lena: numbers, times, days and phone numbers",
+        minutes: 8,
+        exercises: 8,
+        kind: "review",
+        mission: {
+          description:
+            "Eight exercises that bring back Lessons 1 to 4 as you book a meeting with Lena. Nothing new; it shows what to practise next.",
+          quote: {
+            person: "lf",
+            initials: "LF",
+            target: "Lass uns die Woche planen!",
+            native: "Lena, with the team calendar.",
+          },
+        },
+      },
+    ],
   },
   {
     id: "a1-u5",

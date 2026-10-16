@@ -14,7 +14,7 @@ export type Gloss = {
 }
 
 export const ticket = {
-  id: "KLAR-142",
+  id: "HAMS-142",
   title: { target: "Neue Anmeldung testen", native: "Test the new sign-in" },
   status: { target: "Offen", native: "open" },
   fields: [
