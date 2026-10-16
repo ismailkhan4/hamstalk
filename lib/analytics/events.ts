@@ -53,6 +53,10 @@ export type AnalyticsEvents = {
   }
   /** Hamsti explained a missed answer. */
   answer_explained: { lesson_id: string }
+  /** The learner followed another learner. */
+  friend_followed: Record<string, never>
+  /** The learner nudged a friend who hadn't practised yet today. */
+  friend_nudged: { delivered: boolean }
   /** A roleplay with a team character was finished. */
   roleplay_completed: { scenario: string; turns: number; score: number }
   /** A quest from today's plan was finished and paid out. */

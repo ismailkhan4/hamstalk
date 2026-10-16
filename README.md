@@ -145,6 +145,21 @@ Every listen button plays the line in its speaker's own voice, recorded with Ele
 Setup: apply `audio.sql`, set `ELEVENLABS_API_KEY` and `SUPABASE_SECRET_KEY`, paste the voice ids,
 then run `bun run audio:generate --write`.
 
+## Friends
+
+Apply `supabase/migrations/friends.sql` after `leagues.sql` and `reminders.sql`. Until then,
+friends stay hidden.
+
+- **Follow:** one-way and without approval, like Duolingo's: anyone can follow a public profile
+  from `/u/<handle>`. Private profiles can't be followed or found, and drop out of every friend
+  list until they're public again.
+- **Find:** search by name or @handle on the league page, or share your profile link.
+- **Friends this week:** the league page shows you and everyone you follow by XP this league week.
+- **Nudge:** a push reminder to a friend, only when you follow each other and they haven't
+  practised yet today; once per friend per day, five per learner per day, and never to someone who
+  turned nudges off on their profile. Delivery uses the push setup from reminders (VAPID keys and
+  `SUPABASE_SECRET_KEY`).
+
 ## Speaking exercises
 
 `speak` exercises ask the learner to say a line aloud. The browser records it (10 seconds at

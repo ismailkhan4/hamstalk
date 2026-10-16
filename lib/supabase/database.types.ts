@@ -455,11 +455,16 @@ export type Database = {
           handle: string
           display_name: string
           is_public: boolean
+          allow_nudges: boolean
           created_at: string
           updated_at: string
         }
         Insert: never
-        Update: { display_name?: string; is_public?: boolean }
+        Update: {
+          display_name?: string
+          is_public?: boolean
+          allow_nudges?: boolean
+        }
         Relationships: []
       }
       streaks: {
@@ -503,6 +508,12 @@ export type Database = {
         Args: { p_chars: number; p_daily_chars: number }
         Returns: boolean
       }
+      follow: { Args: { p_handle: string }; Returns: boolean }
+      unfollow: { Args: { p_handle: string }; Returns: undefined }
+      profile_friends: { Args: { p_handle: string }; Returns: Json }
+      friends_week: { Args: Record<PropertyKey, never>; Returns: Json }
+      find_learners: { Args: { p_query: string }; Returns: Json }
+      nudge: { Args: { p_handle: string }; Returns: string }
       speech_allow: { Args: { p_daily_total: number }; Returns: boolean }
       finish_practice: {
         Args: { p_id: string; p_outcomes: string[] }
