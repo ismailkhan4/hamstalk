@@ -79,7 +79,7 @@ export async function sendEmail(
 <tr><td>
 <p style="margin:0 0 4px;font-size:22px;font-weight:700;color:#1d2b33">${escape(message.title)}</p>
 <p style="margin:0 0 20px;font-size:16px;color:#4a5a54">${escape(message.body)}</p>
-<a href="${escape(message.url)}" style="display:inline-block;background:#34c759;color:#0f2a17;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:12px">Open Hamstalk</a>
+<a href="${escape(message.url)}" style="display:inline-block;background:#14b8a6;color:#042f2c;font-weight:700;text-decoration:none;padding:12px 22px;border-radius:12px">Open Hamstalk</a>
 <p style="margin:24px 0 0;font-size:13px;color:#7a8a84">You get this because reminders are on. <a href="${escape(settingsUrl)}" style="color:#7a8a84">Change reminders</a></p>
 </td></tr></table></td></tr></table></body></html>`
   try {

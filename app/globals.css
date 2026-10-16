@@ -27,6 +27,18 @@
   --klee-700: #0f7a37;
   --klee-800: #0b5f2b;
   --klee-900: #053b1c;
+  /* Lagune: the brand colour, teal. Klee (green) now means only "right". */
+  --lagune-50: #e6f8f5;
+  --lagune-100: #ccf1eb;
+  --lagune-200: #99e3d8;
+  --lagune-300: #5fd3c3;
+  --lagune-400: #14b8a6;
+  --lagune-450: #22c4b2;
+  --lagune-500: #10a596;
+  --lagune-600: #0d8a7d;
+  --lagune-700: #0b6f66;
+  --lagune-800: #08544e;
+  --lagune-900: #042f2c;
   /* Himmel (sky): selection and info */
   --himmel-50: #e8f4fe;
   --himmel-100: #d0e9fd;
@@ -110,6 +122,8 @@
   /* Vivid tints for dark mode */
   --klee-d400: #4ad97a;
   --klee-d300: #6fe39a;
+  --lagune-d400: #2dd4bf;
+  --lagune-d300: #5eead4;
   --himmel-d400: #5bb8fa;
   --himmel-d300: #92d0ff;
   --kirsch-d400: #ff6b76;
@@ -130,7 +144,7 @@
   --hamster-eye: #1d2b33;
   /* The logo's chat bubble and its ink. The same in both themes, like an app icon. */
   --logo-paper: #fff7ec;
-  --logo-ink: var(--klee-900);
+  --logo-ink: var(--lagune-900);
 }
 
 :root {
@@ -155,15 +169,15 @@
   --border-edge: var(--snow-200);
   --input: var(--snow-450);
   --ring: var(--himmel-500);
-  --primary: var(--klee-400);
-  --primary-hover: var(--klee-450);
-  --primary-active: var(--klee-500);
-  --primary-edge: var(--klee-600);
-  --primary-foreground: var(--klee-900);
-  --primary-subtle: var(--klee-50);
-  --primary-subtle-hover: var(--klee-100);
-  --primary-border: var(--klee-200);
-  --primary-text: var(--klee-700);
+  --primary: var(--lagune-400);
+  --primary-hover: var(--lagune-450);
+  --primary-active: var(--lagune-500);
+  --primary-edge: var(--lagune-600);
+  --primary-foreground: var(--lagune-900);
+  --primary-subtle: var(--lagune-50);
+  --primary-subtle-hover: var(--lagune-100);
+  --primary-border: var(--lagune-200);
+  --primary-text: var(--lagune-700);
   --secondary: var(--snow-50);
   --secondary-hover: var(--snow-100);
   --secondary-edge: var(--snow-200);
@@ -236,7 +250,7 @@
   --article-der: var(--himmel-700);
   --article-die: var(--beere-700);
   --article-das: var(--senf-700);
-  --chart-1: var(--klee-500);
+  --chart-1: var(--lagune-500);
   --chart-2: var(--senf-500);
   --chart-3: var(--himmel-400);
   --chart-4: var(--beere-500);
@@ -244,12 +258,12 @@
   --skeleton: var(--snow-50);
   --skeleton-highlight: var(--snow-25);
   --backdrop: rgb(20 28 32 / 0.5);
-  --deep: var(--klee-800);
+  --deep: var(--lagune-800);
   --deep-foreground: var(--snow-0);
-  --deep-muted: var(--klee-200);
-  --deep-line: #1a7a3d;
-  --deep-raise: #0d6a31;
-  --mint: var(--klee-300);
+  --deep-muted: var(--lagune-200);
+  --deep-line: #0e6e66;
+  --deep-raise: #0a615a;
+  --mint: var(--lagune-300);
   --neutral-border: var(--snow-300);
   --person-lf: #d5f5df;
   --person-lf-foreground: #0b5f2b;
@@ -292,15 +306,15 @@
   --border-edge: var(--night-600);
   --input: var(--night-400);
   --ring: var(--himmel-d400);
-  --primary: var(--klee-d400);
-  --primary-hover: var(--klee-d300);
-  --primary-active: #3cc56b;
-  --primary-edge: #23994d;
-  --primary-foreground: #04210f;
-  --primary-subtle: #0f2a1b;
-  --primary-subtle-hover: #143524;
-  --primary-border: #1f6b3d;
-  --primary-text: var(--klee-d300);
+  --primary: var(--lagune-d400);
+  --primary-hover: var(--lagune-d300);
+  --primary-active: #26bfab;
+  --primary-edge: #17998a;
+  --primary-foreground: #032724;
+  --primary-subtle: #0d2a27;
+  --primary-subtle-hover: #12352f;
+  --primary-border: #1b6b62;
+  --primary-text: var(--lagune-d300);
   --secondary: var(--night-750);
   --secondary-hover: var(--night-700);
   --secondary-edge: var(--night-900);
@@ -369,7 +383,7 @@
   --article-der: var(--himmel-d300);
   --article-die: var(--beere-d300);
   --article-das: var(--senf-d300);
-  --chart-1: var(--klee-d400);
+  --chart-1: var(--lagune-d400);
   --chart-2: var(--senf-d400);
   --chart-3: var(--himmel-d400);
   --chart-4: var(--beere-d400);
@@ -377,12 +391,12 @@
   --skeleton: var(--night-850);
   --skeleton-highlight: var(--night-800);
   --backdrop: rgb(0 0 0 / 0.72);
-  --deep: #0f2a1b;
+  --deep: #0d2a27;
   --deep-foreground: var(--night-50);
-  --deep-muted: #a3e8b8;
-  --deep-line: #1f6b3d;
-  --deep-raise: #143524;
-  --mint: var(--klee-d300);
+  --deep-muted: #99e3d8;
+  --deep-line: #1b6b62;
+  --deep-raise: #12352f;
+  --mint: var(--lagune-d300);
   --neutral-border: var(--night-600);
   --person-lf: #143524;
   --person-lf-foreground: #a3e8b8;

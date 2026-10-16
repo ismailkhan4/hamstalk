@@ -3,7 +3,7 @@ import confetti from "canvas-confetti"
 import { feedbackPreferences } from "@/lib/appearance"
 
 const TOKENS = ["--primary", "--reward", "--spark", "--info", "--level-b1"]
-const FALLBACK = ["#3ccf6a", "#ffc531", "#ff9a3d", "#1769c2", "#7b4fe0"]
+const FALLBACK = ["#14b8a6", "#ffc531", "#ff9a3d", "#1769c2", "#7b4fe0"]
 
 /** The brand colours as the current theme resolves them. */
 function colours() {
