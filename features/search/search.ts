@@ -44,7 +44,7 @@ export function resultCount(results: SearchResults) {
 }
 
 /**
- * Searches what Klarlingo really has: the A1 lessons (planned ones are labelled), the words taught in
+ * Searches what Hamstalk really has: the A1 lessons (planned ones are labelled), the words taught in
  * finished lesson content, and the learner's saved phrases. German matches with or without umlauts.
  */
 export function searchAll(

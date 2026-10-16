@@ -10,7 +10,7 @@ import {
 
 import { posthogHosts } from "@/lib/analytics/hosts"
 
-const LOGGER_NAME = "klarlingo.posthog"
+const LOGGER_NAME = "hamstalk.posthog"
 
 let loggerProvider: LoggerProvider | null = null
 
@@ -42,7 +42,7 @@ export function initializePostHogLogExporter() {
   }
 
   loggerProvider = new LoggerProvider({
-    resource: resourceFromAttributes({ "service.name": "klarlingo" }),
+    resource: resourceFromAttributes({ "service.name": "hamstalk" }),
     processors: [
       new BatchLogRecordProcessor({
         exporter: new OTLPLogExporter({

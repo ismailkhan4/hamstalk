@@ -20,7 +20,7 @@ import { ListenButton } from "./listen-button"
 import type { ExerciseProps } from "./types"
 
 /** "Can't speak now" pauses speaking exercises for an hour, on this device. */
-const PAUSE_KEY = "klarlingo:speaking-paused-until"
+const PAUSE_KEY = "hamstalk:speaking-paused-until"
 const PAUSE_MS = 60 * 60 * 1000
 
 function pausedNow() {

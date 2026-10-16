@@ -13,7 +13,7 @@ export const cta = { start: "Start Monday", signIn: "Sign in" }
 export const hero = {
   kicker: "Monday, 09:00 · Kaffeesatz GmbH, Berlin",
   title: "Your new team speaks German.",
-  lede: "Klarlingo teaches you German one workday at a time: the standup, the bug, the coffee break. Five minutes a lesson, with a hamster cheering you on.",
+  lede: "Hamstalk teaches you German one workday at a time: the standup, the bug, the coffee break. Five minutes a lesson, with a hamster cheering you on.",
   signInPrompt: "Already on the team?",
 }
 
@@ -216,7 +216,7 @@ export const faq = {
     },
     {
       q: "Does it work on my phone?",
-      a: "Yes. Klarlingo runs in your browser and installs to your home screen like an app.",
+      a: "Yes. Hamstalk runs in your browser and installs to your home screen like an app.",
     },
     {
       q: "How long until I’m fluent?",

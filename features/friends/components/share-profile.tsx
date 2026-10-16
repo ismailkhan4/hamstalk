@@ -23,7 +23,7 @@ export function ShareProfile({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Learn German with me on Klarlingo",
+          title: "Learn German with me on Hamstalk",
           url,
         })
         return

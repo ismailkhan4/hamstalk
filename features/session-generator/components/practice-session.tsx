@@ -38,7 +38,7 @@ const EMPTY: Record<string, { title: string; body: string }> = {
   },
   "not-set-up": {
     title: "Practice isn’t set up yet",
-    body: "Practice sessions need the adaptive migration. If you run this copy of Klarlingo, apply supabase/migrations/adaptive.sql.",
+    body: "Practice sessions need the adaptive migration. If you run this copy of Hamstalk, apply supabase/migrations/adaptive.sql.",
   },
 }
 

@@ -2,6 +2,11 @@
 
 import { useCallback, useSyncExternalStore } from "react"
 
+import { moveLegacyKeys } from "./stored-keys"
+
+// Every page loads this module (AppearanceSync is in the root layout), before anything reads storage.
+if (typeof window !== "undefined") moveLegacyKeys()
+
 export const MOTION_OPTIONS = ["system", "reduce"] as const
 export const TEXT_SIZE_OPTIONS = ["default", "large"] as const
 export const TOGGLE_OPTIONS = ["on", "off"] as const
@@ -11,12 +16,12 @@ export type TextSize = (typeof TEXT_SIZE_OPTIONS)[number]
 export type Toggle = (typeof TOGGLE_OPTIONS)[number]
 
 const KEYS = {
-  motion: "klarlingo-motion",
-  textSize: "klarlingo-text-size",
-  sound: "klarlingo-sound",
-  haptics: "klarlingo-haptics",
+  motion: "hamstalk-motion",
+  textSize: "hamstalk-text-size",
+  sound: "hamstalk-sound",
+  haptics: "hamstalk-haptics",
 }
-const CHANGE_EVENT = "klarlingo-appearance"
+const CHANGE_EVENT = "hamstalk-appearance"
 
 function read<T extends string>(
   key: string,

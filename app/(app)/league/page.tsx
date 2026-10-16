@@ -49,7 +49,7 @@ export default async function LeaguePage() {
             title="The league isn’t open yet"
           >
             Weekly leagues need the leagues migration. If you run this copy of
-            Klarlingo, apply supabase/migrations/leagues.sql.
+            Hamstalk, apply supabase/migrations/leagues.sql.
           </EmptyState>
         </main>
       )}

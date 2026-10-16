@@ -51,7 +51,7 @@ const BUSY = "The conversation paused. Try sending that again in a moment."
 
 function system(roleplay: Roleplay) {
   const language = ACTIVE_COURSE.language
-  return `You are playing a character in Klarlingo, an app where adults practise ${language} for a new job. The learner is a beginner (CEFR A1).
+  return `You are playing a character in Hamstalk, an app where adults practise ${language} for a new job. The learner is a beginner (CEFR A1).
 
 Character: ${roleplay.persona}
 Scene: ${roleplay.where}. ${roleplay.brief}
@@ -194,7 +194,7 @@ export async function finishRoleplayAction(
     const response = await client.beta.messages.parse({
       ...aiDefaults(),
       max_tokens: 3000,
-      system: `You review a short ${ACTIVE_COURSE.language} conversation that a beginner (A1) had in Klarlingo. Be encouraging and specific, in English.
+      system: `You review a short ${ACTIVE_COURSE.language} conversation that a beginner (A1) had in Hamstalk. Be encouraging and specific, in English.
 
 - stars: 1 to 3. 3 = every goal met with understandable ${ACTIVE_COURSE.language}; 2 = most goals or several mistakes; 1 = got going but needs another try.
 - summary: one or two sentences on how it went, addressed to the learner as "you".

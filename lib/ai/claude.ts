@@ -3,7 +3,7 @@ import "server-only"
 import Anthropic from "@anthropic-ai/sdk"
 
 /**
- * The Claude client for Klarlingo's AI features. Null when ANTHROPIC_API_KEY isn't set, so the
+ * The Claude client for Hamstalk's AI features. Null when ANTHROPIC_API_KEY isn't set, so the
  * features hide themselves instead of failing.
  */
 export function claude() {
@@ -13,8 +13,8 @@ export function claude() {
 
 export const aiEnabled = () => Boolean(process.env.ANTHROPIC_API_KEY)
 
-/** The model every AI feature uses. Override with KLARLINGO_AI_MODEL. */
-export const AI_MODEL = process.env.KLARLINGO_AI_MODEL || "claude-opus-5-5"
+/** The model every AI feature uses. Override with HAMSTALK_AI_MODEL. */
+export const AI_MODEL = process.env.HAMSTALK_AI_MODEL || "claude-opus-5-5"
 
 /**
  * Settings shared by every call: a declined request is retried server-side on Anthropic's

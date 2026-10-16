@@ -11,7 +11,7 @@ export function LandingHeader() {
   return (
     <header className="sticky top-0 z-(--z-header) border-b-2 border-border-subtle bg-background/90 backdrop-blur-md">
       <div className="mx-auto flex h-17 max-w-280 items-center gap-2 px-4 sm:px-6">
-        <a href="#top" aria-label="Klarlingo home" className="mr-auto">
+        <a href="#top" aria-label="Hamstalk home" className="mr-auto">
           <Logo symbolClassName="size-[30px]" />
         </a>
         <ThemeToggle />

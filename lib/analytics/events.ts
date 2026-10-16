@@ -1,5 +1,5 @@
 /**
- * Every product event Klarlingo sends, with its properties. One list for the browser and the
+ * Every product event Hamstalk sends, with its properties. One list for the browser and the
  * server, so a dashboard or experiment never depends on an event name nobody sends. Add an event
  * here only when the feature that fires it ships.
  *

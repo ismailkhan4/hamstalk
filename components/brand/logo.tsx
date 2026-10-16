@@ -16,13 +16,13 @@ function LogoSymbol({ className, title }: SymbolProps) {
         stroke="var(--primary-foreground)"
         strokeWidth="4.5"
         strokeLinecap="round"
+        strokeLinejoin="round"
         fill="none"
       >
         <path d="M17 12v24" />
-        <path d="M17 29c0-7 5-12.5 12.5-13.5" />
-        <path d="M20 24.5 30.5 35.5" />
+        <path d="M17 27.5c0-5 3.6-8.5 7.5-8.5s7.5 3.5 7.5 8.5v8.5" />
       </g>
-      <circle cx="32.5" cy="15.5" r="5" fill="var(--spark)" />
+      <circle cx="33" cy="12.5" r="5" fill="var(--spark)" />
     </svg>
   )
 }
@@ -38,12 +38,9 @@ function Wordmark({ className }: { className?: string }) {
         className
       )}
     >
-      klarl
-      <span className="relative inline-block">
-        ı
-        <b className="absolute top-[0.02em] left-1/2 ml-[-0.1em] size-[0.2em] rounded-full bg-spark" />
-      </span>
-      ngo
+      hamstalk
+      {/* The spark from the symbol, as a full stop. */}
+      <b className="ml-[0.06em] inline-block size-[0.2em] rounded-full bg-spark" />
     </span>
   )
 }
@@ -53,7 +50,7 @@ function Logo({ className, symbolClassName }: LogoProps) {
     <span className={cn("inline-flex items-center gap-2.5", className)}>
       <LogoSymbol className={symbolClassName} />
       <Wordmark />
-      <span className="sr-only">Klarlingo</span>
+      <span className="sr-only">Hamstalk</span>
     </span>
   )
 }

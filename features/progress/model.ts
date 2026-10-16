@@ -16,7 +16,7 @@ const dayKey = (date: Date) =>
 
 /**
  * Lessons finished on each of the last seven days in the learner's own calendar, oldest first.
- * Counting lessons, not minutes: Klarlingo doesn't time sessions, so it doesn't claim a duration.
+ * Counting lessons, not minutes: Hamstalk doesn't time sessions, so it doesn't claim a duration.
  */
 export function weekBars(completedAt: string[], now: Date): DayBar[] {
   const days = Array.from({ length: 7 }, (_, i) => {

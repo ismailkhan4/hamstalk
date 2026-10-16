@@ -8,10 +8,10 @@ import { applyAppearance } from "@/lib/appearance"
 export function AppearanceSync() {
   useEffect(() => {
     applyAppearance()
-    window.addEventListener("klarlingo-appearance", applyAppearance)
+    window.addEventListener("hamstalk-appearance", applyAppearance)
     window.addEventListener("storage", applyAppearance)
     return () => {
-      window.removeEventListener("klarlingo-appearance", applyAppearance)
+      window.removeEventListener("hamstalk-appearance", applyAppearance)
       window.removeEventListener("storage", applyAppearance)
     }
   }, [])

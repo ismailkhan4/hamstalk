@@ -1,6 +1,6 @@
 import type { Course } from "../types"
 
-/** German, Klarlingo's first course: from your first Hallo at Kaffeesatz GmbH towards B2. */
+/** German, Hamstalk's first course: from your first Hallo at Kaffeesatz GmbH towards B2. */
 export const german: Course = {
   id: "de",
   language: "German",

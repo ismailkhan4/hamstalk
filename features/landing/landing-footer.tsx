@@ -30,7 +30,7 @@ export function LandingFooter() {
         </nav>
       </div>
       <p className="mx-auto max-w-280 px-4 pb-10 text-sm font-semibold text-muted-foreground sm:px-6">
-        © 2026 Klarlingo. {footerNote}
+        © 2026 Hamstalk. {footerNote}
       </p>
     </footer>
   )

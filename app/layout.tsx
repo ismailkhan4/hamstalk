@@ -30,12 +30,12 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Klarlingo · Learn German. Join the team.",
-    template: "%s · Klarlingo",
+    default: "Hamstalk · Learn German. Join the team.",
+    template: "%s · Hamstalk",
   },
   description:
     "The German course for software engineers joining a German-speaking team.",
-  applicationName: "Klarlingo",
+  applicationName: "Hamstalk",
   icons: { apple: "/icons/apple-touch-icon.png" },
 }
 

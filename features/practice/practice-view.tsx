@@ -244,7 +244,7 @@ export function PracticeView({
               {
                 icon: <Mic aria-hidden="true" />,
                 title: "Speaking studio",
-                text: "Planned. It needs microphone recording, and Klarlingo doesn’t record or send your voice anywhere today.",
+                text: "Planned. It needs microphone recording, and Hamstalk doesn’t record or send your voice anywhere today.",
               },
             ].map((studio) => (
               <div

@@ -14,7 +14,7 @@ import { ONBOARDING_STEPS, preferencesSchema } from "./options"
 export type SaveResult = { ok: true } | { ok: false; message: string }
 
 const DATABASE_NOT_READY =
-  "Your answers can’t be saved yet because the database isn’t set up. If you run this copy of Klarlingo, apply the migrations in supabase/migrations."
+  "Your answers can’t be saved yet because the database isn’t set up. If you run this copy of Hamstalk, apply the migrations in supabase/migrations."
 const SAVE_FAILED =
   "Your answer wasn’t saved. Check your connection and try again; nothing you chose is lost."
 

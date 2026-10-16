@@ -3,8 +3,8 @@ import type { MetadataRoute } from "next"
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "Klarlingo",
-    short_name: "Klarlingo",
+    name: "Hamstalk",
+    short_name: "Hamstalk",
     description:
       "The German course for software engineers joining a German-speaking team.",
     start_url: "/home",

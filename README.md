@@ -48,7 +48,7 @@ table, column or nullability.
 
 ## Design language
 
-Klarlingo is meant to feel like a game you want to come back to: bright, rounded and quick to
+Hamstalk is meant to feel like a game you want to come back to: bright, rounded and quick to
 celebrate. The pieces live in `features/celebrations/`:
 
 - **Hamsti** (`mascot.tsx`): the hamster mascot. In German, _hamstern_ means to stockpile, and
@@ -63,7 +63,7 @@ celebrate. The pieces live in `features/celebrations/`:
   glows from 3, and 3, 5, 7 and every fifth after 10 get a callout.
 - **Confetti and count-ups** (`confetti.ts`, `count-up.tsx`).
 
-Reduced motion (the device setting or Klarlingo's own) keeps the sound, colour and words but drops
+Reduced motion (the device setting or Hamstalk's own) keeps the sound, colour and words but drops
 movement and confetti. Tokens are in `app/globals.css`; every text colour there is chosen to meet
 WCAG AA contrast (4.5:1) in both themes.
 
@@ -145,6 +145,23 @@ Every listen button plays the line in its speaker's own voice, recorded with Ele
 Setup: apply `audio.sql`, set `ELEVENLABS_API_KEY` and `SUPABASE_SECRET_KEY`, paste the voice ids,
 then run `bun run audio:generate --write`.
 
+## End-to-end tests
+
+`bun run test:e2e` plays the app in Chromium, at desktop and phone sizes, with Playwright. It uses
+the dev server on :3000 (starting one if none is running) and drives the `/dev` previews and the
+signed-out pages, so it needs no account and writes nothing to the database.
+
+- **Lessons:** every built lesson, played start to finish right first time, plus a wrong answer
+  and a retry. `e2e/solve.ts` answers any exercise from its content, so new lessons are covered
+  automatically.
+- **Speaking:** Chrome's fake microphone records, and the test answers `/api/speech` itself, so
+  no ElevenLabs credit is used.
+- **Friends, sign-in and the paid APIs:** the friends table and nudges, the redirect to sign in,
+  `/api/speech` and `/api/tts` refusing signed-out requests, and the microphone permission header.
+
+First time: `bunx playwright install chromium`. To test another server, set `E2E_BASE_URL` (its
+dev previews must be on: `HAMSTALK_STYLEGUIDE=1` in production builds).
+
 ## Friends
 
 Apply `supabase/migrations/friends.sql` after `leagues.sql` and `reminders.sql`. Until then,
@@ -181,7 +198,7 @@ for the new lines.
 Set `ANTHROPIC_API_KEY` (server only) and apply `supabase/migrations/ai.sql` after
 `adaptive.sql`. Without the key, both features hide themselves. Calls go through the Anthropic SDK
 (`lib/ai/claude.ts`) to `claude-opus-5-5` at low effort, with server-side refusal fallback
-(`fallbacks: "default"`). Set `KLARLINGO_AI_MODEL` to use another model.
+(`fallbacks: "default"`). Set `HAMSTALK_AI_MODEL` to use another model.
 
 - **Explain my answer** (`features/ai/explain.ts`): "Why? Ask Hamsti" on each entry in the
   mistakes notebook (the end of a lesson links there). Hamsti explains that exact answer: why it
@@ -247,19 +264,19 @@ bandit: 80% of the time the wording with the best rate of practice within two ho
 3. In the SQL editor, store the secret and schedule the job. Use your production URL:
 
    ```sql
-   select vault.create_secret('<CRON_SECRET>', 'klarlingo_cron_secret');
+   select vault.create_secret('<CRON_SECRET>', 'hamstalk_cron_secret');
 
    select cron.schedule(
-     'klarlingo-reminders',
+     'hamstalk-reminders',
      '*/15 * * * *',
      $$
      select net.http_post(
-       url := 'https://klarlingo-v1.vercel.app/api/cron/reminders',
+       url := 'https://hamstalk.com/api/cron/reminders',
        headers := jsonb_build_object(
          'Content-Type', 'application/json',
          'Authorization', 'Bearer ' || (
            select decrypted_secret from vault.decrypted_secrets
-            where name = 'klarlingo_cron_secret'
+            where name = 'hamstalk_cron_secret'
          )
        ),
        body := '{}'::jsonb
@@ -274,7 +291,7 @@ bandit: 80% of the time the wording with the best rate of practice within two ho
 4. **Email** (optional): set `RESEND_API_KEY` and `REMINDER_FROM_EMAIL` on a domain verified in
    Resend. Until both are set, the email switch in Settings stays off.
 
-Push needs HTTPS (or localhost). On iPhone and iPad it works only once Klarlingo is added to the
+Push needs HTTPS (or localhost). On iPhone and iPad it works only once Hamstalk is added to the
 Home Screen. In development, `/dev/settings` shows the reminder controls.
 
 ## The Liga: weekly leagues and profiles
@@ -323,7 +340,7 @@ and `/dev/path/guide/a1-u1` show these screens with sample progress.
 
 ## Courses
 
-Klarlingo teaches German first, and is built so other languages can follow.
+Hamstalk teaches German first, and is built so other languages can follow.
 
 - **A course** lives in `content/courses/<id>/`: its config (`course.ts`), curriculum, lessons and
   team stories. `content/courses/index.ts` lists courses and sets `ACTIVE_COURSE`, the one the app
