@@ -10,7 +10,12 @@ export function startAttempt(): Attempt {
   return { phase: "answering", tries: 0, outcome: null }
 }
 
-export function check(attempt: Attempt, verdict: Verdict): Attempt {
+/** `maxTries` is 2 in lessons (a hint, then a second try) and 1 in an Express run. */
+export function check(
+  attempt: Attempt,
+  verdict: Verdict,
+  maxTries: number = MAX_TRIES
+): Attempt {
   if (attempt.phase !== "answering") return attempt
   if (verdict !== "wrong") {
     return {
@@ -20,7 +25,7 @@ export function check(attempt: Attempt, verdict: Verdict): Attempt {
     }
   }
   const tries = attempt.tries + 1
-  return tries >= MAX_TRIES
+  return tries >= maxTries
     ? { phase: "shown", tries, outcome: "shown" }
     : { phase: "wrong", tries, outcome: null }
 }

@@ -1,4 +1,4 @@
-const CACHE = "klarlingo-static-v1"
+const CACHE = "klarlingo-static-v2"
 const OFFLINE_URL = "/offline"
 const REFRESH_AFTER_MS = 6 * 60 * 60 * 1000
 let lastRefresh = 0
@@ -82,4 +82,47 @@ self.addEventListener("fetch", (event) => {
       )
     )
   }
+})
+
+// Reminders. The server sends { title, body, url, tag }; tapping opens the link, which records
+// the open and goes on to the right page.
+self.addEventListener("push", (event) => {
+  let data = {}
+  try {
+    data = event.data ? event.data.json() : {}
+  } catch {
+    data = { body: event.data ? event.data.text() : "" }
+  }
+  event.waitUntil(
+    self.registration.showNotification(data.title || "Klarlingo", {
+      body: data.body || "",
+      icon: "/icons/icon-192.png",
+      badge: "/icons/icon-192.png",
+      tag: data.tag || "klarlingo",
+      data: { url: data.url || "/home" },
+    })
+  )
+})
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close()
+  const url = new URL(
+    (event.notification.data && event.notification.data.url) || "/home",
+    self.location.origin
+  )
+  event.waitUntil(
+    (async () => {
+      const windows = await self.clients.matchAll({
+        type: "window",
+        includeUncontrolled: true,
+      })
+      for (const client of windows) {
+        if (new URL(client.url).origin === url.origin && "focus" in client) {
+          await client.focus()
+          return client.navigate(url.href)
+        }
+      }
+      return self.clients.openWindow(url.href)
+    })()
+  )
 })

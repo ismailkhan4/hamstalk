@@ -192,6 +192,7 @@ export function StandupSession({
                   history.filter((l) => l.who === "lena").at(-1)?.target ?? ""
                 }
                 label="Hear Lena again"
+                speaker="lf"
               />
             </div>
             <div

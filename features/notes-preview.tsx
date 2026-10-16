@@ -159,6 +159,7 @@ export const sampleCards: ReviewCard[] = [
     exampleNative: "The meeting starts at ten.",
     strength: 2,
     lessonId: "a1-u1-l2",
+    when: { forgot: "in 10 min", hard: "in 2 days", good: "in 5 days" },
   },
   {
     itemKey: "b",
@@ -169,6 +170,7 @@ export const sampleCards: ReviewCard[] = [
     exampleNative: "There’s a bug in the code.",
     strength: 1,
     lessonId: "a1-u1-l2",
+    when: { forgot: "in 10 min", hard: "in 2 days", good: "in 5 days" },
   },
   {
     itemKey: "c",
@@ -179,6 +181,7 @@ export const sampleCards: ReviewCard[] = [
     exampleNative: "I work in the frontend.",
     strength: 3,
     lessonId: "a1-u1-l2",
+    when: { forgot: "in 10 min", hard: "in 2 days", good: "in 5 days" },
   },
 ]
 

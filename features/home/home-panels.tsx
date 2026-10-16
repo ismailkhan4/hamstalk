@@ -3,13 +3,11 @@ import Link from "next/link"
 
 import { Avatar } from "@/components/learning/avatar"
 import { initialsFor } from "@/components/learning/team-badge"
-import { getLevel } from "@/content/courses/de/curriculum"
 import {
   goalOptions,
   levelOptions,
   type Preferences,
 } from "@/features/onboarding/options"
-import { cn } from "@/lib/utils"
 
 export function TeamCard({ name }: { name: string }) {
   return (
@@ -126,50 +124,6 @@ export function HowItWorks() {
           </li>
         ))}
       </ul>
-    </section>
-  )
-}
-
-export function PathStrip({ currentUnit }: { currentUnit: number }) {
-  const units = getLevel("A1").units
-  const shown = Math.min(currentUnit, units.length)
-  return (
-    <section aria-labelledby="strip-title">
-      <div className="flex items-baseline justify-between">
-        <h2 id="strip-title" className="font-bold">
-          Your path
-        </h2>
-        <span className="text-xs text-muted-foreground">
-          A1 · Unit {shown} of {units.length}
-        </span>
-      </div>
-      <ol
-        aria-label={`A1, unit ${shown} of ${units.length}`}
-        className="relative mt-4 flex justify-between"
-      >
-        <span
-          aria-hidden="true"
-          className="absolute inset-x-1 top-1/2 h-0.5 -translate-y-1/2 bg-border"
-        />
-        {units.map((unit) => (
-          <li
-            key={unit.id}
-            aria-hidden="true"
-            className={cn(
-              "relative size-3.5 rounded-full border-2 border-input bg-background",
-              unit.number < currentUnit && "border-primary bg-primary",
-              unit.number === currentUnit &&
-                "border-spark bg-spark shadow-[0_0_0_4px_color-mix(in_srgb,var(--spark)_22%,transparent)]"
-            )}
-          />
-        ))}
-      </ol>
-      <Link
-        href="/path"
-        className="mt-4 inline-block text-sm font-semibold text-primary-text underline underline-offset-[3px]"
-      >
-        Open learning path
-      </Link>
     </section>
   )
 }

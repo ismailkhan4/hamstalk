@@ -5,6 +5,16 @@ import { z } from "zod"
 import { isMissingTable } from "@/features/onboarding/data"
 import type { createClient } from "@/lib/supabase/server"
 
+import {
+  legacyRate,
+  previewLabels,
+  strengthOf,
+  whenLabel,
+  type Memory,
+  type Rating,
+  type Strength,
+} from "./scheduler"
+
 type Supabase = Awaited<ReturnType<typeof createClient>>
 
 export type ReviewCard = {
@@ -14,8 +24,10 @@ export type ReviewCard = {
   native: string
   exampleTarget: string | null
   exampleNative: string | null
-  strength: 1 | 2 | 3
+  strength: Strength
   lessonId: string
+  /** When the word comes back after each answer, for the buttons. */
+  when: Record<Rating, string>
 }
 
 const rowSchema = z.object({
@@ -27,7 +39,79 @@ const rowSchema = z.object({
   example_en: z.string().nullable(),
   strength: z.union([z.literal(1), z.literal(2), z.literal(3)]),
   lesson_id: z.string(),
+  due_at: z.string(),
+  review_count: z.number(),
+  last_reviewed_at: z.string().nullable(),
+  // FSRS memory; absent until adaptive.sql is applied.
+  stability: z.number().nullable().optional(),
+  difficulty: z.number().nullable().optional(),
+  fsrs_state: z.number().optional(),
+  lapses: z.number().optional(),
+  scheduled_days: z.number().optional(),
+  learning_steps: z.number().optional(),
 })
+
+const CARD_COLUMNS =
+  "item_key, article, word, en, example_de, example_en, strength, lesson_id, due_at, review_count, last_reviewed_at"
+const MEMORY_COLUMNS =
+  "stability, difficulty, fsrs_state, lapses, scheduled_days, learning_steps"
+
+/** Whether an error is a missing column: the FSRS columns before adaptive.sql. */
+const missingColumn = (error: { code?: string } | null) =>
+  error?.code === "42703"
+
+export function memoryOf(row: z.infer<typeof rowSchema>): Memory {
+  return {
+    stability: row.stability ?? null,
+    difficulty: row.difficulty ?? null,
+    fsrsState: row.fsrs_state ?? 0,
+    lapses: row.lapses ?? 0,
+    scheduledDays: row.scheduled_days ?? 0,
+    learningSteps: row.learning_steps ?? 0,
+    reviewCount: row.review_count,
+    lastReviewedAt: row.last_reviewed_at,
+    dueAt: row.due_at,
+  }
+}
+
+function toCard(row: z.infer<typeof rowSchema>, now: Date): ReviewCard {
+  const fsrs = row.stability !== undefined
+  const legacy = (rating: Rating) =>
+    whenLabel(legacyRate(row.strength, rating, now).dueAt, now)
+  return {
+    itemKey: row.item_key,
+    article: row.article,
+    word: row.word,
+    native: row.en,
+    exampleTarget: row.example_de,
+    exampleNative: row.example_en,
+    strength:
+      fsrs && row.stability !== null
+        ? strengthOf(row.stability ?? null)
+        : row.strength,
+    lessonId: row.lesson_id,
+    when: fsrs
+      ? previewLabels(memoryOf(row), now)
+      : {
+          forgot: legacy("forgot"),
+          hard: legacy("hard"),
+          good: legacy("good"),
+        },
+  }
+}
+
+/** Due words, with FSRS memory when it exists. */
+async function selectDue(supabase: Supabase, now: Date, limit: number) {
+  const query = (columns: string) =>
+    supabase
+      .from("review_items")
+      .select(columns)
+      .lte("due_at", now.toISOString())
+      .order("due_at", { ascending: true })
+      .limit(limit)
+  const full = await query(`${CARD_COLUMNS}, ${MEMORY_COLUMNS}`)
+  return missingColumn(full.error) ? query(CARD_COLUMNS) : full
+}
 
 export const SESSION_SIZE = 12
 
@@ -36,30 +120,14 @@ export async function loadDueCards(
   supabase: Supabase,
   now = new Date()
 ): Promise<ReviewCard[]> {
-  const { data, error } = await supabase
-    .from("review_items")
-    .select(
-      "item_key, article, word, en, example_de, example_en, strength, lesson_id"
-    )
-    .lte("due_at", now.toISOString())
-    .order("due_at", { ascending: true })
-    .limit(SESSION_SIZE)
+  const { data, error } = await selectDue(supabase, now, SESSION_SIZE)
   if (isMissingTable(error)) return []
   if (error)
     throw new Error(`Could not load the review (${error.code ?? "unknown"})`)
   return z
     .array(rowSchema)
     .parse(data)
-    .map((row) => ({
-      itemKey: row.item_key,
-      article: row.article,
-      word: row.word,
-      native: row.en,
-      exampleTarget: row.example_de,
-      exampleNative: row.example_en,
-      strength: row.strength,
-      lessonId: row.lesson_id,
-    }))
+    .map((row) => toCard(row, now))
 }
 
 export type NotebookCounts = { phrases: number; mistakes: number; due: number }
@@ -105,14 +173,7 @@ export async function loadReviewOverview(
 ): Promise<ReviewOverview> {
   const head = { count: "exact" as const, head: true }
   const [due, total, weak, next] = await Promise.all([
-    supabase
-      .from("review_items")
-      .select(
-        "item_key, article, word, en, example_de, example_en, strength, lesson_id"
-      )
-      .lte("due_at", now.toISOString())
-      .order("due_at", { ascending: true })
-      .limit(50),
+    selectDue(supabase, now, 50),
     supabase.from("review_items").select("id", head),
     supabase
       .from("review_items")
@@ -138,16 +199,7 @@ export async function loadReviewOverview(
     due: z
       .array(rowSchema)
       .parse(due.data)
-      .map((row) => ({
-        itemKey: row.item_key,
-        article: row.article,
-        word: row.word,
-        native: row.en,
-        exampleTarget: row.example_de,
-        exampleNative: row.example_en,
-        strength: row.strength,
-        lessonId: row.lesson_id,
-      })),
+      .map((row) => toCard(row, now)),
     needsPractice: weak.count ?? 0,
     total: total.count ?? 0,
     nextDue:

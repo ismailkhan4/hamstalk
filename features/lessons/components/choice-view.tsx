@@ -10,9 +10,11 @@ import {
 import { TARGET_LANG } from "@/content/courses"
 import { TargetText } from "@/components/learning/target-text"
 import { Button } from "@/components/ui/button"
+import { speakerFromCaption } from "@/lib/tts/core"
 import { cn } from "@/lib/utils"
 
 import { check, retry, startAttempt, type Attempt } from "../engine/attempt"
+import { useMaxTries } from "../engine/tries-context"
 import { choiceNote, gradeChoice } from "../engine/grading"
 import { choiceMistake } from "../engine/mistakes"
 import { optionOrder } from "../engine/shuffle"
@@ -36,6 +38,7 @@ export function ChoiceView({
   const [selection, setSelection] = useState<number | null>(null)
   const [chosen, setChosen] = useState<number | null>(null)
   const [attempt, setAttempt] = useState<Attempt>(startAttempt)
+  const maxTries = useMaxTries()
   const [transcriptOpen, setTranscriptOpen] = useState(false)
 
   const answering = attempt.phase === "answering"
@@ -58,7 +61,7 @@ export function ChoiceView({
 
   function onCheck() {
     if (selection === null) return
-    const next = check(attempt, gradeChoice(exercise, selection))
+    const next = check(attempt, gradeChoice(exercise, selection), maxTries)
     setChosen(selection)
     setAttempt(next)
     if (next.phase === "wrong")
@@ -100,7 +103,8 @@ export function ChoiceView({
           <div className="mt-6 rounded-xl border border-border bg-card p-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <ListenButton
-                text={exercise.listening.clip}
+                text={personalise(exercise.listening.clip, learner)}
+                speaker={speakerFromCaption(exercise.listening.meta)}
                 label="Play"
                 slow
                 variant="outline"

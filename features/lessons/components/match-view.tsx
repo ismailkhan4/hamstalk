@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 import { check, retry, startAttempt, type Attempt } from "../engine/attempt"
+import { useMaxTries } from "../engine/tries-context"
 import {
   emptyAssignments,
   gradeMatch,
@@ -43,6 +44,7 @@ export function MatchView({
   const [active, setActive] = useState<number | null>(0)
   const [graded, setGraded] = useState<boolean[] | null>(null)
   const [attempt, setAttempt] = useState<Attempt>(startAttempt)
+  const maxTries = useMaxTries()
 
   const answering = attempt.phase === "answering"
   const complete = assignments.every((value) => value !== null)
@@ -67,7 +69,11 @@ export function MatchView({
 
   function onCheck() {
     const result = gradeMatch(exercise, assignments)
-    const next = check(attempt, result.allCorrect ? "correct" : "wrong")
+    const next = check(
+      attempt,
+      result.allCorrect ? "correct" : "wrong",
+      maxTries
+    )
     setAttempt(next)
     setGraded(result.correct)
     if (next.phase === "wrong")

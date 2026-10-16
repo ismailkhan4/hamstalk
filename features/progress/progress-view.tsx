@@ -7,6 +7,8 @@ import {
   ActivityList,
   type ActivityEntry,
 } from "@/features/activity/activity-list"
+import { Lanyard } from "@/features/economy/components/lanyard"
+import type { Economy } from "@/features/economy/model"
 import { levelOptions, type StartLevel } from "@/features/onboarding/options"
 import {
   completedUnitCount,
@@ -30,6 +32,8 @@ type Props = {
   progress: LessonProgress[]
   facts: ProgressFacts
   activity: ActivityEntry[]
+  /** Lanyard pins; null until economy.sql is applied. */
+  pins?: Economy["pins"] | null
 }
 
 function Stat({
@@ -64,6 +68,7 @@ export function ProgressView({
   progress,
   facts,
   activity,
+  pins,
 }: Props) {
   const a1 = getLevel("A1")
   const doneUnits = completedUnitCount("A1", progress)
@@ -196,6 +201,12 @@ export function ProgressView({
             <StreakSection />
           </div>
         </Suspense>
+
+        {pins && (
+          <div className="mt-10">
+            <Lanyard pins={pins} />
+          </div>
+        )}
 
         <section aria-labelledby="recent" className="mt-10">
           <div className="flex items-baseline justify-between gap-3">

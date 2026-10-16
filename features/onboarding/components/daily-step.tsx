@@ -123,8 +123,8 @@ export function DailyStep({
             <span className="font-semibold">Daily reminder</span>{" "}
             <span className="text-muted-foreground">· optional</span>
             <span className="mt-0.5 block text-sm text-muted-foreground">
-              Nothing is switched on yet. You’ll confirm reminders later in
-              Settings.
+              After your first lesson, we’ll ask to send notifications to this
+              device.
             </span>
           </span>
         </label>

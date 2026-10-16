@@ -17,7 +17,7 @@ import {
 import { lessonVocabularyRows, savedPhraseRow } from "@/features/review/items"
 
 import { initialsOf } from "./initials"
-import { personalise } from "./schema"
+import { isGraded, personalise } from "./schema"
 import { loadRunnableLesson } from "./source"
 
 export type LessonSaveResult = { ok: true } | { ok: false; message: string }
@@ -99,6 +99,7 @@ export async function completeLessonAction(
     .eq("lesson_id", parsed.data.lessonId)
     .maybeSingle()
   if (readError) return failure(readError)
+  await recordAttempts(ctx, parsed.data.outcomes)
   if (existing?.status === "completed")
     return {
       ok: true,
@@ -149,6 +150,28 @@ export async function completeLessonAction(
     source: ctx.source,
   })
   return { ok: true, rewards }
+}
+
+const SCORE = { first_try: 1, second_try: 0.5, shown: 0 } as const
+
+/**
+ * Feeds the learner model: each graded exercise's first-attempt result moves the learner's rating
+ * for its concept and the exercise's difficulty. Only lessons served from the pool, whose exercise
+ * positions match the pool's keys. Never fails the lesson.
+ */
+async function recordAttempts(
+  ctx: NonNullable<Awaited<ReturnType<typeof context>>>,
+  outcomes: readonly ("first_try" | "second_try" | "shown")[]
+) {
+  if (ctx.source !== "pool") return
+  const items = outcomes.flatMap((outcome, position) => {
+    const exercise = ctx.lesson.exercises[position]
+    return exercise && isGraded(exercise)
+      ? [{ key: `${ctx.lesson.id}:${position}`, score: SCORE[outcome] }]
+      : []
+  })
+  if (items.length > 0)
+    await ctx.supabase.rpc("record_attempts", { p_items: items })
 }
 
 /** A first miss goes to the mistakes notebook. A repeated miss on the same item updates one row. */

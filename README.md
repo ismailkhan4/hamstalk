@@ -99,6 +99,197 @@ between visits without writing anything. Keep the two in step. In development, `
 every streak state, and `/dev/lesson?screen=complete&streak=7&earned=1&goal=1` shows the
 celebration.
 
+## Hamsti's stash: nuts, the Akku, quests and pins
+
+Apply `supabase/migrations/economy.sql` after `habit_loop.sql`. Like the habit loop, learners can
+read their rows and never write them. Four functions do all the writing and decide every amount:
+
+- **`earn()`** replaces calling `award_xp()` directly (`features/rewards/award.ts` falls back to
+  `award_xp()` until the migration is applied). It awards the XP, then pays hazelnuts for the day's
+  goal (5), streak milestones (10–200), finished quests and new pins, and applies a double-XP boost.
+- **`use_akku()`**: the Akku has five bars. A lesson takes one for each answer that is still wrong
+  after the hint, so a first wrong try only costs the hint. One bar refills every four hours, and
+  every five words reviewed in a day charge one back. Reviews and standups never use it. At zero,
+  the lesson stops with its place saved, and the learner can recharge, practise, wait or leave.
+- **`buy()`**: the shop (Vorrat, at `/shop`) sells a full recharge (300), a streak freeze (150,
+  hold at most two) and 15 minutes of double XP (80). New learners start with 100 nuts.
+- **`my_economy()`** returns the balance, the Akku, today's plan and the pins.
+
+**Today's plan (Tagesplan)** on Home has three quests, picked from the learner and the date: an XP
+target, a lessons quest, and either reviewing words or reaching the daily goal. They pay out the
+moment they're done. **Pins** on Hamsti's lanyard (on Progress) have up to five tiers each, for the
+streak, lessons, XP, reviewed words, standups and quests, and pay 25 nuts per tier.
+
+`features/economy/model.ts` mirrors the prices, quest wording and pin tiers for display. Keep it in
+step with the SQL. In development, `/dev/shop?stash=fresh|busy|low|empty` shows the shop, the plan
+and the lanyard, `/dev/home?stash=low` shows Home with them, `/dev/lesson?akku=1` starts a lesson
+on its last bar (`akku=0` shows the empty screen), and `/dev/lesson?screen=complete&stash=1` shows
+the end of a lesson with nuts, quests and a pin.
+
+## Recorded speech (ElevenLabs)
+
+Every listen button plays the line in its speaker's own voice, recorded with ElevenLabs
+(`eleven_v4`). It falls back to the browser's voice when there's no recording.
+
+- **Cast:** voice ids live in `voices` in `content/courses/<id>/course.ts`, one per character plus
+  a `narrator` for words and prompts. They aren't secret. An empty id uses the narrator.
+- **Storage:** recordings live in the public Supabase bucket `tts`, created by
+  `supabase/migrations/audio.sql`. Each file is named by a hash of model, voice, speed and text, so
+  a line is never paid for twice, and changing a voice re-records only that voice's lines.
+- **Recorded ahead:** `bun run audio:generate` lists the missing fixed lines and their character
+  count; `--write` records and uploads them. Run it after content changes.
+- **Recorded on demand:** lines with the learner's name are recorded on first play by `/api/tts`
+  (signed-in learners only), then reused by everyone with that name. Each learner can record 200
+  new lines a day, and the whole app stays within `TTS_DAILY_CHAR_BUDGET` characters a day.
+
+Setup: apply `audio.sql`, set `ELEVENLABS_API_KEY` and `SUPABASE_SECRET_KEY`, paste the voice ids,
+then run `bun run audio:generate --write`.
+
+## AI: Explain my answer and roleplays
+
+Set `ANTHROPIC_API_KEY` (server only) and apply `supabase/migrations/ai.sql` after
+`adaptive.sql`. Without the key, both features hide themselves. Calls go through the Anthropic SDK
+(`lib/ai/claude.ts`) to `claude-opus-5-5` at low effort, with server-side refusal fallback
+(`fallbacks: "default"`). Set `KLARLINGO_AI_MODEL` to use another model.
+
+- **Explain my answer** (`features/ai/explain.ts`): "Why? Ask Hamsti" on each entry in the
+  mistakes notebook (the end of a lesson links there). Hamsti explains that exact answer: why it
+  didn't fit, the rule, and one new example. It's offered after the answer is shown, never before
+  the second try.
+- **Roleplays** (`content/courses/<id>/roleplays.ts`, `/team/roleplay/<id>`): short typed
+  conversations with a team character, unlocked when their unit is finished. The character
+  answers in simple sentences, ticks off the learner's goals, and gently corrects slips. The end
+  brings stars, highlights and fixes. A finished roleplay counts as a practice session: 15 XP,
+  within the shared limit of five XP-earning sessions a day.
+- **Limits:** `ai_allow()` caps each learner at 40 explanations and 80 roleplay replies a day. A
+  roleplay ends after 8 learner messages. Replies use structured outputs, validated by zod.
+
+In development, `/dev/roleplay` plays a roleplay with scripted replies and no AI.
+
+## The adaptive engine: FSRS, the learner model and practice
+
+Apply `supabase/migrations/adaptive.sql` after `reminders.sql`. It also replaces `award_xp()` with
+a copy that accepts practice sessions; keep the two in step if either changes.
+
+- **Review words** are scheduled by FSRS (`ts-fsrs`, `features/review/scheduler.ts`). The learner
+  answers Forgot, Hard or Got it, and each button says when the word comes back. Strength bars are
+  derived from FSRS stability. Before the migration, the old spacing keeps working.
+- **Learner model** (`features/learner-model/elo.ts`): an Elo-style rating per concept (the
+  exercise's `concept_tag`), and a difficulty per exercise shared by everyone
+  (`exercises_pool.base_difficulty`). `record_attempts()` updates both from each exercise's first
+  attempt of the day, from lessons served by the pool and from practice.
+- **Session generator** (`features/session-generator/generate.ts`, pure) builds practice from
+  finished lessons:
+  - **Smart practice** (`/practice/smart`): ten exercises around 80% predicted success. Open
+    mistakes count three times, and anything seen in the last day is held back.
+  - **Your mistakes** (`/practice/mistakes`): the exercises behind open mistakes, most missed first.
+    Right first time marks a mistake learned.
+  - **Express** (`/practice/express/<unit>`): a finished unit's ten hardest exercises for the
+    learner. One try, no hints, and each miss takes an Akku bar. Getting 8 of 10 right first time
+    turns the unit's stretch of the line gold.
+- Practice earns 15 XP (30 for an Express), for at most five sessions a day. Smart practice and
+  mistakes never use the Akku.
+
+In development, `/dev/practice?kind=smart|mistakes|express` plays a session built from Unit 1, and
+`/dev/path?stage=done` shows a gold unit.
+
+## Reminders: push, email and the streak saver
+
+Apply `supabase/migrations/reminders.sql` after `leagues.sql`. Two kinds of reminder, each sent
+at most once a day per learner, in their own time zone, and only if they haven't practised yet:
+
+- **Daily:** at the learner's reminder time (Settings, or the prompt after their first lesson),
+  for up to two hours after it.
+- **Streak saver:** from 21:00 when the streak would end at midnight. If both are due at once,
+  only the streak saver goes out.
+
+Wordings live in `features/reminders/templates.ts`. The endpoint picks one with an epsilon-greedy
+bandit: 80% of the time the wording with the best rate of practice within two hours of sending,
+20% a random one. Every reminder links through `/r/<id>`, which records the open.
+
+**Setting it up**
+
+1. Generate push keys with `bunx web-push generate-vapid-keys`. Set `NEXT_PUBLIC_VAPID_PUBLIC_KEY`,
+   `VAPID_PRIVATE_KEY` and `VAPID_SUBJECT`, plus `SUPABASE_SECRET_KEY` (Project settings → API
+   keys) and a long random `CRON_SECRET`, in `.env.local` and in Vercel. Redeploy.
+2. In Supabase, enable the `pg_cron` and `pg_net` extensions (Database → Extensions).
+3. In the SQL editor, store the secret and schedule the job. Use your production URL:
+
+   ```sql
+   select vault.create_secret('<CRON_SECRET>', 'klarlingo_cron_secret');
+
+   select cron.schedule(
+     'klarlingo-reminders',
+     '*/15 * * * *',
+     $$
+     select net.http_post(
+       url := 'https://klarlingo-v1.vercel.app/api/cron/reminders',
+       headers := jsonb_build_object(
+         'Content-Type', 'application/json',
+         'Authorization', 'Bearer ' || (
+           select decrypted_secret from vault.decrypted_secrets
+            where name = 'klarlingo_cron_secret'
+         )
+       ),
+       body := '{}'::jsonb
+     );
+     $$
+   );
+   ```
+
+   Check runs with `select * from cron.job_run_details order by start_time desc limit 5;` and
+   replies with `select * from net._http_response order by created desc limit 5;`.
+
+4. **Email** (optional): set `RESEND_API_KEY` and `REMINDER_FROM_EMAIL` on a domain verified in
+   Resend. Until both are set, the email switch in Settings stays off.
+
+Push needs HTTPS (or localhost). On iPhone and iPad it works only once Klarlingo is added to the
+Home Screen. In development, `/dev/settings` shows the reminder controls.
+
+## The Liga: weekly leagues and profiles
+
+Apply `supabase/migrations/leagues.sql` after `economy.sql`. Leagues look like a football table:
+ten divisions from Kreisklasse up to the Bundesliga (the names come from the course config), and a
+season every week, Monday 00:00 to Monday 00:00 UTC. XP earned that week are the points.
+
+- **Joining:** a learner joins a table in their division the first time they open Home or
+  `/league` with XP that week. Tables hold up to 20 learners and fill the fullest open table first.
+- **Pacers:** while a table has fewer than 10 learners, the course's team characters (`pacers` in
+  `content/courses/<id>/course.ts`, ids matching `league_table()` in the SQL) fill the empty places
+  and earn XP at a steady pace that grows with the division. They are always labelled as team
+  characters.
+- **Promotion and relegation:** top 3 move up and bottom 3 move down (2 and 2 in tables under 10,
+  fewer under 6). The top division has no promotion and the bottom none relegation.
+- **No scheduled job:** a finished week is settled for each learner on their next visit, from the
+  final standings, which can't change after the whistle. The result shows once on `/league`.
+- **Profiles** live at `/u/<handle>` (`/profile` goes to your own). The display name defaults to a
+  first name and an initial, and the handle can't be guessed from the email. Learners can rename
+  themselves and hide the page; league tables then show the name without a link. Other learners'
+  data is only ever read through `my_league()` and `public_profile()`, which return names, handles
+  and public stats.
+
+In development, `/dev/league?state=mid|top|bottom|full|new|promoted|relegated|stayed`,
+`/dev/profile?me=1` and `/dev/home?league=top` show these screens with sample data.
+
+## The learning path
+
+The path is drawn as a U-Bahn line map (`features/path/`). Each level is a line (A1 is U1, A2 is U2,
+and so on), each lesson is a station, a unit review is an interchange, the team standup is the last
+stop of every unit, and the level checkpoint is the terminus (Endstation). The track is solid behind
+the learner and faded ahead. Hamsti marks the current station ("Du bist hier"), and units with no
+lessons built yet are drawn as a Baustelle.
+
+- `transit.ts` turns progress into the line. It is pure, so the map and Home use the same answer.
+- `components/transit-line.tsx` draws the full map at `/path?level=a1`. Each unit is an anchor, so
+  links go to `/path?level=a1#a1-u2`.
+- `components/line-strip.tsx` is Home's piece of the map: the current unit, left to right.
+- `/path/guide/<unitId>` is the unit guide: goals, words, the grammar, every lesson's rule table, and
+  the standup line.
+- Line colours are the `--line-a1` to `--line-b2` tokens in `app/globals.css`.
+
+In development, `/dev/path?stage=unit2` (`new`, `unit2` or `done`, plus `&level=a2`), `/dev/home`
+and `/dev/path/guide/a1-u1` show these screens with sample progress.
+
 ## Courses
 
 Klarlingo teaches German first, and is built so other languages can follow.

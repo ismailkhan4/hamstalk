@@ -147,28 +147,40 @@ export function ReviewScreen({
                 <p className="mb-2 text-center text-sm text-muted-foreground">
                   Be honest. This only decides when the word comes back.
                 </p>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-3 gap-2 sm:gap-3">
                   <Button
                     variant="outline"
                     size="lg"
                     disabled={pending}
-                    onClick={() => rate("again")}
-                    className="h-auto flex-col py-2.5"
+                    onClick={() => rate("forgot")}
+                    className="h-auto flex-col px-2 py-2.5"
                   >
-                    Need more practice
+                    Forgot
                     <span className="text-xs font-normal text-muted-foreground">
-                      Comes back tomorrow
+                      {card.when.forgot}
+                    </span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    disabled={pending}
+                    onClick={() => rate("hard")}
+                    className="h-auto flex-col px-2 py-2.5"
+                  >
+                    Hard
+                    <span className="text-xs font-normal text-muted-foreground">
+                      {card.when.hard}
                     </span>
                   </Button>
                   <Button
                     size="lg"
                     disabled={pending}
-                    onClick={() => rate("remembered")}
-                    className="h-auto flex-col py-2.5"
+                    onClick={() => rate("good")}
+                    className="h-auto flex-col px-2 py-2.5"
                   >
-                    Remembered
+                    Got it
                     <span className="text-xs font-normal opacity-80">
-                      Comes back in a few days
+                      {card.when.good}
                     </span>
                   </Button>
                 </div>
@@ -181,7 +193,7 @@ export function ReviewScreen({
   }
 
   if (phase === "done") {
-    const again = results.filter((entry) => entry.rating === "again")
+    const again = results.filter((entry) => entry.rating === "forgot")
     return (
       <div className="flex min-h-svh flex-col bg-background">
         <FocusHeader
@@ -222,9 +234,7 @@ export function ReviewScreen({
               </dd>
             </div>
             <div>
-              <dt className="text-[0.8125rem] text-muted-foreground">
-                Need more practice
-              </dt>
+              <dt className="text-[0.8125rem] text-muted-foreground">Forgot</dt>
               <dd className="mt-1 font-display text-3xl font-bold">
                 {again.length}
               </dd>
@@ -233,7 +243,7 @@ export function ReviewScreen({
           {again.length > 0 && (
             <section aria-labelledby="back-tomorrow" className="mt-8">
               <h2 id="back-tomorrow" className="font-semibold">
-                Coming back tomorrow
+                Coming back soon
               </h2>
               <ul className="mt-3 flex flex-wrap gap-2">
                 {again.map(({ card: item }) => (

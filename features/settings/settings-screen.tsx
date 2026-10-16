@@ -81,6 +81,8 @@ type SettingsScreenProps = {
   actions: SettingsActions
   /** Where the data download comes from; the preview has no real file. */
   exportHref?: string
+  /** Streak saver, notifications on this device and email; shown under the daily reminder. */
+  reminders?: React.ReactNode
 }
 
 function Section({
@@ -156,6 +158,7 @@ export function SettingsScreen({
   preferences: initial,
   actions,
   exportHref = "/settings/export",
+  reminders,
 }: SettingsScreenProps) {
   const router = useRouter()
   const { theme, setTheme } = useTheme()
@@ -363,8 +366,7 @@ export function SettingsScreen({
               <span>
                 <span className="font-semibold">Daily reminder</span>
                 <span className="mt-0.5 block text-sm text-muted-foreground">
-                  Saved as your preference. Klarlingo doesn’t send reminders
-                  yet, so nothing will arrive.
+                  A nudge at your time, on days you haven’t practised yet.
                 </span>
               </span>
             </label>
@@ -390,6 +392,7 @@ export function SettingsScreen({
               </label>
             )}
           </div>
+          {reminders}
         </Section>
 
         <Section

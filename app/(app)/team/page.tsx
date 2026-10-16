@@ -4,6 +4,7 @@ import { loadLearner } from "@/features/learner/load-learner"
 import { DatabaseNotReady } from "@/features/onboarding/database-not-ready"
 import { loadCompletedStandups } from "@/features/team/data"
 import { TeamView } from "@/features/team/team-view"
+import { aiEnabled } from "@/lib/ai/claude"
 import { createClient } from "@/lib/supabase/server"
 
 export const metadata: Metadata = { title: "Your team" }
@@ -21,6 +22,7 @@ export default async function TeamPage() {
       startedAt={learner.preferences.startedAt}
       progress={learner.progress}
       completedStandups={completedStandups}
+      ai={aiEnabled()}
     />
   )
 }

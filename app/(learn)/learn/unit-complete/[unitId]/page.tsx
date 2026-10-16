@@ -27,8 +27,7 @@ export default async function UnitCompletePage({ params }: Props) {
   const finished = unit.lessons.every(
     (lesson) => done.get(lesson.id)?.status === "completed"
   )
-  if (!finished)
-    redirect(`/path?level=${unit.level.toLowerCase()}&unit=${unit.id}`)
+  if (!finished) redirect(`/path?level=${unit.level.toLowerCase()}#${unit.id}`)
 
   const xp = unit.lessons.reduce(
     (sum, lesson) => sum + (done.get(lesson.id)?.xp ?? 0),

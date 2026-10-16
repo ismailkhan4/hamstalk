@@ -108,7 +108,7 @@ export function DiscoverView({
                     </p>
                   )}
                   <div className="mt-3 flex flex-wrap items-center gap-2">
-                    <ListenButton text={de} />
+                    <ListenButton text={de} speaker={line.speaker.person} />
                     {line.saveKey && (
                       <Button
                         variant="outline"

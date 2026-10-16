@@ -32,7 +32,47 @@ export type Course = {
     reviewDone: string
     unitDone: (unit: number) => string
     greeting: (name: string) => string
+    /** The "you are here" sign on the path's line map. */
+    youAreHere: string
+    /** A level's last stop on the line map, e.g. "Endstation". */
+    terminus: string
+    /** An unbuilt stretch of the line, e.g. "Baustelle" (construction site). */
+    underConstruction: string
+    /** The daily quests card, e.g. "Tagesplan" (plan for the day). */
+    dailyPlan: string
+    /** The shop where nuts are spent, e.g. "Vorrat" (Hamsti's store cupboard). */
+    stash: string
+    /** Lives, shown as a battery, e.g. "Akku". */
+    akku: string
+    /** Out of lives, e.g. "Akku leer". */
+    akkuEmpty: string
+    /** The weekly league, e.g. "Liga". */
+    league: string
+    /** Ten league divisions, lowest first, e.g. "Kreisliga" … "Bundesliga". */
+    divisions: readonly string[]
+    /** Week results: moved up, stayed, moved down. */
+    promoted: string
+    stayed: string
+    relegated: string
+    /** The end of the league week, e.g. "Abpfiff" (final whistle). */
+    finalWhistle: string
   }
   /** The workplace story the course's lessons are set in. */
   world: { company: string; city: string }
+  /**
+   * The story's characters who pace league tables while there are few learners. ids match the
+   * avatars and the list in leagues.sql (league_table).
+   */
+  pacers: readonly {
+    id: string
+    name: string
+    initials: string
+    role: string
+  }[]
+  /**
+   * ElevenLabs voice ids, one per character (keys match the avatars) plus a narrator for words and
+   * prompts. Not secret. An empty id falls back to the narrator; with no narrator the app uses the
+   * browser's voice.
+   */
+  voices: Readonly<Record<string, string>>
 }

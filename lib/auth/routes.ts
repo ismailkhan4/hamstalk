@@ -17,6 +17,10 @@ const PROTECTED_PREFIXES = [
   "/search",
   "/notifications",
   "/activity",
+  "/shop",
+  "/league",
+  "/u",
+  "/profile",
   "/reset-password",
 ] as const
 

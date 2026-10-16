@@ -52,7 +52,8 @@ export function HabitBadgesView({
       </span>
       <span className="inline-flex items-center gap-1.5 text-sm text-secondary-text tabular-nums">
         <GoalRing xp={habit.xpToday} goal={habit.goalXp} size={22} />
-        <span aria-hidden="true">
+        {/* Phones show the ring alone, to leave room in the top bar. */}
+        <span aria-hidden="true" className="max-sm:hidden">
           {Math.min(habit.xpToday, 999)}/{habit.goalXp}
         </span>
         <span className="sr-only">

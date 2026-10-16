@@ -225,6 +225,11 @@
   --level-b1-subtle: var(--pflaume-50);
   --level-b2: var(--beere-600);
   --level-b2-subtle: var(--beere-50);
+  /* The path's transit lines: one vivid colour per level (U1 = A1 …). Fills only, never text. */
+  --line-a1: var(--klee-400);
+  --line-a2: var(--himmel-400);
+  --line-b1: var(--pflaume-400);
+  --line-b2: var(--beere-400);
   --article-der: var(--himmel-700);
   --article-die: var(--beere-700);
   --article-das: var(--senf-700);
@@ -354,6 +359,10 @@
   --level-b1-subtle: #1f1a3b;
   --level-b2: var(--beere-d300);
   --level-b2-subtle: #2e1428;
+  --line-a1: var(--klee-d400);
+  --line-a2: var(--himmel-d400);
+  --line-b1: var(--pflaume-d400);
+  --line-b2: var(--beere-d400);
   --article-der: var(--himmel-d300);
   --article-die: var(--beere-d300);
   --article-das: var(--senf-d300);
@@ -544,6 +553,10 @@ html[data-theme-transition]::view-transition-new(root) {
   --color-xp-track: var(--xp-track);
   --color-streak: var(--streak);
   --color-gold: var(--gold);
+  --color-line-a1: var(--line-a1);
+  --color-line-a2: var(--line-a2);
+  --color-line-b1: var(--line-b1);
+  --color-line-b2: var(--line-b2);
   --color-level-a1: var(--level-a1);
   --color-level-a1-subtle: var(--level-a1-subtle);
   --color-level-a2: var(--level-a2);

@@ -6,6 +6,10 @@ import { notFound } from "next/navigation"
 import { EmptyState } from "@/components/feedback/empty-state"
 import { buttonVariants } from "@/components/ui/button-variants"
 import { findLesson } from "@/content/courses/de/curriculum"
+import { buyAction, drainAkkuAction } from "@/features/economy/actions"
+import { loadEconomy } from "@/features/economy/data"
+import { enableRemindersAction } from "@/features/reminders/actions"
+import { ReminderPrompt } from "@/features/reminders/components/reminder-prompt"
 import { loadLearner } from "@/features/learner/load-learner"
 import { LessonRunner } from "@/features/lessons/components/lesson-runner"
 import { loadLessonState } from "@/features/lessons/data"
@@ -27,6 +31,11 @@ import { DatabaseNotReady } from "@/features/onboarding/database-not-ready"
 import { createClient } from "@/lib/supabase/server"
 
 type Props = { params: Promise<{ lessonId: string }> }
+
+async function rechargeAkkuAction() {
+  "use server"
+  return buyAction("recharge")
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const found = findLesson((await params).lessonId)
@@ -69,7 +78,10 @@ export default async function LessonPage({ params }: Props) {
     )
   }
 
-  const state = await loadLessonState(supabase, lessonId)
+  const [state, economy] = await Promise.all([
+    loadLessonState(supabase, lessonId),
+    loadEconomy(),
+  ])
 
   return (
     <LessonRunner
@@ -98,7 +110,17 @@ export default async function LessonPage({ params }: Props) {
         complete: completeLessonAction,
         recordMistake: recordMistakeAction,
         savePhrase: savePhraseAction,
+        drainAkku: drainAkkuAction,
+        rechargeAkku: rechargeAkkuAction,
       }}
+      reminderPrompt={<ReminderPrompt enable={enableRemindersAction} />}
+      stash={
+        economy && {
+          akku: economy.akku,
+          nextBarAt: economy.nextBarAt,
+          nuts: economy.nuts,
+        }
+      }
     />
   )
 }
