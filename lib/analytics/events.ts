@@ -38,13 +38,19 @@ export type AnalyticsEvents = {
   /** Sent by the server when the day's XP first reaches the learner's daily goal. */
   daily_goal_reached: {
     goal_xp: number
-    source: "lesson" | "lesson_replay" | "review" | "standup"
+    source: "lesson" | "lesson_replay" | "review" | "standup" | "practice"
   }
   /** The reminder job sent a reminder. */
   reminder_sent: { kind: string; channel: string; template: string }
   /** The learner turned reminders on or off on this device. */
   push_enabled: Record<string, never>
   push_disabled: Record<string, never>
+  /** A practice session (smart, mistakes or Express) was finished. */
+  practice_completed: {
+    exercises: number
+    first_try: number
+    passed: boolean | null
+  }
   /** A quest from today's plan was finished and paid out. */
   quest_completed: { quest: string; reward: number }
   /** A lanyard pin tier was unlocked. */
@@ -66,7 +72,7 @@ export type AnalyticsEvents = {
   }
   /** The server saved a spaced-repetition rating. */
   review_item_rated: {
-    rating: "again" | "remembered"
+    rating: "forgot" | "hard" | "good"
     strength: 1 | 2 | 3
   }
   /** The server confirmed the learner completed a team standup. */

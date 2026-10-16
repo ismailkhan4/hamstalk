@@ -23,6 +23,7 @@ export default async function DevPathPage({ searchParams }: Props) {
       preferences={learner.preferences}
       progress={progress}
       completedStandups={completedStandups}
+      expressPassed={params.stage === "done" ? ["a1-u1"] : []}
       params={{ level: params.level }}
       basePath="/dev/path"
     />

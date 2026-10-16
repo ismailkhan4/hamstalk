@@ -16,6 +16,8 @@ type LessonIntroProps = {
   replay: boolean
   onStart: () => void
   onResume: () => void
+  /** A practice session: no team intro, and it saves when it ends rather than as it goes. */
+  practice?: "smart" | "mistakes" | "express"
 }
 
 export function LessonIntro({
@@ -26,6 +28,7 @@ export function LessonIntro({
   replay,
   onStart,
   onResume,
+  practice,
 }: LessonIntroProps) {
   return (
     <>
@@ -52,21 +55,23 @@ export function LessonIntro({
         )}
         <p className="mt-4 text-body-lg text-secondary-text">{lesson.goal}</p>
 
-        <div className="mt-6 flex items-start gap-4">
-          <Avatar
-            person={lesson.intro.speaker.person}
-            initials={lesson.intro.speaker.initials}
-            size="xl"
-          />
-          <div>
-            <TargetText as="p" className="text-2xl">
-              {personalise(lesson.intro.target, learner)}
-            </TargetText>
-            <p className="mt-1 text-[0.9375rem] text-muted-foreground">
-              {personalise(lesson.intro.native, learner)}
-            </p>
+        {!practice && (
+          <div className="mt-6 flex items-start gap-4">
+            <Avatar
+              person={lesson.intro.speaker.person}
+              initials={lesson.intro.speaker.initials}
+              size="xl"
+            />
+            <div>
+              <TargetText as="p" className="text-2xl">
+                {personalise(lesson.intro.target, learner)}
+              </TargetText>
+              <p className="mt-1 text-[0.9375rem] text-muted-foreground">
+                {personalise(lesson.intro.native, learner)}
+              </p>
+            </div>
           </div>
-        </div>
+        )}
 
         <dl className="mt-8 grid gap-4 border-y border-border py-4 sm:grid-cols-3">
           <div>
@@ -91,9 +96,11 @@ export function LessonIntro({
           </div>
         </dl>
 
-        <h2 className="mt-6 text-sm font-semibold text-secondary-text">
-          You’ll practise
-        </h2>
+        {lesson.phrases.length > 0 && (
+          <h2 className="mt-6 text-sm font-semibold text-secondary-text">
+            You’ll practise
+          </h2>
+        )}
         <ul className="mt-2 flex flex-wrap gap-2">
           {lesson.phrases.map((phrase) => (
             <li
@@ -106,12 +113,20 @@ export function LessonIntro({
         </ul>
         {replay && (
           <p className="mt-6 rounded-lg bg-info-subtle p-3 text-sm text-info-text">
-            You’ve finished this one. You can replay it any time; replays don’t
-            add XP.
+            You’ve finished this one. Replay it any time: a replay earns a
+            little practice XP once a day.
           </p>
         )}
       </main>
-      <ActionFooter hint="You can leave and come back. Your place is saved.">
+      <ActionFooter
+        hint={
+          practice === "express"
+            ? "One try per answer, and each miss takes an Akku bar."
+            : practice
+              ? "Takes a few minutes. Practice never uses the Akku."
+              : "You can leave and come back. Your place is saved."
+        }
+      >
         {resumeAt ? (
           <>
             <Button variant="outline" size="lg" onClick={onStart}>
@@ -123,7 +138,11 @@ export function LessonIntro({
           </>
         ) : (
           <Button size="lg" onClick={onStart}>
-            Start lesson
+            {practice === "express"
+              ? "Ride the Express"
+              : practice
+                ? "Start practice"
+                : "Start lesson"}
           </Button>
         )}
       </ActionFooter>

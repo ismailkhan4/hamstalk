@@ -20,6 +20,8 @@ type PathViewProps = Pick<Learner, "name" | "preferences" | "progress"> & {
   email: string
   counts?: Learner["counts"]
   completedStandups: string[]
+  /** Units whose Express run is passed: drawn gold. */
+  expressPassed?: string[]
   params: { level?: string | string[]; unit?: string | string[] }
   /** Where the path lives, so links stay inside development previews. */
   basePath?: string
@@ -33,6 +35,7 @@ export function PathView({
   progress,
   counts,
   completedStandups,
+  expressPassed = [],
   params,
   basePath = "/path",
 }: PathViewProps) {
@@ -49,7 +52,8 @@ export function PathView({
     selectedLevel,
     preferences.startLevel,
     progress,
-    completedStandups
+    completedStandups,
+    expressPassed
   )
   const next = nextLesson(preferences.startLevel, progress)
   const doneUnits = completedUnitCount(selectedLevel, progress)

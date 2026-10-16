@@ -93,7 +93,8 @@ export function NotificationsView({ name, email, counts, items }: Props) {
               className="font-semibold text-primary-text underline underline-offset-[3px]"
             >
               settings
-            </Link>.
+            </Link>
+            .
           </span>
         </p>
       </main>

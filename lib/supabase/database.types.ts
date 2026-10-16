@@ -233,6 +233,12 @@ export type Database = {
           due_at: string
           last_reviewed_at: string | null
           review_count: number
+          stability?: number | null
+          difficulty?: number | null
+          fsrs_state?: number
+          lapses?: number
+          scheduled_days?: number
+          learning_steps?: number
           created_at: string
         }
         Insert: {
@@ -267,6 +273,12 @@ export type Database = {
           due_at?: string
           last_reviewed_at?: string | null
           review_count?: number
+          stability?: number | null
+          difficulty?: number | null
+          fsrs_state?: number
+          lapses?: number
+          scheduled_days?: number
+          learning_steps?: number
           created_at?: string
         }
         Relationships: []
@@ -387,6 +399,56 @@ export type Database = {
         Update: never
         Relationships: []
       }
+      learner_skills: {
+        Row: {
+          user_id: string
+          concept_tag: string
+          rating: number
+          attempts: number
+          updated_at: string
+        }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
+      exercise_attempts: {
+        Row: {
+          user_id: string
+          source_key: string
+          attempted_on: string
+          score: number
+          attempted_at: string
+        }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
+      practice_sessions: {
+        Row: {
+          id: string
+          user_id: string
+          kind: string
+          unit_id: string | null
+          exercise_keys: string[]
+          created_at: string
+          completed_at: string | null
+          passed: boolean | null
+        }
+        Insert: {
+          user_id: string
+          kind: string
+          unit_id?: string | null
+          exercise_keys: string[]
+        }
+        Update: never
+        Relationships: []
+      }
+      unit_express: {
+        Row: { user_id: string; unit_id: string; passed_at: string }
+        Insert: never
+        Update: never
+        Relationships: []
+      }
       profiles: {
         Row: {
           user_id: string
@@ -436,6 +498,11 @@ export type Database = {
       my_league: { Args: Record<PropertyKey, never>; Returns: Json }
       my_profile: { Args: Record<PropertyKey, never>; Returns: Json }
       public_profile: { Args: { p_handle: string }; Returns: Json }
+      finish_practice: {
+        Args: { p_id: string; p_outcomes: string[] }
+        Returns: Json
+      }
+      record_attempts: { Args: { p_items: Json }; Returns: undefined }
       reminder_opened: { Args: { p_id: string }; Returns: undefined }
       reminder_template_stats: {
         Args: { p_kind: string }

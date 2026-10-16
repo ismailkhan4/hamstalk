@@ -1,4 +1,12 @@
-import { BookOpen, Check, Construction, Flag, Lock, Users } from "lucide-react"
+import {
+  BookOpen,
+  Check,
+  Construction,
+  Flag,
+  Lock,
+  TramFront,
+  Users,
+} from "lucide-react"
 import Link from "next/link"
 
 import { buttonVariants } from "@/components/ui/button-variants"
@@ -89,6 +97,11 @@ function SectionRows({
   lineNumber: number
 }) {
   const { unit } = section
+  // A passed Express turns the unit's stretch of line gold.
+  const gold =
+    section.express === "gold"
+      ? ({ "--line": "var(--gold)" } as React.CSSProperties)
+      : undefined
   // A stretch of line is solid once what it leads to is done, half solid at your station.
   const headTrack: Track = section.underConstruction
     ? "construction"
@@ -101,6 +114,7 @@ function SectionRows({
       <li
         id={unit.id}
         className="relative grid scroll-mt-24 grid-cols-[56px_minmax(0,1fr)] gap-3 pt-5 pb-3"
+        style={gold}
       >
         <Rail track={headTrack} />
         <span
@@ -127,6 +141,21 @@ function SectionRows({
               <span className="font-mono text-sm font-semibold text-muted-foreground tabular-nums">
                 {section.done}/{section.total}
               </span>
+              {section.express !== "locked" && (
+                <Link
+                  href={`/practice/express/${unit.id}`}
+                  className={cn(
+                    "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-sm font-extrabold",
+                    section.express === "gold"
+                      ? "bg-reward text-reward-foreground"
+                      : "text-reward-text hover:underline"
+                  )}
+                >
+                  <TramFront aria-hidden="true" className="size-4" />
+                  {section.express === "gold" ? "Express ★" : "Express"}
+                  <span className="sr-only"> run for unit {unit.number}</span>
+                </Link>
+              )}
               <Link
                 href={guideHref}
                 className="ml-auto inline-flex items-center gap-1.5 text-sm font-extrabold text-primary-text hover:underline"
@@ -149,6 +178,7 @@ function SectionRows({
         section.stations.map((station) => (
           <StationRow
             key={station.lesson.id}
+            style={gold}
             station={station}
             track={
               station.here
@@ -163,6 +193,7 @@ function SectionRows({
 
       {!section.underConstruction && section.standup !== "planned" && (
         <StandupRow
+          style={gold}
           state={section.standup}
           track={section.standup === "done" ? "passed" : "ahead"}
         />
@@ -209,10 +240,12 @@ function StationRow({
   station,
   track,
   resumeAt,
+  style,
 }: {
   station: Station
   track: Track
   resumeAt: number | null
+  style?: React.CSSProperties
 }) {
   const { lesson, status, interchange, here } = station
   const playable = status !== "locked" && status !== "planned"
@@ -223,7 +256,10 @@ function StationRow({
   )
 
   return (
-    <li className="relative grid grid-cols-[56px_minmax(0,1fr)] gap-3 py-2">
+    <li
+      className="relative grid grid-cols-[56px_minmax(0,1fr)] gap-3 py-2"
+      style={style}
+    >
       <Rail track={track} />
       <span className="relative z-10 flex justify-center pt-1">
         <StationMarker station={station} />
@@ -319,9 +355,11 @@ function StationMarker({ station }: { station: Station }) {
 function StandupRow({
   state,
   track,
+  style,
 }: {
   state: Section["standup"]
   track: Track
+  style?: React.CSSProperties
 }) {
   const text =
     state === "done"
@@ -330,7 +368,10 @@ function StandupRow({
         ? "Ready: say your line at the 9:30 standup"
         : "Opens when you finish the unit"
   return (
-    <li className="relative grid grid-cols-[56px_minmax(0,1fr)] gap-3 py-2">
+    <li
+      className="relative grid grid-cols-[56px_minmax(0,1fr)] gap-3 py-2"
+      style={style}
+    >
       <Rail track={track} />
       <span className="relative z-10 flex justify-center">
         <span

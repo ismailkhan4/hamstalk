@@ -126,6 +126,33 @@ and the lanyard, `/dev/home?stash=low` shows Home with them, `/dev/lesson?akku=1
 on its last bar (`akku=0` shows the empty screen), and `/dev/lesson?screen=complete&stash=1` shows
 the end of a lesson with nuts, quests and a pin.
 
+## The adaptive engine: FSRS, the learner model and practice
+
+Apply `supabase/migrations/adaptive.sql` after `reminders.sql`. It also replaces `award_xp()` with
+a copy that accepts practice sessions; keep the two in step if either changes.
+
+- **Review words** are scheduled by FSRS (`ts-fsrs`, `features/review/scheduler.ts`). The learner
+  answers Forgot, Hard or Got it, and each button says when the word comes back. Strength bars are
+  derived from FSRS stability. Before the migration, the old spacing keeps working.
+- **Learner model** (`features/learner-model/elo.ts`): an Elo-style rating per concept (the
+  exercise's `concept_tag`), and a difficulty per exercise shared by everyone
+  (`exercises_pool.base_difficulty`). `record_attempts()` updates both from each exercise's first
+  attempt of the day, from lessons served by the pool and from practice.
+- **Session generator** (`features/session-generator/generate.ts`, pure) builds practice from
+  finished lessons:
+  - **Smart practice** (`/practice/smart`): ten exercises around 80% predicted success. Open
+    mistakes count three times, and anything seen in the last day is held back.
+  - **Your mistakes** (`/practice/mistakes`): the exercises behind open mistakes, most missed first.
+    Right first time marks a mistake learned.
+  - **Express** (`/practice/express/<unit>`): a finished unit's ten hardest exercises for the
+    learner. One try, no hints, and each miss takes an Akku bar. Getting 8 of 10 right first time
+    turns the unit's stretch of the line gold.
+- Practice earns 15 XP (30 for an Express), for at most five sessions a day. Smart practice and
+  mistakes never use the Akku.
+
+In development, `/dev/practice?kind=smart|mistakes|express` plays a session built from Unit 1, and
+`/dev/path?stage=done` shows a gold unit.
+
 ## Reminders: push, email and the streak saver
 
 Apply `supabase/migrations/reminders.sql` after `leagues.sql`. Two kinds of reminder, each sent

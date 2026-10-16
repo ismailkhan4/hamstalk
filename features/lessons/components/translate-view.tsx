@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 import { check, retry, startAttempt, type Attempt } from "../engine/attempt"
+import { useMaxTries } from "../engine/tries-context"
 import { gradeTranslate } from "../engine/grading"
 import { translateMistake } from "../engine/mistakes"
 import { personalise, type TranslateExercise } from "../schema"
@@ -29,12 +30,13 @@ export function TranslateView({
 }: TranslateViewProps) {
   const [text, setText] = useState("")
   const [attempt, setAttempt] = useState<Attempt>(startAttempt)
+  const maxTries = useMaxTries()
   const answering = attempt.phase === "answering"
   const source = personalise(exercise.source, learner)
   const answerText = personalise(exercise.accept[0] ?? "", learner)
 
   function onCheck() {
-    const next = check(attempt, gradeTranslate(exercise, text))
+    const next = check(attempt, gradeTranslate(exercise, text), maxTries)
     setAttempt(next)
     if (next.phase === "wrong")
       onMiss(translateMistake(lessonId, index, exercise, text))

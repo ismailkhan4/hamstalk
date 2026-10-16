@@ -6,7 +6,7 @@ import { z } from "zod"
  */
 export const rewardsSchema = z.object({
   awarded: z.number().int().min(0),
-  source: z.enum(["lesson", "lesson_replay", "review", "standup"]),
+  source: z.enum(["lesson", "lesson_replay", "review", "standup", "practice"]),
   xpToday: z.number().int().min(0),
   goalXp: z.number().int().positive(),
   goalReached: z.boolean(),
@@ -41,7 +41,8 @@ export const rewardsSchema = z.object({
 export type Rewards = z.infer<typeof rewardsSchema>
 export type RewardsInput = z.input<typeof rewardsSchema>
 
-export type XpSource = "lesson" | "lesson_replay" | "review" | "standup"
+export type XpSource =
+  "lesson" | "lesson_replay" | "review" | "standup" | "practice"
 
 /** Whether there is anything worth stopping the learner for. */
 export function isCelebration(rewards: Rewards | null | undefined) {

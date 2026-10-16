@@ -50,6 +50,8 @@ export type Section = {
   passed: boolean
   stations: Station[]
   standup: StandupState
+  /** The unit's Express run: locked until the unit is done, gold once passed. */
+  express: "locked" | "open" | "gold"
 }
 
 export type Line = {
@@ -64,7 +66,8 @@ export function transitLine(
   levelCode: CefrLevel,
   startLevel: StartLevel | null,
   progress: LessonProgress[],
-  completedStandups: string[]
+  completedStandups: string[],
+  expressPassed: readonly string[] = []
 ): Line {
   const level = getLevel(levelCode)
   const sections = level.units.map((unit): Section => {
@@ -89,6 +92,12 @@ export function transitLine(
       passed: status === "completed",
       stations,
       standup: standupState(unit.id, progress, completedStandups),
+      express:
+        status !== "completed"
+          ? "locked"
+          : expressPassed.includes(unit.id)
+            ? "gold"
+            : "open",
     }
   })
   return {

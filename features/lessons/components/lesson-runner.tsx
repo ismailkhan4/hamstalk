@@ -39,6 +39,7 @@ import {
   summarise,
   type SessionState,
 } from "../engine/session"
+import { TriesProvider } from "../engine/tries-context"
 import { isGraded, type Lesson } from "../schema"
 import { ticketId } from "../ticket"
 import { BuildView } from "./build-view"
@@ -54,7 +55,8 @@ import type { Learner } from "./types"
 
 type SaveResult = { ok: true } | { ok: false; message: string }
 type CompleteResult =
-  { ok: true; rewards?: Rewards | null } | { ok: false; message: string }
+  | { ok: true; rewards?: Rewards | null; passed?: boolean | null }
+  | { ok: false; message: string }
 
 /** What the runner needs from the server. The real actions or a stand-in for previews and tests. */
 export type LessonActions = {
@@ -102,6 +104,10 @@ export type LessonRunnerProps = {
   actions: LessonActions
   /** Asks about reminders at the end of a first-time lesson. */
   reminderPrompt?: React.ReactNode
+  /** Tries per answer: 2 in lessons, 1 in an Express run. */
+  tries?: number
+  /** Set for practice sessions, which end differently from lessons. */
+  practice?: { kind: "smart" | "mistakes" | "express"; unitNumber?: number }
   /** The Akku and nut balance as the lesson opened; null until economy.sql is applied. */
   stash: { akku: number; nextBarAt: string | null; nuts: number } | null
 }
@@ -123,6 +129,8 @@ export function LessonRunner({
   actions,
   stash,
   reminderPrompt,
+  tries = 2,
+  practice,
 }: LessonRunnerProps) {
   const router = useRouter()
   const savedOutcomes = replay ? [] : initial.outcomes
@@ -144,6 +152,7 @@ export function LessonRunner({
   const [saving, setSaving] = useState(false)
   const [startedAt, setStartedAt] = useState(() => Date.now())
   const [rewards, setRewards] = useState<Rewards | null>(null)
+  const [passed, setPassed] = useState<boolean | null>(null)
   const [combo, setCombo] = useState(0)
   const [bestCombo, setBestCombo] = useState(0)
   const [milestone, setMilestone] = useState<ComboMilestone | null>(null)
@@ -199,6 +208,7 @@ export function LessonRunner({
       setSaving(false)
       if (result.ok) {
         setRewards(result.rewards ?? null)
+        setPassed(result.passed ?? null)
         setCompleteProblem(null)
       } else if (!replay) setCompleteProblem(result.message)
     },
@@ -349,6 +359,7 @@ export function LessonRunner({
           resumeAt={hasSavedPlace ? index + 1 : null}
           replay={replay}
           onStart={() => start(false)}
+          practice={practice?.kind}
           onResume={() => start(true)}
         />
       </div>
@@ -405,6 +416,7 @@ export function LessonRunner({
           saving={saving}
           onRetrySave={() => void finishLesson(state)}
           reminderPrompt={reminderPrompt}
+          practice={practice && { ...practice, passed }}
         />
       </div>
     )
@@ -413,108 +425,110 @@ export function LessonRunner({
   const common = { index, learner, lessonId: lesson.id, onMiss }
 
   return (
-    <div className="flex min-h-svh flex-col bg-background">
-      <FocusHeader
-        closeLabel="Leave lesson"
-        onClose={() => setExitOpen(true)}
-        ticket={ticketId(lesson.id)}
-        title={lesson.title}
-        titleLang={lesson.titleInTarget ? TARGET_LANG : undefined}
-        progress={progress}
-        combo={combo}
-        status={
-          akku ? <AkkuBadge akku={akku.bars} drains={drains} /> : undefined
-        }
-      />
-      <ComboToast milestone={milestone} />
-      {warning && (
-        <div className="mx-auto w-full max-w-(--lesson-max) px-[clamp(20px,4vw,32px)] pt-4">
-          <Alert tone="warning" title="Not saved yet">
-            {warning}
-          </Alert>
-        </div>
-      )}
-      {exercise?.type === "discover" && (
-        <DiscoverView
-          key={index}
-          exercise={exercise}
-          learner={learner}
-          savedKeys={initial.savedPhraseKeys}
-          onToggleSave={onToggleSave}
-          onDone={() => onDone("first_try")}
+    <TriesProvider tries={tries}>
+      <div className="flex min-h-svh flex-col bg-background">
+        <FocusHeader
+          closeLabel="Leave lesson"
+          onClose={() => setExitOpen(true)}
+          ticket={ticketId(lesson.id)}
+          title={lesson.title}
+          titleLang={lesson.titleInTarget ? TARGET_LANG : undefined}
+          progress={progress}
+          combo={combo}
+          status={
+            akku ? <AkkuBadge akku={akku.bars} drains={drains} /> : undefined
+          }
         />
-      )}
-      {exercise?.type === "tip" && (
-        <TipView
-          key={index}
-          exercise={exercise}
-          learner={learner}
-          onDone={() => onDone("first_try")}
-        />
-      )}
-      {exercise?.type === "choice" && (
-        <ChoiceView
-          key={index}
-          {...common}
-          exercise={exercise}
-          onDone={onDone}
-        />
-      )}
-      {exercise?.type === "match" && (
-        <MatchView
-          key={index}
-          {...common}
-          exercise={exercise}
-          onDone={onDone}
-        />
-      )}
-      {exercise?.type === "build" && (
-        <BuildView
-          key={index}
-          {...common}
-          exercise={exercise}
-          onDone={onDone}
-        />
-      )}
-      {exercise?.type === "translate" && (
-        <TranslateView
-          key={index}
-          {...common}
-          exercise={exercise}
-          onDone={onDone}
-        />
-      )}
-      {exercise?.type === "conversation" && (
-        <ConversationView
-          key={index}
-          {...common}
-          exercise={exercise}
-          onDone={onDone}
-        />
-      )}
+        <ComboToast milestone={milestone} />
+        {warning && (
+          <div className="mx-auto w-full max-w-(--lesson-max) px-[clamp(20px,4vw,32px)] pt-4">
+            <Alert tone="warning" title="Not saved yet">
+              {warning}
+            </Alert>
+          </div>
+        )}
+        {exercise?.type === "discover" && (
+          <DiscoverView
+            key={index}
+            exercise={exercise}
+            learner={learner}
+            savedKeys={initial.savedPhraseKeys}
+            onToggleSave={onToggleSave}
+            onDone={() => onDone("first_try")}
+          />
+        )}
+        {exercise?.type === "tip" && (
+          <TipView
+            key={index}
+            exercise={exercise}
+            learner={learner}
+            onDone={() => onDone("first_try")}
+          />
+        )}
+        {exercise?.type === "choice" && (
+          <ChoiceView
+            key={index}
+            {...common}
+            exercise={exercise}
+            onDone={onDone}
+          />
+        )}
+        {exercise?.type === "match" && (
+          <MatchView
+            key={index}
+            {...common}
+            exercise={exercise}
+            onDone={onDone}
+          />
+        )}
+        {exercise?.type === "build" && (
+          <BuildView
+            key={index}
+            {...common}
+            exercise={exercise}
+            onDone={onDone}
+          />
+        )}
+        {exercise?.type === "translate" && (
+          <TranslateView
+            key={index}
+            {...common}
+            exercise={exercise}
+            onDone={onDone}
+          />
+        )}
+        {exercise?.type === "conversation" && (
+          <ConversationView
+            key={index}
+            {...common}
+            exercise={exercise}
+            onDone={onDone}
+          />
+        )}
 
-      <Dialog open={exitOpen} onOpenChange={setExitOpen}>
-        <DialogContent size="sm">
-          <DialogTitle>Leave this lesson?</DialogTitle>
-          <DialogDescription>
-            {replay
-              ? "You can replay it any time. Nothing from a replay changes your progress."
-              : `You’ve done ${done} of ${total} exercises. Your place is saved, so you can continue from exercise ${Math.min(done + 1, total)} later.`}
-          </DialogDescription>
-          <DialogActions>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => router.push(exitHref)}
-            >
-              Leave lesson
-            </Button>
-            <Button size="lg" onClick={() => setExitOpen(false)}>
-              Keep learning
-            </Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
-    </div>
+        <Dialog open={exitOpen} onOpenChange={setExitOpen}>
+          <DialogContent size="sm">
+            <DialogTitle>Leave this lesson?</DialogTitle>
+            <DialogDescription>
+              {replay
+                ? "You can replay it any time. Nothing from a replay changes your progress."
+                : `You’ve done ${done} of ${total} exercises. Your place is saved, so you can continue from exercise ${Math.min(done + 1, total)} later.`}
+            </DialogDescription>
+            <DialogActions>
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => router.push(exitHref)}
+              >
+                Leave lesson
+              </Button>
+              <Button size="lg" onClick={() => setExitOpen(false)}>
+                Keep learning
+              </Button>
+            </DialogActions>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </TriesProvider>
   )
 }

@@ -20,6 +20,7 @@ import {
   type Attempt,
   type Outcome,
 } from "../engine/attempt"
+import { useMaxTries } from "../engine/tries-context"
 import { choiceNote, gradeChoice } from "../engine/grading"
 import { optionOrder } from "../engine/shuffle"
 import { turnMistake } from "../engine/mistakes"
@@ -54,6 +55,7 @@ export function ConversationView({
   const [selection, setSelection] = useState<number | null>(null)
   const [chosen, setChosen] = useState<number | null>(null)
   const [attempt, setAttempt] = useState<Attempt>(startAttempt)
+  const maxTries = useMaxTries()
   const [turnOutcomes, setTurnOutcomes] = useState<Outcome[]>([])
   const [history, setHistory] = useState<Said[]>([])
 
@@ -82,7 +84,7 @@ export function ConversationView({
 
   function onCheck() {
     if (selection === null || !turn) return
-    const next = check(attempt, gradeChoice(turn, selection))
+    const next = check(attempt, gradeChoice(turn, selection), maxTries)
     setChosen(selection)
     setAttempt(next)
     if (next.phase === "wrong")

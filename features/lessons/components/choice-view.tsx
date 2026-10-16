@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 import { check, retry, startAttempt, type Attempt } from "../engine/attempt"
+import { useMaxTries } from "../engine/tries-context"
 import { choiceNote, gradeChoice } from "../engine/grading"
 import { choiceMistake } from "../engine/mistakes"
 import { optionOrder } from "../engine/shuffle"
@@ -36,6 +37,7 @@ export function ChoiceView({
   const [selection, setSelection] = useState<number | null>(null)
   const [chosen, setChosen] = useState<number | null>(null)
   const [attempt, setAttempt] = useState<Attempt>(startAttempt)
+  const maxTries = useMaxTries()
   const [transcriptOpen, setTranscriptOpen] = useState(false)
 
   const answering = attempt.phase === "answering"
@@ -58,7 +60,7 @@ export function ChoiceView({
 
   function onCheck() {
     if (selection === null) return
-    const next = check(attempt, gradeChoice(exercise, selection))
+    const next = check(attempt, gradeChoice(exercise, selection), maxTries)
     setChosen(selection)
     setAttempt(next)
     if (next.phase === "wrong")
