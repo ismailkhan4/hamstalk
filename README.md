@@ -99,6 +99,58 @@ between visits without writing anything. Keep the two in step. In development, `
 every streak state, and `/dev/lesson?screen=complete&streak=7&earned=1&goal=1` shows the
 celebration.
 
+## Hamsti's stash: nuts, the Akku, quests and pins
+
+Apply `supabase/migrations/economy.sql` after `habit_loop.sql`. Like the habit loop, learners can
+read their rows and never write them. Four functions do all the writing and decide every amount:
+
+- **`earn()`** replaces calling `award_xp()` directly (`features/rewards/award.ts` falls back to
+  `award_xp()` until the migration is applied). It awards the XP, then pays hazelnuts for the day's
+  goal (5), streak milestones (10–200), finished quests and new pins, and applies a double-XP boost.
+- **`use_akku()`**: the Akku has five bars. A lesson takes one for each answer that is still wrong
+  after the hint, so a first wrong try only costs the hint. One bar refills every four hours, and
+  every five words reviewed in a day charge one back. Reviews and standups never use it. At zero,
+  the lesson stops with its place saved, and the learner can recharge, practise, wait or leave.
+- **`buy()`**: the shop (Vorrat, at `/shop`) sells a full recharge (300), a streak freeze (150,
+  hold at most two) and 15 minutes of double XP (80). New learners start with 100 nuts.
+- **`my_economy()`** returns the balance, the Akku, today's plan and the pins.
+
+**Today's plan (Tagesplan)** on Home has three quests, picked from the learner and the date: an XP
+target, a lessons quest, and either reviewing words or reaching the daily goal. They pay out the
+moment they're done. **Pins** on Hamsti's lanyard (on Progress) have up to five tiers each, for the
+streak, lessons, XP, reviewed words, standups and quests, and pay 25 nuts per tier.
+
+`features/economy/model.ts` mirrors the prices, quest wording and pin tiers for display. Keep it in
+step with the SQL. In development, `/dev/shop?stash=fresh|busy|low|empty` shows the shop, the plan
+and the lanyard, `/dev/home?stash=low` shows Home with them, `/dev/lesson?akku=1` starts a lesson
+on its last bar (`akku=0` shows the empty screen), and `/dev/lesson?screen=complete&stash=1` shows
+the end of a lesson with nuts, quests and a pin.
+
+## The Liga: weekly leagues and profiles
+
+Apply `supabase/migrations/leagues.sql` after `economy.sql`. Leagues look like a football table:
+ten divisions from Kreisklasse up to the Bundesliga (the names come from the course config), and a
+season every week, Monday 00:00 to Monday 00:00 UTC. XP earned that week are the points.
+
+- **Joining:** a learner joins a table in their division the first time they open Home or
+  `/league` with XP that week. Tables hold up to 20 learners and fill the fullest open table first.
+- **Pacers:** while a table has fewer than 10 learners, the course's team characters (`pacers` in
+  `content/courses/<id>/course.ts`, ids matching `league_table()` in the SQL) fill the empty places
+  and earn XP at a steady pace that grows with the division. They are always labelled as team
+  characters.
+- **Promotion and relegation:** top 3 move up and bottom 3 move down (2 and 2 in tables under 10,
+  fewer under 6). The top division has no promotion and the bottom none relegation.
+- **No scheduled job:** a finished week is settled for each learner on their next visit, from the
+  final standings, which can't change after the whistle. The result shows once on `/league`.
+- **Profiles** live at `/u/<handle>` (`/profile` goes to your own). The display name defaults to a
+  first name and an initial, and the handle can't be guessed from the email. Learners can rename
+  themselves and hide the page; league tables then show the name without a link. Other learners'
+  data is only ever read through `my_league()` and `public_profile()`, which return names, handles
+  and public stats.
+
+In development, `/dev/league?state=mid|top|bottom|full|new|promoted|relegated|stayed`,
+`/dev/profile?me=1` and `/dev/home?league=top` show these screens with sample data.
+
 ## The learning path
 
 The path is drawn as a U-Bahn line map (`features/path/`). Each level is a line (A1 is U1, A2 is U2,

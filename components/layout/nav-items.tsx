@@ -5,6 +5,7 @@ import {
   NotebookPen,
   Route,
   Target,
+  Trophy,
   Users,
 } from "lucide-react"
 
@@ -46,6 +47,13 @@ export const primaryNav: NavItem[] = [
     shortLabel: "Practice",
     icon: <Target aria-hidden="true" />,
     count: "due",
+  },
+  {
+    href: "/league",
+    also: ["/u"],
+    label: "League",
+    shortLabel: "League",
+    icon: <Trophy aria-hidden="true" />,
   },
   {
     href: "/team",

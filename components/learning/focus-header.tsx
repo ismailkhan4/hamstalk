@@ -17,6 +17,8 @@ type FocusHeaderProps = {
   progress?: { current: number; total: number; done?: boolean }
   /** Answers right first time in a row. From COMBO_GLOW_AT, the build shows as passing. */
   combo?: number
+  /** Extra status before the step count, e.g. the Akku. */
+  status?: React.ReactNode
 }
 
 /**
@@ -31,6 +33,7 @@ export function FocusHeader({
   ticket,
   progress,
   combo = 0,
+  status,
 }: FocusHeaderProps) {
   const still = useLessMotion()
   const passing = combo >= COMBO_GLOW_AT && !progress?.done
@@ -80,6 +83,7 @@ export function FocusHeader({
               </motion.span>
             )}
           </AnimatePresence>
+          {status}
           {progress && (
             <p
               aria-live="polite"

@@ -24,6 +24,7 @@ import { buttonVariants } from "@/components/ui/button-variants"
 import { celebrate } from "@/features/celebrations/confetti"
 import { CountUp } from "@/features/celebrations/count-up"
 import { playFeedback } from "@/features/celebrations/feedback"
+import { StashSummary } from "@/features/economy/components/stash-summary"
 import { Mascot } from "@/features/celebrations/mascot"
 import { MASCOT_NAME } from "@/features/celebrations/mascot-name"
 import { isCelebration, type Rewards } from "@/features/rewards/payload"
@@ -115,7 +116,8 @@ export function LessonComplete({
 
   // Before the server answers, show what this lesson should earn; then exactly what it did.
   const expectedXp = replay ? 10 : summary.xp + (perfect ? 10 : 0)
-  const xp = rewards?.awarded ?? expectedXp
+  const boosted = rewards?.boosted ?? 0
+  const xp = (rewards?.awarded ?? expectedXp) + boosted
 
   return (
     <main
@@ -197,10 +199,17 @@ export function LessonComplete({
         <dl className="divide-y-2 divide-border-subtle">
           <Check label="XP earned" icon={Zap} tone="reward">
             <CountUp key={xp} to={xp} prefix="+" /> XP
-            {!replay && perfect && (
-              <span className="ml-2 text-xs font-bold text-muted-foreground">
-                incl. +10 perfect
+            {boosted > 0 ? (
+              <span className="ml-2 text-xs font-bold text-reward-text">
+                doubled
               </span>
+            ) : (
+              !replay &&
+              perfect && (
+                <span className="ml-2 text-xs font-bold text-muted-foreground">
+                  incl. +10 perfect
+                </span>
+              )
             )}
           </Check>
           <Check label="Right first time" icon={Target} tone="primary">
@@ -222,6 +231,11 @@ export function LessonComplete({
           All checks have passed
         </p>
       </section>
+      <StashSummary
+        rewards={rewards}
+        className="mt-6 motion-safe:animate-rise"
+        style={{ animationDelay: "450ms" }}
+      />
       {replay && (
         <p className="mt-2 text-sm text-muted-foreground">
           Replays earn 10 practice XP, once a day per lesson.

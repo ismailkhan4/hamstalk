@@ -40,6 +40,14 @@ export type AnalyticsEvents = {
     goal_xp: number
     source: "lesson" | "lesson_replay" | "review" | "standup"
   }
+  /** A quest from today's plan was finished and paid out. */
+  quest_completed: { quest: string; reward: number }
+  /** A lanyard pin tier was unlocked. */
+  pin_unlocked: { pin: string; tier: number }
+  /** Nuts were spent in the shop. */
+  item_bought: { item: string; price: number }
+  /** A lesson took Akku bars for missed answers. */
+  akku_used: { lesson_id: string; bars: number; left: number }
   /** The server confirmed the learner completed onboarding. */
   onboarding_completed: Record<string, never>
   /** The server recorded a completed placement check. */

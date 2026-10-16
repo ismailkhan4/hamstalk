@@ -21,6 +21,10 @@ import {
 } from "@/features/celebrations/combo"
 import { ComboToast } from "@/features/celebrations/combo-toast"
 import { playFeedback } from "@/features/celebrations/feedback"
+import type { AkkuResult, BuyResult } from "@/features/economy/actions"
+import { AkkuBadge } from "@/features/economy/components/akku-badge"
+import { AkkuEmpty } from "@/features/economy/components/akku-empty"
+import { akkuAt, AKKU_MAX, SHOP } from "@/features/economy/model"
 import type { Rewards } from "@/features/rewards/payload"
 import { track } from "@/lib/analytics/client"
 
@@ -71,9 +75,15 @@ export type LessonActions = {
     saveKey: string
     save: boolean
   }) => Promise<SaveResult>
+  /** Takes Akku bars for missed answers. Null when it couldn't be recorded. */
+  drainAkku: (input: {
+    lessonId: string
+    bars: number
+  }) => Promise<AkkuResult | null>
+  rechargeAkku: () => Promise<BuyResult>
 }
 
-type LessonRunnerProps = {
+export type LessonRunnerProps = {
   lesson: Lesson
   kicker: string
   learner: Learner
@@ -90,9 +100,13 @@ type LessonRunnerProps = {
   exitHref: string
   pathHref: string
   actions: LessonActions
+  /** The Akku and nut balance as the lesson opened; null until economy.sql is applied. */
+  stash: { akku: number; nextBarAt: string | null; nuts: number } | null
 }
 
-type Phase = "intro" | "exercise" | "complete"
+type Phase = "intro" | "exercise" | "empty" | "complete"
+
+const RECHARGE_PRICE = SHOP.find((item) => item.id === "recharge")?.price ?? 0
 
 export function LessonRunner({
   lesson,
@@ -105,6 +119,7 @@ export function LessonRunner({
   exitHref,
   pathHref,
   actions,
+  stash,
 }: LessonRunnerProps) {
   const router = useRouter()
   const savedOutcomes = replay ? [] : initial.outcomes
@@ -136,6 +151,19 @@ export function LessonRunner({
     },
     []
   )
+  // The Akku: null when there's no stash. One bar goes for each answer missed after the hint.
+  const [akku, setAkku] = useState<{
+    bars: number
+    nextBarAt: number | null
+  } | null>(() =>
+    stash
+      ? (({ akku: bars, nextBarAt }) => ({ bars, nextBarAt }))(
+          akkuAt(stash, Date.now())
+        )
+      : null
+  )
+  const [drains, setDrains] = useState(0)
+  const [nuts, setNuts] = useState(stash?.nuts ?? null)
   const [finished, setFinished] = useState<{
     state: SessionState
     minutes: number
@@ -174,7 +202,7 @@ export function LessonRunner({
     [actions, lesson.id, replay]
   )
 
-  async function advance(state: SessionState) {
+  async function advance(state: SessionState, left = akku) {
     setSession(state)
     const nextIndex = index + 1
     if (isComplete(state) && nextIndex >= total) {
@@ -187,6 +215,7 @@ export function LessonRunner({
       return
     }
     setIndex(nextIndex)
+    if (left && left.bars === 0) setPhase("empty")
     if (!replay) {
       const result = await actions.saveProgress({
         lessonId: lesson.id,
@@ -211,8 +240,34 @@ export function LessonRunner({
     milestoneTimer.current = setTimeout(() => setMilestone(null), 1900)
   }
 
+  /** Answers still wrong after the hint each take a bar. Returns the bars left. */
+  function drain(missed: number) {
+    if (!akku || missed === 0) return akku
+    const bars = Math.max(0, akku.bars - missed)
+    const next = {
+      bars,
+      nextBarAt:
+        akku.bars === AKKU_MAX ? Date.now() + 4 * 3_600_000 : akku.nextBarAt,
+    }
+    setAkku(next)
+    setDrains((count) => count + 1)
+    void actions
+      .drainAkku({ lessonId: lesson.id, bars: missed })
+      .then((result) => {
+        if (result)
+          setAkku({
+            bars: result.akku,
+            nextBarAt: result.nextBarAt ? Date.parse(result.nextBarAt) : null,
+          })
+      })
+    return next
+  }
+
   function onDone(outcome: Outcome, turnOutcomes?: Outcome[]) {
     updateCombo(outcome)
+    const left = drain(
+      (turnOutcomes ?? [outcome]).filter((o) => o === "shown").length
+    )
     if (exercise)
       track("exercise_answered", {
         lesson_id: lesson.id,
@@ -223,7 +278,8 @@ export function LessonRunner({
     void advance(
       turnOutcomes
         ? recordConversation(session, index, turnOutcomes)
-        : recordOutcome(session, index, outcome)
+        : recordOutcome(session, index, outcome),
+      left
     )
   }
 
@@ -245,6 +301,12 @@ export function LessonRunner({
     return result.ok ? null : "Try again in a moment."
   }
 
+  function onRecharged() {
+    setAkku({ bars: AKKU_MAX, nextBarAt: null })
+    setNuts((count) => (count === null ? null : count - RECHARGE_PRICE))
+    setPhase("exercise")
+  }
+
   function start(fromSaved: boolean) {
     track("lesson_started", {
       lesson_id: lesson.id,
@@ -258,7 +320,7 @@ export function LessonRunner({
       setSession(startSession(lesson))
     }
     setStartedAt(Date.now())
-    setPhase("exercise")
+    setPhase(akku && akku.bars === 0 ? "empty" : "exercise")
   }
 
   const progress = {
@@ -285,6 +347,29 @@ export function LessonRunner({
           replay={replay}
           onStart={() => start(false)}
           onResume={() => start(true)}
+        />
+      </div>
+    )
+  }
+
+  if (phase === "empty" && akku) {
+    return (
+      <div className="flex min-h-svh flex-col bg-background">
+        <FocusHeader
+          closeLabel="Leave lesson"
+          onClose={() => router.push(exitHref)}
+          ticket={ticketId(lesson.id)}
+          title={lesson.title}
+          titleLang={lesson.titleInTarget ? TARGET_LANG : undefined}
+          progress={progress}
+          status={<AkkuBadge akku={akku.bars} drains={drains} />}
+        />
+        <AkkuEmpty
+          nuts={nuts}
+          nextBarAt={akku.nextBarAt}
+          exitHref={exitHref}
+          buy={actions.rechargeAkku}
+          onRecharged={onRecharged}
         />
       </div>
     )
@@ -333,6 +418,9 @@ export function LessonRunner({
         titleLang={lesson.titleInTarget ? TARGET_LANG : undefined}
         progress={progress}
         combo={combo}
+        status={
+          akku ? <AkkuBadge akku={akku.bars} drains={drains} /> : undefined
+        }
       />
       <ComboToast milestone={milestone} />
       {warning && (

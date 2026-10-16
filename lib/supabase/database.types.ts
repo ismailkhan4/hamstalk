@@ -341,6 +341,19 @@ export type Database = {
         Update: never
         Relationships: []
       }
+      profiles: {
+        Row: {
+          user_id: string
+          handle: string
+          display_name: string
+          is_public: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: never
+        Update: { display_name?: string; is_public?: boolean }
+        Relationships: []
+      }
       streaks: {
         Row: {
           user_id: string
@@ -366,6 +379,17 @@ export type Database = {
         Args: { p_source: string; p_ref: string; p_amount?: number | null }
         Returns: Json
       }
+      buy: { Args: { p_item: string }; Returns: Json }
+      earn: {
+        Args: { p_source: string; p_ref: string; p_amount?: number | null }
+        Returns: Json
+      }
+      my_economy: { Args: Record<PropertyKey, never>; Returns: Json }
+      use_akku: { Args: { p_ref: string; p_count?: number }; Returns: Json }
+      league_result_seen: { Args: { p_week: string }; Returns: undefined }
+      my_league: { Args: Record<PropertyKey, never>; Returns: Json }
+      my_profile: { Args: Record<PropertyKey, never>; Returns: Json }
+      public_profile: { Args: { p_handle: string }; Returns: Json }
     }
     Enums: { [_ in never]: never }
     CompositeTypes: { [_ in never]: never }

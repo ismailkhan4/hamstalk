@@ -5,6 +5,10 @@ import { AppShell } from "@/components/layout/app-shell"
 import { isLessonAvailable } from "@/content/courses/de/availability"
 import { HowItWorks, PlanPanel, TeamCard } from "./home-panels"
 import { MissionCard } from "./mission-card"
+import { TodayPlan } from "@/features/economy/components/today-plan"
+import type { Economy } from "@/features/economy/model"
+import { LeagueCard } from "@/features/leagues/components/league-card"
+import type { League } from "@/features/leagues/model"
 import { dayAtCompany } from "@/features/learner/day-at-company"
 import type { Learner } from "@/features/learner/load-learner"
 import { isPreviewLevel } from "@/features/onboarding/plan"
@@ -20,6 +24,10 @@ type HomeViewProps = Pick<
   email: string
   counts?: Learner["counts"]
   completedStandups: string[]
+  /** Null until economy.sql is applied. */
+  economy: Economy | null
+  /** Null until leagues.sql is applied. */
+  league?: League | null
 }
 
 export function HomeView({
@@ -30,6 +38,8 @@ export function HomeView({
   progress,
   counts,
   completedStandups,
+  economy,
+  league = null,
 }: HomeViewProps) {
   const line = transitLine(
     "A1",
@@ -107,6 +117,8 @@ export function HomeView({
               firstName={firstName}
             />
           )}
+          {economy && <TodayPlan economy={economy} />}
+          {league && <LeagueCard league={league} />}
           <TeamCard name={name} />
         </div>
         <aside
