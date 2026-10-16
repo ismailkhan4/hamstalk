@@ -22,6 +22,7 @@ export const EXERCISE_TYPES = [
   "build",
   "translate",
   "conversation",
+  "speak",
 ] as const satisfies readonly Exercise["type"][]
 
 export type PoolRecord = {

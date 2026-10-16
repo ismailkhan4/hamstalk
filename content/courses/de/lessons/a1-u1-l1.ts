@@ -400,5 +400,20 @@ export const lesson1: Lesson = {
         native: "Bye, everyone!",
       },
     },
+    {
+      type: "speak",
+      kind: "Say it",
+      prompt: "You arrive at the team table. Greet everyone out loud",
+      target: "Hallo zusammen!",
+      native: "Hello, everyone!",
+      speaker: "lf",
+      accept: [],
+      feedback: {
+        right: "Hallo zusammen! That’s how you greet the whole team at once.",
+        wrong:
+          "Two words: Hallo, then zusammen, stressed on the second syllable: zu-SAM-men.",
+      },
+      topic: "Greetings",
+    },
   ],
 }

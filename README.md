@@ -145,6 +145,22 @@ Every listen button plays the line in its speaker's own voice, recorded with Ele
 Setup: apply `audio.sql`, set `ELEVENLABS_API_KEY` and `SUPABASE_SECRET_KEY`, paste the voice ids,
 then run `bun run audio:generate --write`.
 
+## Speaking exercises
+
+`speak` exercises ask the learner to say a line aloud. The browser records it (10 seconds at
+most), `/api/speech` has ElevenLabs Scribe (`scribe_v2`) transcribe it, and
+`features/lessons/engine/speech.ts` grades the transcript leniently: case, punctuation, filler
+words, ß/ss, umlaut spellings and digits don't matter, one letter off in a longer word counts, and
+four words in five is a pass. Words Scribe was unsure of are marked "nearly there".
+
+Recognition can miss a good answer, so a speaking miss never costs Akku or goes into the mistakes
+notebook, and "Can't speak now" pauses speaking exercises for an hour on that device.
+
+Setup: apply `supabase/migrations/speaking.sql` (adds the `speak` type to the pool and the daily
+limits: 200 answers per learner, `SPEECH_DAILY_LIMIT` for the app), turn on the API key's
+"Speech to Text" permission, then `bun run curriculum:ingest` and `bun run audio:generate --write`
+for the new lines.
+
 ## AI: Explain my answer and roleplays
 
 Set `ANTHROPIC_API_KEY` (server only) and apply `supabase/migrations/ai.sql` after

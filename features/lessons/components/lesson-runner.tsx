@@ -50,6 +50,7 @@ import { DiscoverView } from "./discover-view"
 import { LessonComplete, type UpNext } from "./lesson-complete"
 import { LessonIntro } from "./lesson-intro"
 import { MatchView } from "./match-view"
+import { SpeakView } from "./speak-view"
 import { TipView } from "./tip-view"
 import type { Learner } from "./types"
 
@@ -491,6 +492,14 @@ export function LessonRunner({
         )}
         {exercise?.type === "translate" && (
           <TranslateView
+            key={index}
+            {...common}
+            exercise={exercise}
+            onDone={onDone}
+          />
+        )}
+        {exercise?.type === "speak" && (
+          <SpeakView
             key={index}
             {...common}
             exercise={exercise}

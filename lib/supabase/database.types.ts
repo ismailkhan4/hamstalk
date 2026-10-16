@@ -503,6 +503,7 @@ export type Database = {
         Args: { p_chars: number; p_daily_chars: number }
         Returns: boolean
       }
+      speech_allow: { Args: { p_daily_total: number }; Returns: boolean }
       finish_practice: {
         Args: { p_id: string; p_outcomes: string[] }
         Returns: Json

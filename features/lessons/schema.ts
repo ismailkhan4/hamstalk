@@ -188,6 +188,22 @@ export const translateExercise = z.object({
   revisits: z.number().int().min(0).optional(),
 })
 
+export const speakExercise = z.object({
+  type: z.literal("speak"),
+  kind: z.string(),
+  prompt: z.string(),
+  /** The line to say aloud, shown and played. */
+  target: z.string().min(1),
+  native: z.string().min(1),
+  /** Who says it in the recording (an avatar id); the narrator when unset. */
+  speaker: person.exclude(["me"]).optional(),
+  /** Other ways of saying it that also count, e.g. "Tschüs" for "Tschüss". */
+  accept: z.array(z.string().min(1)).default([]),
+  feedback: z.object({ right: z.string(), wrong: z.string() }),
+  topic: z.string().optional(),
+  revisits: z.number().int().min(0).optional(),
+})
+
 const turn = z
   .object({
     speaker: voice,
@@ -223,6 +239,7 @@ export const exerciseSchema = z.discriminatedUnion("type", [
   buildExercise,
   translateExercise,
   conversationExercise,
+  speakExercise,
 ])
 
 const vocabularyEntry = z.object({
@@ -268,6 +285,7 @@ export type BuildExercise = z.infer<typeof buildExercise>
 export type ConversationExercise = z.infer<typeof conversationExercise>
 export type ConversationTurn = z.infer<typeof turn>
 export type TranslateExercise = z.infer<typeof translateExercise>
+export type SpeakExercise = z.infer<typeof speakExercise>
 export type Exercise = z.infer<typeof exerciseSchema>
 export type Lesson = z.infer<typeof lessonSchema>
 export type VocabularyEntry = z.infer<typeof vocabularyEntry>
@@ -277,6 +295,7 @@ export type GradedExercise =
   | BuildExercise
   | ConversationExercise
   | TranslateExercise
+  | SpeakExercise
 
 export function isGraded(exercise: Exercise): exercise is GradedExercise {
   return exercise.type !== "discover" && exercise.type !== "tip"
