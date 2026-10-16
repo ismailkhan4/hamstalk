@@ -67,6 +67,8 @@ type LessonCompleteProps = {
   saveProblem: string | null
   saving: boolean
   onRetrySave: () => void
+  /** Asks about reminders after a first-time lesson; rendered by the page. */
+  reminderPrompt?: React.ReactNode
 }
 
 export function LessonComplete({
@@ -83,6 +85,7 @@ export function LessonComplete({
   saveProblem,
   saving,
   onRetrySave,
+  reminderPrompt,
 }: LessonCompleteProps) {
   const review = lesson.kind === "review"
   const perfect = summary.graded > 0 && summary.firstTry === summary.graded
@@ -236,6 +239,7 @@ export function LessonComplete({
         className="mt-6 motion-safe:animate-rise"
         style={{ animationDelay: "450ms" }}
       />
+      {!replay && reminderPrompt}
       {replay && (
         <p className="mt-2 text-sm text-muted-foreground">
           Replays earn 10 practice XP, once a day per lesson.

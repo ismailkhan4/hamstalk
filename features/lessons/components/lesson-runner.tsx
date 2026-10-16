@@ -100,6 +100,8 @@ export type LessonRunnerProps = {
   exitHref: string
   pathHref: string
   actions: LessonActions
+  /** Asks about reminders at the end of a first-time lesson. */
+  reminderPrompt?: React.ReactNode
   /** The Akku and nut balance as the lesson opened; null until economy.sql is applied. */
   stash: { akku: number; nextBarAt: string | null; nuts: number } | null
 }
@@ -120,6 +122,7 @@ export function LessonRunner({
   pathHref,
   actions,
   stash,
+  reminderPrompt,
 }: LessonRunnerProps) {
   const router = useRouter()
   const savedOutcomes = replay ? [] : initial.outcomes
@@ -401,6 +404,7 @@ export function LessonRunner({
           saveProblem={completeProblem}
           saving={saving}
           onRetrySave={() => void finishLesson(state)}
+          reminderPrompt={reminderPrompt}
         />
       </div>
     )

@@ -40,6 +40,11 @@ export type AnalyticsEvents = {
     goal_xp: number
     source: "lesson" | "lesson_replay" | "review" | "standup"
   }
+  /** The reminder job sent a reminder. */
+  reminder_sent: { kind: string; channel: string; template: string }
+  /** The learner turned reminders on or off on this device. */
+  push_enabled: Record<string, never>
+  push_disabled: Record<string, never>
   /** A quest from today's plan was finished and paid out. */
   quest_completed: { quest: string; reward: number }
   /** A lanyard pin tier was unlocked. */

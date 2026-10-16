@@ -126,6 +126,59 @@ and the lanyard, `/dev/home?stash=low` shows Home with them, `/dev/lesson?akku=1
 on its last bar (`akku=0` shows the empty screen), and `/dev/lesson?screen=complete&stash=1` shows
 the end of a lesson with nuts, quests and a pin.
 
+## Reminders: push, email and the streak saver
+
+Apply `supabase/migrations/reminders.sql` after `leagues.sql`. Two kinds of reminder, each sent
+at most once a day per learner, in their own time zone, and only if they haven't practised yet:
+
+- **Daily:** at the learner's reminder time (Settings, or the prompt after their first lesson),
+  for up to two hours after it.
+- **Streak saver:** from 21:00 when the streak would end at midnight. If both are due at once,
+  only the streak saver goes out.
+
+Wordings live in `features/reminders/templates.ts`. The endpoint picks one with an epsilon-greedy
+bandit: 80% of the time the wording with the best rate of practice within two hours of sending,
+20% a random one. Every reminder links through `/r/<id>`, which records the open.
+
+**Setting it up**
+
+1. Generate push keys with `bunx web-push generate-vapid-keys`. Set `NEXT_PUBLIC_VAPID_PUBLIC_KEY`,
+   `VAPID_PRIVATE_KEY` and `VAPID_SUBJECT`, plus `SUPABASE_SECRET_KEY` (Project settings → API
+   keys) and a long random `CRON_SECRET`, in `.env.local` and in Vercel. Redeploy.
+2. In Supabase, enable the `pg_cron` and `pg_net` extensions (Database → Extensions).
+3. In the SQL editor, store the secret and schedule the job. Use your production URL:
+
+   ```sql
+   select vault.create_secret('<CRON_SECRET>', 'klarlingo_cron_secret');
+
+   select cron.schedule(
+     'klarlingo-reminders',
+     '*/15 * * * *',
+     $$
+     select net.http_post(
+       url := 'https://klarlingo-v1.vercel.app/api/cron/reminders',
+       headers := jsonb_build_object(
+         'Content-Type', 'application/json',
+         'Authorization', 'Bearer ' || (
+           select decrypted_secret from vault.decrypted_secrets
+            where name = 'klarlingo_cron_secret'
+         )
+       ),
+       body := '{}'::jsonb
+     );
+     $$
+   );
+   ```
+
+   Check runs with `select * from cron.job_run_details order by start_time desc limit 5;` and
+   replies with `select * from net._http_response order by created desc limit 5;`.
+
+4. **Email** (optional): set `RESEND_API_KEY` and `REMINDER_FROM_EMAIL` on a domain verified in
+   Resend. Until both are set, the email switch in Settings stays off.
+
+Push needs HTTPS (or localhost). On iPhone and iPad it works only once Klarlingo is added to the
+Home Screen. In development, `/dev/settings` shows the reminder controls.
+
 ## The Liga: weekly leagues and profiles
 
 Apply `supabase/migrations/leagues.sql` after `economy.sql`. Leagues look like a football table:

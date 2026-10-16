@@ -79,22 +79,21 @@ export function NotificationsView({ name, email, counts, items }: Props) {
         <p className="mt-8 flex max-w-3xl gap-2.5 text-sm text-secondary-text">
           <Info aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
           <span>
-            This list is worked out each time you open it. Klarlingo doesn’t
-            send reminders, emails or push notifications, so there is nothing to
-            mark as read.
+            This list is worked out each time you open it, so it always shows
+            what’s waiting right now.
           </span>
         </p>
         <p className="mt-3 flex max-w-3xl gap-2.5 text-sm text-muted-foreground">
           <Bell aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
           <span>
-            Your reminder choice in{" "}
+            Daily reminders and the evening streak saver arrive as notifications
+            on the devices you turn on in{" "}
             <Link
               href="/settings"
               className="font-semibold text-primary-text underline underline-offset-[3px]"
             >
               settings
-            </Link>{" "}
-            is saved, but no reminder is sent yet.
+            </Link>.
           </span>
         </p>
       </main>

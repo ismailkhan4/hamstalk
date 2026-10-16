@@ -69,6 +69,8 @@ export type Database = {
           onboarding_step: string
           onboarded_at: string | null
           timezone: string | null
+          streak_saver?: boolean
+          email_reminders?: boolean
           created_at: string
           updated_at: string
         }
@@ -87,6 +89,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          streak_saver?: boolean
+          email_reminders?: boolean
           user_id?: string
           goal?: string | null
           start_level?: string | null
@@ -341,6 +345,48 @@ export type Database = {
         Update: never
         Relationships: []
       }
+      push_subscriptions: {
+        Row: {
+          id: string
+          user_id: string
+          endpoint: string
+          p256dh: string
+          auth: string
+          user_agent: string | null
+          created_at: string
+          last_sent_at: string | null
+        }
+        Insert: {
+          user_id: string
+          endpoint: string
+          p256dh: string
+          auth: string
+          user_agent?: string | null
+        }
+        Update: { last_sent_at?: string | null }
+        Relationships: []
+      }
+      notification_log: {
+        Row: {
+          id: string
+          user_id: string
+          kind: string
+          channel: string
+          template: string
+          local_date: string
+          sent_at: string
+          opened_at: string | null
+        }
+        Insert: {
+          user_id: string
+          kind: string
+          channel: string
+          template: string
+          local_date: string
+        }
+        Update: never
+        Relationships: []
+      }
       profiles: {
         Row: {
           user_id: string
@@ -390,6 +436,28 @@ export type Database = {
       my_league: { Args: Record<PropertyKey, never>; Returns: Json }
       my_profile: { Args: Record<PropertyKey, never>; Returns: Json }
       public_profile: { Args: { p_handle: string }; Returns: Json }
+      reminder_opened: { Args: { p_id: string }; Returns: undefined }
+      reminder_template_stats: {
+        Args: { p_kind: string }
+        Returns: { template: string; sends: number; wins: number }[]
+      }
+      reminders_due: {
+        Args: { p_now?: string }
+        Returns: {
+          user_id: string
+          kind: string
+          local_date: string
+          email: string
+          full_name: string
+          streak: number
+          freezes: number
+          xp_today: number
+          goal_xp: number
+          due_words: number
+          email_reminders: boolean
+          subscriptions: Json
+        }[]
+      }
     }
     Enums: { [_ in never]: never }
     CompositeTypes: { [_ in never]: never }

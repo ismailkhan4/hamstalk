@@ -8,6 +8,8 @@ import { buttonVariants } from "@/components/ui/button-variants"
 import { findLesson } from "@/content/courses/de/curriculum"
 import { buyAction, drainAkkuAction } from "@/features/economy/actions"
 import { loadEconomy } from "@/features/economy/data"
+import { enableRemindersAction } from "@/features/reminders/actions"
+import { ReminderPrompt } from "@/features/reminders/components/reminder-prompt"
 import { loadLearner } from "@/features/learner/load-learner"
 import { LessonRunner } from "@/features/lessons/components/lesson-runner"
 import { loadLessonState } from "@/features/lessons/data"
@@ -111,6 +113,7 @@ export default async function LessonPage({ params }: Props) {
         drainAkku: drainAkkuAction,
         rechargeAkku: rechargeAkkuAction,
       }}
+      reminderPrompt={<ReminderPrompt enable={enableRemindersAction} />}
       stash={
         economy && {
           akku: economy.akku,

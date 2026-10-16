@@ -2,6 +2,8 @@
 
 import type { Preferences } from "@/features/onboarding/options"
 
+import { ReminderSettings } from "@/features/reminders/components/reminder-settings"
+
 import type { SettingsResult } from "./actions"
 import { SettingsScreen } from "./settings-screen"
 
@@ -10,8 +12,8 @@ const preferences: Preferences = {
   startLevel: "beginner",
   contexts: ["standups", "messaging", "everyday"],
   dailyMinutes: 15,
-  reminderEnabled: false,
-  reminderTime: null,
+  reminderEnabled: true,
+  reminderTime: "18:00",
   onboardedAt: "2026-10-12T08:00:00Z",
   startedAt: "2026-10-12T08:00:00Z",
   step: "plan",
@@ -37,6 +39,22 @@ export function SettingsPreview({ fail }: { fail: boolean }) {
       }}
       preferences={preferences}
       exportHref="/icon.svg"
+      reminders={
+        <ReminderSettings
+          setup={{
+            ready: true,
+            streakSaver: true,
+            emailReminders: false,
+            push: true,
+            email: false,
+          }}
+          actions={{
+            savePush: async () => ({ ok: true }),
+            removePush: async () => ({ ok: true }),
+            savePrefs: async () => ({ ok: true }),
+          }}
+        />
+      }
       actions={{
         savePreferences: () => outcome(),
         updateProfile: () => outcome("Your name is updated."),
