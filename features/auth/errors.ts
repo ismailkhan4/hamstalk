@@ -24,7 +24,7 @@ const messages: Record<string, AuthError> = {
   },
   same_password: {
     title: "That’s your current password",
-    message: "Choose a password you haven’t used on Klarlingo before.",
+    message: "Choose a password you haven’t used on Hamstalk before.",
   },
   signup_disabled: {
     title: "Sign-up is closed for now",
@@ -54,7 +54,7 @@ export const unexpectedError: AuthError = {
 export const configurationError: AuthError = {
   title: "Sign-in isn’t set up yet",
   message:
-    "This copy of Klarlingo isn’t connected to its account service. If you run it, check the Supabase settings.",
+    "This copy of Hamstalk isn’t connected to its account service. If you run it, check the Supabase settings.",
 }
 
 export function toAuthError(error: SupabaseLikeError): AuthError {

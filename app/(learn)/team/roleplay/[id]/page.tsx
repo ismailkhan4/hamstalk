@@ -67,7 +67,7 @@ export default async function RoleplayPage({ params }: Props) {
     return (
       <Unavailable
         title="Roleplays aren’t switched on here"
-        body="They need an Anthropic API key. If you run this copy of Klarlingo, set ANTHROPIC_API_KEY."
+        body="They need an Anthropic API key. If you run this copy of Hamstalk, set ANTHROPIC_API_KEY."
       />
     )
 
@@ -85,7 +85,7 @@ export default async function RoleplayPage({ params }: Props) {
     return (
       <Unavailable
         title="Roleplays aren’t set up yet"
-        body="They need the AI migration. If you run this copy of Klarlingo, apply supabase/migrations/ai.sql."
+        body="They need the AI migration. If you run this copy of Hamstalk, apply supabase/migrations/ai.sql."
       />
     )
 

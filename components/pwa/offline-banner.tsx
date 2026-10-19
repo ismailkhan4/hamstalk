@@ -22,7 +22,7 @@ function useOnline() {
 }
 
 /**
- * Says plainly when the connection is gone. Klarlingo keeps nothing for offline use, so the message
+ * Says plainly when the connection is gone. Hamstalk keeps nothing for offline use, so the message
  * names what stops working instead of promising what doesn't exist.
  */
 export function OfflineBanner() {
@@ -56,7 +56,7 @@ function OfflineNotice() {
     >
       <WifiOff aria-hidden="true" className="size-4 shrink-0" />
       <p className="min-w-0 flex-1">
-        You’re offline. Klarlingo needs a connection to load lessons and save
+        You’re offline. Hamstalk needs a connection to load lessons and save
         your progress, so what’s on screen stays, but nothing new is saved until
         you’re back.
         {stillOffline && " Still no connection."}

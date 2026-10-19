@@ -85,7 +85,7 @@ function psqlEnv(): NodeJS.ProcessEnv {
     PGDATABASE: decodeURIComponent(url.pathname.slice(1)) || "postgres",
     PGSSLMODE:
       url.searchParams.get("sslmode") ?? (local ? "prefer" : "require"),
-    PGAPPNAME: "klarlingo-curriculum-ingest",
+    PGAPPNAME: "hamstalk-curriculum-ingest",
     PGCONNECT_TIMEOUT: "15",
   }
 }

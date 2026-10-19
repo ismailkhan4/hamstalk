@@ -205,6 +205,95 @@ export const standups: Standup[] = [
       },
     ],
   },
+  {
+    unitId: "a1-u4",
+    line: {
+      target: "Um zehn habe ich einen Termin.",
+      native: "At ten I have an appointment.",
+    },
+    prompts: [
+      {
+        task: "Say what’s in your calendar today",
+        ask: {
+          target: "Guten Morgen, %N! Was steht heute an?",
+          native: "Good morning, %N! What’s on today?",
+        },
+        options: [
+          {
+            target: "Um zehn habe ich einen Termin.",
+            native: "At ten I have an appointment.",
+          },
+          {
+            target: "Um zehn ich habe einen Termin.",
+            native: "At ten I have an appointment.",
+          },
+          {
+            target: "Es ist zehn Uhr.",
+            native: "It’s ten o’clock.",
+          },
+        ],
+        correct: 0,
+        right:
+          "Um zehn takes first place, so habe comes second, then ich. Verb second.",
+        wrong: {
+          1: "After Um zehn the verb comes next: Um zehn habe ich einen Termin.",
+          2: "That tells the time now. Lena asked what’s on: Um zehn habe ich einen Termin.",
+        },
+        react: { target: "Alles klar, um zehn.", native: "Got it, at ten." },
+        phrases: [
+          {
+            target: "Um zehn habe ich einen Termin.",
+            native: "At ten I have an appointment.",
+          },
+          {
+            target: "Heute habe ich keine Termine.",
+            native: "I have no appointments today.",
+          },
+        ],
+      },
+      {
+        task: "Say when you’re free tomorrow",
+        ask: {
+          target: "Hast du morgen Zeit für ein Review?",
+          native: "Do you have time for a review tomorrow?",
+        },
+        options: [
+          {
+            target: "Ja, morgen um halb elf.",
+            native: "Yes, tomorrow at half past ten.",
+          },
+          {
+            target: "Ja, morgen ist halb elf.",
+            native: "Yes, tomorrow is half past ten.",
+          },
+          {
+            target: "Ja, am morgen um halb elf.",
+            native: "Yes, on tomorrow at half past ten.",
+          },
+        ],
+        correct: 0,
+        right: "morgen um halb elf: tomorrow at 10:30. Short and clear.",
+        wrong: {
+          1: "ist says what something is. To say when: morgen um halb elf.",
+          2: "am goes with days, like am Montag. morgen stands on its own: morgen um halb elf.",
+        },
+        react: {
+          target: "Super, morgen um halb elf!",
+          native: "Great, tomorrow at half past ten!",
+        },
+        phrases: [
+          {
+            target: "Ja, morgen um halb elf.",
+            native: "Yes, tomorrow at half past ten.",
+          },
+          {
+            target: "Morgen habe ich keine Zeit.",
+            native: "I don’t have time tomorrow.",
+          },
+        ],
+      },
+    ],
+  },
 ]
 
 export function getStandup(unitId: string) {

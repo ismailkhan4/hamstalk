@@ -22,7 +22,7 @@ export function OnboardingHeader({ step }: { step: OnboardingStep }) {
   return (
     <header className="sticky top-0 z-(--z-header) border-b border-border-subtle bg-background/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-(--content-max) items-center gap-6 px-[clamp(20px,4vw,48px)]">
-        <Link href="/" aria-label="Klarlingo home" className="shrink-0">
+        <Link href="/" aria-label="Hamstalk home" className="shrink-0">
           <Logo symbolClassName="size-[30px]" />
         </Link>
         <div className="mx-auto hidden w-full max-w-md flex-col gap-1 sm:flex">

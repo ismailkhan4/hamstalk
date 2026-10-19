@@ -32,7 +32,7 @@ export function WelcomeStep({
         Willkommen im Team!
       </h1>
       <p className="mt-4 max-w-[56ch] text-body-lg text-secondary-text">
-        You’re joining Klarlingo. Let’s set up your German-learning journey so
+        You’re joining Hamstalk. Let’s set up your German-learning journey so
         your first mission fits your goals.
       </p>
       <ol

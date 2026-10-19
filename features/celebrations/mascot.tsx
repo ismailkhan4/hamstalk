@@ -32,7 +32,7 @@ type MascotProps = {
 }
 
 /**
- * Hamsti, Klarlingo's hamster. In German, *hamstern* means to stockpile, and Hamsti stockpiles the
+ * Hamsti, Hamstalk's hamster. In German, *hamstern* means to stockpile, and Hamsti stockpiles the
  * words you learn: the cheeks puff up whenever something good happens. An SVG with Motion; the
  * props are the contract, so a Rive file can replace the drawing later without touching a screen.
  */

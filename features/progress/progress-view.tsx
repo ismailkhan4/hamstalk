@@ -173,7 +173,7 @@ export function ProgressView({
             <p className="mt-3 text-secondary-text">
               Only a checkpoint can change your level, never XP, streaks or
               lesson counts. The A1 checkpoint comes after Unit 8, and it isn’t
-              built yet, so Klarlingo doesn’t claim a level for you.
+              built yet, so Hamstalk doesn’t claim a level for you.
             </p>
             {startLevel && (
               <p className="mt-3 text-secondary-text">

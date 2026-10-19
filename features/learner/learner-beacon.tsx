@@ -6,8 +6,8 @@ import { identify, resetAnalytics } from "@/lib/analytics/client"
 
 import { syncTimezoneAction } from "./actions"
 
-const USER_KEY = "klarlingo:analytics-user"
-const ZONE_KEY = "klarlingo:timezone-synced"
+const USER_KEY = "hamstalk:analytics-user"
+const ZONE_KEY = "hamstalk:timezone-synced"
 
 function read(storage: Storage, key: string) {
   try {

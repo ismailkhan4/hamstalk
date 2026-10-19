@@ -53,6 +53,10 @@ function collect(): Line[] {
         for (const turn of exercise.turns)
           add(turn.line, turn.speaker.person, where)
       if (exercise.type === "translate") add(exercise.source, null, where)
+      if (exercise.type === "speak") {
+        add(exercise.target, exercise.speaker ?? null, where)
+        add(exercise.target, exercise.speaker ?? null, where, "slow")
+      }
       if (exercise.type === "choice" && exercise.listening) {
         const speaker = speakerFromCaption(exercise.listening.meta)
         add(exercise.listening.clip, speaker, where)

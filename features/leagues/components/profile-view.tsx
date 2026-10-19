@@ -4,7 +4,7 @@ import { TARGET_LANG } from "@/content/courses"
 import { initialsFor } from "@/components/learning/team-badge"
 import { Lanyard } from "@/features/economy/components/lanyard"
 
-import type { ProfileSaveResult } from "../actions"
+import type { ProfileInput, ProfileSaveResult } from "../actions"
 import { divisionName, type Profile } from "../model"
 import { DivisionCrest } from "./division-crest"
 import { ProfileForm } from "./profile-form"
@@ -12,16 +12,23 @@ import { ProfileForm } from "./profile-form"
 const joined = (iso: string) =>
   new Date(iso).toLocaleDateString("en", { month: "long", year: "numeric" })
 
-/** A learner's public page: name, division, streak, XP and pins. Your own adds the edit form. */
+/**
+ * A learner's public page: name, division, streak, XP and pins. Your own adds the edit form.
+ * `actions` sit under the name (Follow, Share) and `friends` below the pins, when friends are on.
+ */
 export function ProfileView({
   profile,
   save,
+  actions,
+  friends,
+  allowNudges = null,
 }: {
   profile: Profile
-  save?: (input: {
-    displayName: string
-    isPublic: boolean
-  }) => Promise<ProfileSaveResult>
+  save?: (input: ProfileInput) => Promise<ProfileSaveResult>
+  actions?: React.ReactNode
+  friends?: React.ReactNode
+  /** Null hides the nudges setting (before friends.sql). */
+  allowNudges?: boolean | null
 }) {
   const stats = [
     {
@@ -64,6 +71,11 @@ export function ProfileView({
           <p className="font-semibold text-muted-foreground">
             @{profile.handle} · learning since {joined(profile.joinedAt)}
           </p>
+          {actions && (
+            <div className="mt-3 flex flex-wrap items-start gap-2">
+              {actions}
+            </div>
+          )}
           {profile.me && !profile.isPublic && (
             <p className="mt-1 inline-flex items-center gap-1.5 text-sm font-bold text-secondary-text">
               <Lock aria-hidden="true" className="size-4" />
@@ -98,10 +110,13 @@ export function ProfileView({
 
       <Lanyard pins={profile.pins} />
 
+      {friends}
+
       {profile.me && save && (
         <ProfileForm
           displayName={profile.displayName}
           isPublic={profile.isPublic}
+          allowNudges={allowNudges}
           save={save}
         />
       )}

@@ -22,7 +22,7 @@ export default function OfflinePage() {
       </span>
       <h1 className="mt-5 font-display text-h2 font-bold">You’re offline</h1>
       <p className="mt-2 text-secondary-text">
-        Klarlingo needs a connection to load your lessons and save your
+        Hamstalk needs a connection to load your lessons and save your
         progress. Nothing you did before this was lost; reconnect and pick up
         where you left off.
       </p>

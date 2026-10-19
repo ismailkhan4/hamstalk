@@ -32,7 +32,7 @@ export default async function ShopPage() {
             title="The shop isn’t open yet"
           >
             Nuts, the Akku and the shop need the economy migration. If you run
-            this copy of Klarlingo, apply supabase/migrations/economy.sql.
+            this copy of Hamstalk, apply supabase/migrations/economy.sql.
           </EmptyState>
         </main>
       )}

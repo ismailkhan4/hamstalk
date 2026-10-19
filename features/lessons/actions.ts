@@ -31,7 +31,7 @@ const PERFECT_BONUS = 10
 const FAILED =
   "Your progress isn’t saved yet. It’s kept on this device while you’re here; try saving again."
 const NOT_READY =
-  "Progress can’t be saved yet because the database isn’t set up. If you run this copy of Klarlingo, apply the migrations in supabase/migrations."
+  "Progress can’t be saved yet because the database isn’t set up. If you run this copy of Hamstalk, apply the migrations in supabase/migrations."
 
 const failure = (
   error: { code?: string } | null

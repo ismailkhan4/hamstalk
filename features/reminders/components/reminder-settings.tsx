@@ -63,7 +63,7 @@ export function ReminderSettings({
       if (!result.ok) {
         setProblem(
           result.reason === "denied"
-            ? "Notifications are blocked for Klarlingo in this browser. Allow them in the site settings, then try again."
+            ? "Notifications are blocked for Hamstalk in this browser. Allow them in the site settings, then try again."
             : "This browser couldn’t turn on notifications. Try again, or use another browser."
         )
         return
@@ -121,7 +121,7 @@ export function ReminderSettings({
             {!setup.push
               ? "Not available yet: push isn’t set up on this server."
               : support === "needs-install"
-                ? "On iPhone and iPad, add Klarlingo to your Home Screen first (Share, then Add to Home Screen), then open it from there."
+                ? "On iPhone and iPad, add Hamstalk to your Home Screen first (Share, then Add to Home Screen), then open it from there."
                 : support === "unsupported"
                   ? "This browser can’t show notifications."
                   : device

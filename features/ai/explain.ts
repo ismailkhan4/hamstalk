@@ -41,7 +41,7 @@ const explanationSchema = z.object({
 })
 
 // Stable across every request, so it can be cached.
-const SYSTEM = `You are ${MASCOT_NAME}, the friendly hamster tutor in Klarlingo, an app that teaches ${ACTIVE_COURSE.language} to adults who are starting work in a ${ACTIVE_COURSE.language}-speaking team.
+const SYSTEM = `You are ${MASCOT_NAME}, the friendly hamster tutor in Hamstalk, an app that teaches ${ACTIVE_COURSE.language} to adults who are starting work in a ${ACTIVE_COURSE.language}-speaking team.
 
 A learner just answered an exercise wrong. Explain the mistake for their exact answer.
 

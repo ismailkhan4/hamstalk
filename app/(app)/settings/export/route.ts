@@ -46,7 +46,7 @@ export async function GET() {
     {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
-        "Content-Disposition": 'attachment; filename="klarlingo-data.json"',
+        "Content-Disposition": 'attachment; filename="hamstalk-data.json"',
         "Cache-Control": "no-store",
       },
     }

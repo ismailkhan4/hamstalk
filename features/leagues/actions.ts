@@ -24,7 +24,11 @@ const profileInput = z.object({
     .min(1, "Add a name others will see.")
     .max(40, "Keep it to 40 characters."),
   isPublic: z.boolean(),
+  /** Only sent once friends.sql is applied, which adds the column. */
+  allowNudges: z.boolean().optional(),
 })
+
+export type ProfileInput = z.input<typeof profileInput>
 
 /** Changes how others see the learner. RLS limits the update to their own row and two columns. */
 export async function saveProfileAction(
@@ -43,6 +47,9 @@ export async function saveProfileAction(
     .update({
       display_name: parsed.data.displayName,
       is_public: parsed.data.isPublic,
+      ...(parsed.data.allowNudges === undefined
+        ? {}
+        : { allow_nudges: parsed.data.allowNudges }),
     })
     .eq("user_id", user.id)
   if (error)
