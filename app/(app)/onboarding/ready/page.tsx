@@ -61,7 +61,7 @@ export default async function ReadyPage() {
       <header>
         <Link
           href="/"
-          aria-label="Klarlingo home"
+          aria-label="Hamstalk home"
           className="[&_span]:text-deep-foreground"
         >
           <Logo symbolClassName="size-[30px]" />

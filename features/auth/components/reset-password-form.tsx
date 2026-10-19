@@ -50,7 +50,7 @@ export function ResetPasswordForm({ action, email }: ResetPasswordFormProps) {
       <h1 className="font-display text-h1 font-bold">Choose a new password</h1>
       <p className="mt-3 text-body text-secondary-text">
         For <b className="text-foreground">{email}</b>. Pick something you
-        haven’t used on Klarlingo before.
+        haven’t used on Hamstalk before.
       </p>
       {serverError && (
         <Alert tone="error" title={serverError.title} className="mt-6">

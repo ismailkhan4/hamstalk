@@ -53,7 +53,7 @@ export function AuthShell({
         />
         <Link
           href="/"
-          aria-label="Klarlingo home"
+          aria-label="Hamstalk home"
           className="w-fit [&_span]:text-deep-foreground"
         >
           <Logo symbolClassName="size-[30px]" />
@@ -94,7 +94,7 @@ export function AuthShell({
         className="flex min-w-0 flex-col px-[clamp(20px,4vw,48px)] pt-5 pb-7"
       >
         <div className="flex min-h-12 items-center lg:hidden">
-          <Link href="/" aria-label="Klarlingo home">
+          <Link href="/" aria-label="Hamstalk home">
             <Logo symbolClassName="size-[30px]" />
           </Link>
         </div>

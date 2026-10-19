@@ -47,7 +47,8 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   {
     key: "Permissions-Policy",
-    value: "camera=(), microphone=(), geolocation=(), payment=()",
+    // The microphone is for speaking exercises, on Hamstalk's own pages only.
+    value: "camera=(), microphone=(self), geolocation=(), payment=()",
   },
   {
     key: "Strict-Transport-Security",
@@ -114,7 +115,7 @@ const nextConfig: NextConfig = {
 // from the Vercel commit SHA.
 export default withSentryConfig(nextConfig, {
   org: "heyismail",
-  project: "klarlingo",
+  project: "klarlingo", // Sentry project slug: rename it in Sentry first, then here
   authToken: process.env.SENTRY_AUTH_TOKEN,
   widenClientFileUpload: true,
   silent: !process.env.CI,

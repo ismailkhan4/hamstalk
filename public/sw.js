@@ -1,4 +1,4 @@
-const CACHE = "klarlingo-static-v2"
+const CACHE = "hamstalk-static-v3"
 const OFFLINE_URL = "/offline"
 const REFRESH_AFTER_MS = 6 * 60 * 60 * 1000
 let lastRefresh = 0
@@ -94,11 +94,11 @@ self.addEventListener("push", (event) => {
     data = { body: event.data ? event.data.text() : "" }
   }
   event.waitUntil(
-    self.registration.showNotification(data.title || "Klarlingo", {
+    self.registration.showNotification(data.title || "Hamstalk", {
       body: data.body || "",
       icon: "/icons/icon-192.png",
       badge: "/icons/icon-192.png",
-      tag: data.tag || "klarlingo",
+      tag: data.tag || "hamstalk",
       data: { url: data.url || "/home" },
     })
   )

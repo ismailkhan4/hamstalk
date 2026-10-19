@@ -55,12 +55,12 @@ export function safeNextPath(
     return fallback
   let url: URL
   try {
-    url = new URL(next, "https://klarlingo.invalid")
+    url = new URL(next, "https://hamstalk.invalid")
   } catch {
     return fallback
   }
   if (
-    url.origin !== "https://klarlingo.invalid" ||
+    url.origin !== "https://hamstalk.invalid" ||
     !isProtectedPath(url.pathname)
   )
     return fallback

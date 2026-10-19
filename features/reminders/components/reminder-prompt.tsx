@@ -11,7 +11,7 @@ import { REMINDER_TIMES } from "@/features/onboarding/options"
 import type { ReminderResult } from "../actions"
 import { currentSubscription, pushSupport, subscribe } from "../push-client"
 
-const ASKED_KEY = "klarlingo:reminder-asked"
+const ASKED_KEY = "hamstalk:reminder-asked"
 
 /**
  * After a finished lesson: would the learner like a nudge tomorrow? Asked once per device, only

@@ -249,7 +249,7 @@ export function ChatScreen({ shell, firstName }: Props) {
                   id="own-reply-note"
                   className="mt-1.5 text-sm text-muted-foreground"
                 >
-                  Klarlingo doesn’t grade free writing yet. Compare your reply
+                  Hamstalk doesn’t grade free writing yet. Compare your reply
                   with model answers instead. Your text stays on this page and
                   isn’t sent or saved.
                 </p>

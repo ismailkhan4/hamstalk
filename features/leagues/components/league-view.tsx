@@ -19,10 +19,13 @@ export function LeagueView({
   league,
   onResultSeen,
   profileBase,
+  friends,
 }: {
   league: League
   onResultSeen: (week: string) => Promise<void> | void
   profileBase?: string
+  /** The friends table, when friends are on. */
+  friends?: React.ReactNode
 }) {
   const now = useNow(60_000)
   const left = Date.parse(league.endsAt) - now
@@ -81,6 +84,8 @@ export function LeagueView({
           </Link>
         </section>
       )}
+
+      {friends}
 
       <section
         aria-labelledby="how-league"

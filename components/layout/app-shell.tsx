@@ -35,7 +35,7 @@ export function AppShell({ name, email, counts, children }: AppShellProps) {
 
       <aside className="sticky top-0 hidden h-svh flex-col border-r border-border-subtle px-4 py-5 lg:flex">
         <div className="flex items-center justify-between">
-          <Link href="/home" aria-label="Klarlingo home" className="w-fit px-2">
+          <Link href="/home" aria-label="Hamstalk home" className="w-fit px-2">
             <Logo symbolClassName="size-[30px]" />
           </Link>
           <Link
@@ -96,7 +96,7 @@ export function AppShell({ name, email, counts, children }: AppShellProps) {
       </aside>
 
       <header className="sticky top-0 z-(--z-header) flex h-14 items-center justify-between border-b border-border-subtle bg-background/95 px-3 backdrop-blur sm:px-4 lg:hidden">
-        <Link href="/home" aria-label="Klarlingo home">
+        <Link href="/home" aria-label="Hamstalk home">
           {/* Narrow phones keep just the mark, to leave room for the streak. */}
           <LogoSymbol className="size-[30px] sm:hidden" />
           <Logo className="max-sm:hidden" symbolClassName="size-[30px]" />

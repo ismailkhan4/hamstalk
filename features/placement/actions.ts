@@ -21,7 +21,7 @@ const progressSchema = z.object({
 const NOT_SAVED =
   "Your answers weren’t saved. Check your connection and try again; they’re still on this screen."
 const DATABASE_NOT_READY =
-  "Answers can’t be saved yet because the database isn’t set up. If you run this copy of Klarlingo, apply the migrations in supabase/migrations."
+  "Answers can’t be saved yet because the database isn’t set up. If you run this copy of Hamstalk, apply the migrations in supabase/migrations."
 
 export async function savePlacementProgressAction(
   input: unknown

@@ -147,7 +147,7 @@ export function SignInForm({
         Sign in
       </Button>
       <p className="mt-5 text-center text-[0.9375rem] text-secondary-text">
-        New to Klarlingo?{" "}
+        New to Hamstalk?{" "}
         <Link
           href="/signup"
           className="font-semibold text-primary-text underline underline-offset-[3px]"

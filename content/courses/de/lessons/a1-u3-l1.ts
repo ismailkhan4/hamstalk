@@ -76,7 +76,7 @@ export const lesson1: Lesson = {
           speaker: { person: "lf", initials: "LF", label: "Lena" },
           target: "Guten Tag, Herr Schulz. Wie heißen Sie?",
           native: "Hello, Mr Schulz. What’s your name?",
-          note: "With Sie, the verb ends in -native: Wie heißen Sie?",
+          note: "With Sie, the verb ends in -en: Wie heißen Sie?",
           saveKey: "U3b",
           topic: "Names",
           example: {

@@ -450,5 +450,22 @@ export const lesson2: Lesson = {
         native: "Good night, everyone!",
       },
     },
+    {
+      type: "speak",
+      kind: "Say it",
+      prompt:
+        "It’s 9:00 and the stand-up is starting. Say good morning to everyone",
+      target: "Guten Morgen, zusammen!",
+      native: "Good morning, everyone!",
+      speaker: "lf",
+      accept: ["Morgen, zusammen!"],
+      feedback: {
+        right:
+          "Guten Morgen, zusammen! The way every stand-up at Kaffeesatz begins.",
+        wrong:
+          "Three words: Guten Morgen, zusammen. Morgen has a hard g, like the g in “go”.",
+      },
+      topic: "Greetings",
+    },
   ],
 }
