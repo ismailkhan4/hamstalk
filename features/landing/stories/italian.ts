@@ -79,7 +79,7 @@ export const italian: Story = {
         ],
       },
       tips: {
-        en: "Italian often puts the verb first: *compare un errore*.",
+        en: "Italian often puts the verb before the subject: *compare un errore*.",
         de: "Im Italienischen steht das Verb oft vor dem Subjekt: *compare un errore*.",
         it: "Il verbo può venire prima del soggetto: *compare un errore*.",
       },

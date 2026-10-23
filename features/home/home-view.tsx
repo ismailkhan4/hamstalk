@@ -62,7 +62,7 @@ export function HomeView({
     : nothingDone && nextOpen
       ? `Welcome to the team. Your first mission takes about ${next.lesson.minutes} minutes.`
       : nothingDone
-        ? "Welcome to the team. Your first lessons are being built and open here as soon as they’re ready."
+        ? "Welcome to the team. Your first lessons are being built and will open here as soon as they’re ready."
         : next.resumeAt !== null
           ? `Welcome back. ${next.lesson.title} is saved at exercise ${next.resumeAt + 1}.`
           : `Next: ${next.lesson.goal.charAt(0).toLowerCase()}${next.lesson.goal.slice(1)}.`

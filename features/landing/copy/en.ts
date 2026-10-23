@@ -11,12 +11,14 @@ const names: Record<Course, string> = {
 /** British English, like the rest of the app. */
 export const en: CopyFor = (story) => {
   const lang = names[story.course]
+  /** "an English-speaking team", "a German-speaking team" */
+  const a = /^[AEIOU]/.test(lang) ? "an" : "a"
   const { lead, helper, friend, company } = story
   const city = story.city.en
   return {
     meta: {
       title: `Hamstalk · Learn ${lang}. Join the team.`,
-      description: `The ${lang} course for software engineers joining a ${lang}-speaking team.`,
+      description: `The ${lang} course for software engineers joining ${a} ${lang}-speaking team.`,
       ogLocale: "en_GB",
     },
     nav: {
@@ -57,7 +59,7 @@ export const en: CopyFor = (story) => {
         },
         tue: {
           title: "You’re stuck",
-          moment: `The ticket makes no sense, and ${helper.name} looks busy. No sentence will help you more than asking for help.`,
+          moment: `The ticket makes no sense, and ${helper.name} looks busy. No sentence will help you more than the one that asks for help.`,
         },
         wed: {
           title: "Something’s broken",
@@ -103,12 +105,12 @@ export const en: CopyFor = (story) => {
           a: `None at all. Your first Monday starts with *${story.greeting}*.`,
         },
         {
-          q: `Is it only ${lang} for work?`,
+          q: `Is it only workplace ${lang}?`,
           a: "No. You’ll also order coffee, book appointments and hunt for a flat. The office just gives every lesson a story.",
         },
         {
           q: "Do I have to be a developer?",
-          a: `Nope. The team in the story builds software, but the ${lang} works just as well outside tech.`,
+          a: `Nope. The team in the story builds software, but the ${lang} you learn works just as well outside tech.`,
         },
         {
           q: "Does it work on my phone?",
@@ -121,7 +123,7 @@ export const en: CopyFor = (story) => {
       ],
     },
     invite: {
-      heading: "See you Monday.",
+      heading: "See you on Monday.",
       label: "Invitation",
       when: "Monday · 09:30–09:45",
       where: `${company} · Room “${story.room}”`,

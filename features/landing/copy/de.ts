@@ -38,7 +38,7 @@ export const de: CopyFor = (story) => {
     hero: {
       kicker: `Montag, 09:00 · ${company}, ${story.city.de}`,
       title: `Dein neues Team spricht ${noun}.`,
-      lede: `Hamstalk bringt dir ${noun} bei, einen Arbeitstag nach dem anderen: Stand-up, Bug, Kaffeepause. Fünf Minuten pro Lektion – und ein Hamster, der dich anfeuert.`,
+      lede: `Hamstalk bringt dir ${noun} Arbeitstag für Arbeitstag bei: Stand-up, Bug, Kaffeepause. Fünf Minuten pro Lektion – und ein Hamster, der dich anfeuert.`,
       signInPrompt: "Schon im Team?",
       planner: "Deine erste Woche",
       now: "Jetzt",
@@ -62,7 +62,7 @@ export const de: CopyFor = (story) => {
         wed: {
           title: "Irgendwas ist kaputt",
           moment:
-            "Ein Bug im Registrierungsformular, und alle schauen dich an. Beschreib ihn genau – den Rest erledigen die Logs.",
+            "Im Registrierungsformular steckt ein Bug, und alle schauen dich an. Beschreib ihn genau – den Rest erledigen die Logs.",
         },
         thu: {
           title: "Die Kaffeepause",
@@ -104,11 +104,11 @@ export const de: CopyFor = (story) => {
         },
         {
           q: `Geht es nur um ${noun} für die Arbeit?`,
-          a: "Nein. Du bestellst auch Kaffee, vereinbarst Termine und suchst eine Wohnung. Das Büro gibt jeder Lektion nur ihre Geschichte.",
+          a: "Nein. Du bestellst auch Kaffee, vereinbarst Termine und suchst eine Wohnung. Das Büro sorgt nur dafür, dass jede Lektion eine Geschichte erzählt.",
         },
         {
           q: "Muss ich programmieren können?",
-          a: `Nein. Das Team in der Geschichte entwickelt Software, aber das ${noun} hilft dir auch außerhalb der Tech-Branche.`,
+          a: `Nein. Das Team in der Geschichte entwickelt Software, aber das ${noun}, das du lernst, hilft dir auch außerhalb der Tech-Branche.`,
         },
         {
           q: "Funktioniert Hamstalk auf dem Handy?",

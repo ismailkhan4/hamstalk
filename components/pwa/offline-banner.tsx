@@ -57,8 +57,8 @@ function OfflineNotice() {
       <WifiOff aria-hidden="true" className="size-4 shrink-0" />
       <p className="min-w-0 flex-1">
         You’re offline. Hamstalk needs a connection to load lessons and save
-        your progress, so what’s on screen stays, but nothing new is saved until
-        you’re back.
+        your progress. What’s on screen stays, but nothing new is saved until
+        you’re back online.
         {stillOffline && " Still no connection."}
       </p>
       <button

@@ -36,7 +36,7 @@ export const german: Story = {
         it: ["Cosa fai oggi?", "Oggi lavoro al login."],
       },
       tips: {
-        en: "Start with *heute*, and the verb still comes second.",
+        en: "Even when you start with *heute*, the verb still comes second.",
         de: "Auch wenn der Satz mit *heute* beginnt, steht das Verb an zweiter Stelle.",
         it: "Anche se inizi con *heute*, il verbo resta al secondo posto.",
       },
@@ -132,7 +132,7 @@ export const german: Story = {
       },
       tips: {
         en: "*Kannst du noch …* politely asks for one more thing.",
-        de: "Mit *Kannst du noch …* bittest du höflich um eine Sache mehr.",
+        de: "Mit *Kannst du noch …* bittest du höflich um noch etwas.",
         it: "Con *Kannst du noch …* chiedi gentilmente ancora una cosa.",
       },
     },

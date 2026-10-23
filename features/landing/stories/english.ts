@@ -104,7 +104,7 @@ export const english: Story = {
       tips: {
         en: "*How are you finding …?* asks what you think of something new.",
         de: "Mit *How are you finding …?* fragt man, wie dir etwas Neues gefällt.",
-        it: "*How are you finding …?* chiede come ti trovi con qualcosa di nuovo.",
+        it: "*How are you finding …?* chiede che impressione ti fa qualcosa di nuovo.",
       },
     },
     fri: {

@@ -9,6 +9,10 @@ import { ACTIVE_COURSE } from "@/content/courses"
 
 export const DIVISIONS = 10
 
+/** A place in a table: 1st, 2nd, 3rd, 11th, 22nd. */
+export const ordinal = (n: number) =>
+  `${n}${n % 10 === 1 && n % 100 !== 11 ? "st" : n % 10 === 2 && n % 100 !== 12 ? "nd" : n % 10 === 3 && n % 100 !== 13 ? "rd" : "th"}`
+
 export const leagueRowSchema = z.object({
   rank: z.number().int().positive(),
   kind: z.enum(["learner", "pacer"]),

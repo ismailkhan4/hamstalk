@@ -106,8 +106,8 @@ export const it: CopyFor = (story) => {
           a: `Per niente. Il tuo primo lunedì inizia con *${story.greeting}*.`,
         },
         {
-          q: `È solo ${bare} per il lavoro?`,
-          a: "No. Ordinerai anche un caffè, prenderai appuntamenti e cercherai casa. L’ufficio dà solo una storia a ogni lezione.",
+          q: `Imparo solo ${the} del lavoro?`,
+          a: "No. Ordinerai anche un caffè, prenderai appuntamenti e cercherai casa. L’ufficio serve solo a dare una storia a ogni lezione.",
         },
         {
           q: "Devo saper programmare?",

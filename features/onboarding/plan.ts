@@ -256,10 +256,10 @@ export function missionsNote(level: StartLevel, planned: PlannedMission[]) {
   if (level === "beginner") {
     return available === planned.length
       ? "The four lessons of Unit 1, then its review. Same order as on your learning path."
-      : `The four lessons of Unit 1, then its review. Same order as on your learning path. ${available === 0 ? "They’re being built now and open here as soon as each one is ready." : `${available} of ${planned.length} are open now; the rest follow.`}`
+      : `The four lessons of Unit 1, then its review. Same order as on your learning path. ${available === 0 ? "They’re being built now and will open here as soon as each one is ready." : `${available} of ${planned.length} are open now; the rest follow.`}`
   }
   if (level === "a1") {
-    return "You start at Unit 3. Units 1 and 2 stay open for review. Unit 3 lessons are planned and open here as soon as they’re ready; Unit 1 is the first to arrive."
+    return "You start at Unit 3. Units 1 and 2 stay open for review. Unit 3 lessons are planned and will open here as soon as they’re ready; Unit 1 is the first to arrive."
   }
   const code = level === "b2" ? "B2" : level.toUpperCase()
   return `${code} is a preview: these are the first units on its path, planned but not built yet. You can start with Unit 1 any time.`
