@@ -85,7 +85,7 @@ export const levelOptions: Record<
   beginner: {
     code: "Start",
     title: "Complete beginner",
-    text: "I’m new to German. Perfect, everyone starts here.",
+    text: "I’m new to German. Perfect: everyone starts here.",
     short: "Complete beginner",
   },
   a1: {

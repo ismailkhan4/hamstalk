@@ -114,7 +114,7 @@ export function MissionCard({
           className="mt-4 flex gap-2.5 rounded-lg bg-reward-subtle p-3 text-sm text-reward-text"
         >
           <Hammer aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
-          This lesson is being built. It opens here as soon as it’s ready;
+          This lesson is being built. It will open here as soon as it’s ready;
           nothing you do now is lost.
         </p>
       )}

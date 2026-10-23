@@ -23,8 +23,20 @@ function withThemeTransition(update: () => void) {
   transition.finished.finally(() => delete root.dataset.themeTransition)
 }
 
+const englishLabels = {
+  toLight: "Switch to light theme",
+  toDark: "Switch to dark theme",
+}
+
 /** One-click light/dark switch. The full Light / Dark / System choice lives in Settings. */
-function ThemeToggle({ className }: { className?: string }) {
+function ThemeToggle({
+  className,
+  labels = englishLabels,
+}: {
+  className?: string
+  /** For pages in another language, such as the translated landing page. */
+  labels?: { toLight: string; toDark: string }
+}) {
   const { resolvedTheme, setTheme } = useTheme()
   const mounted = useSyncExternalStore(
     subscribe,
@@ -39,7 +51,7 @@ function ThemeToggle({ className }: { className?: string }) {
       onClick={() =>
         withThemeTransition(() => setTheme(isDark ? "light" : "dark"))
       }
-      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+      aria-label={isDark ? labels.toLight : labels.toDark}
       className={cn(
         "grid size-11 place-items-center rounded-lg text-secondary-text transition-colors duration-(--duration-fast) hover:bg-accent hover:text-foreground",
         className

@@ -6,6 +6,7 @@ import { AppearanceSync } from "@/components/appearance-sync"
 import { OfflineBanner } from "@/components/pwa/offline-banner"
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register"
 import { ThemeProvider } from "@/components/theme-provider"
+import { DEFAULT_LOCALE } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
 /** Headings, numbers and celebrations: round and bouncy. */
@@ -28,7 +29,17 @@ const mono = JetBrains_Mono({
   display: "swap",
 })
 
+/** Makes canonical, alternate-language and Open Graph URLs absolute. */
+function metadataBase() {
+  try {
+    return new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://hamstalk.com")
+  } catch {
+    return new URL("https://hamstalk.com")
+  }
+}
+
 export const metadata: Metadata = {
+  metadataBase: metadataBase(),
   title: {
     default: "Hamstalk · Learn German. Join the team.",
     template: "%s · Hamstalk",
@@ -53,7 +64,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang={DEFAULT_LOCALE}
       suppressHydrationWarning
       className={cn(display.variable, sans.variable, mono.variable)}
     >

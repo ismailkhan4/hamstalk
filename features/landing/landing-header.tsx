@@ -5,30 +5,46 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { buttonVariants } from "@/components/ui/button-variants"
 import { cn } from "@/lib/utils"
 
-import { cta } from "./content"
+import type { LandingProps } from "./landing-page"
+import { LanguageSwitcher } from "./language-switcher"
 
-export function LandingHeader() {
+export function LandingHeader({ copy, story, locale, cta }: LandingProps) {
   return (
     <header className="sticky top-0 z-(--z-header) border-b-2 border-border-subtle bg-background/90 backdrop-blur-md">
-      <div className="mx-auto flex h-17 max-w-280 items-center gap-2 px-4 sm:px-6">
-        <a href="#top" aria-label="Hamstalk home" className="mr-auto">
+      <div className="mx-auto flex h-17 max-w-280 items-center gap-1 px-4 sm:gap-2 sm:px-6">
+        <a href="#top" aria-label={copy.nav.home} className="mr-auto">
           <Logo symbolClassName="size-[30px]" />
         </a>
-        <ThemeToggle />
+        <LanguageSwitcher
+          locale={locale}
+          course={story.course}
+          label={copy.nav.language}
+        />
+        {/* The smallest phones have room for language or theme, and language matters more. */}
+        <ThemeToggle
+          className="max-[359px]:hidden"
+          labels={{
+            toLight: copy.nav.themeToLight,
+            toDark: copy.nav.themeToDark,
+          }}
+        />
         <Link
           href="/signin"
-          className={buttonVariants({ variant: "ghost", size: "md" })}
-        >
-          {cta.signIn}
-        </Link>
-        <Link
-          href="/signup"
           className={cn(
-            buttonVariants({ size: "md" }),
-            "hidden sm:inline-flex"
+            buttonVariants({ variant: "ghost", size: "md" }),
+            "px-3 sm:px-4"
           )}
         >
-          {cta.start}
+          {copy.cta.signIn}
+        </Link>
+        <Link
+          href={cta.href}
+          className={cn(
+            buttonVariants({ size: "md" }),
+            "hidden lg:inline-flex"
+          )}
+        >
+          {cta.label}
         </Link>
       </div>
     </header>

@@ -9,11 +9,8 @@ import { playFeedback } from "@/features/celebrations/feedback"
 import { Mascot } from "@/features/celebrations/mascot"
 import { cn } from "@/lib/utils"
 
-import { divisionName, DIVISIONS, type LeagueResult } from "../model"
+import { divisionName, DIVISIONS, ordinal, type LeagueResult } from "../model"
 import { DivisionCrest } from "./division-crest"
-
-const ordinal = (n: number) =>
-  `${n}${n % 10 === 1 && n % 100 !== 11 ? "st" : n % 10 === 2 && n % 100 !== 12 ? "nd" : n % 10 === 3 && n % 100 !== 13 ? "rd" : "th"}`
 
 /**
  * Last week's result, shown once: promotion gets the confetti, staying up a pat on the back and

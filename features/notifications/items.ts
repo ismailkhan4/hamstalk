@@ -42,7 +42,7 @@ export function buildNotifications({
     items.push({
       id: "streak",
       kind: "streak",
-      title: `Your ${streak.count} day streak ends at midnight`,
+      title: `Your ${streak.count}-day streak ends at midnight`,
       text:
         streak.freezing > 0
           ? "Practise today and a streak freeze covers the day you missed."
