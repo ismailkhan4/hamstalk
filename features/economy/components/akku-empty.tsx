@@ -90,7 +90,7 @@ export function AkkuEmpty({
               <p className="font-extrabold">Recharge now</p>
               <p className="text-sm font-semibold text-muted-foreground">
                 Five bars straight away. You have {nuts.toLocaleString("en")}{" "}
-                nuts.
+                {nuts === 1 ? "nut" : "nuts"}.
               </p>
             </div>
             <Button
@@ -113,8 +113,8 @@ export function AkkuEmpty({
           <div className="min-w-[12rem] flex-1">
             <p className="font-extrabold">Practise to charge it</p>
             <p className="text-sm font-semibold text-muted-foreground">
-              Every {REVIEWS_PER_BAR} words you review charge one bar. Reviews
-              never use the Akku.
+              Reviewing {REVIEWS_PER_BAR} words charges one bar. Reviews never
+              use the Akku.
             </p>
           </div>
           <Link

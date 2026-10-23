@@ -22,13 +22,13 @@ function copy(state: StreakState): {
     case "done":
       return {
         mood: "onFire",
-        title: `${state.count} day streak!`,
+        title: `${state.count}-day streak!`,
         text: "Today’s practice is done. See you tomorrow.",
       }
     case "at-risk":
       return {
         mood: "sleepy",
-        title: `Your ${state.count} day streak needs you`,
+        title: `Your ${state.count}-day streak needs you`,
         text:
           state.freezing > 0
             ? "Practise today and a streak freeze covers the day you missed."

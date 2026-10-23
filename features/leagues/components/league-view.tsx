@@ -9,7 +9,13 @@ import { Mascot } from "@/features/celebrations/mascot"
 import { MASCOT_NAME } from "@/features/celebrations/mascot-name"
 import { useNow } from "@/features/economy/use-now"
 
-import { divisionName, DIVISIONS, timeLeft, type League } from "../model"
+import {
+  divisionName,
+  DIVISIONS,
+  ordinal,
+  timeLeft,
+  type League,
+} from "../model"
 import { DivisionCrest } from "./division-crest"
 import { LigaTable } from "./liga-table"
 import { ResultCard } from "./result-card"
@@ -57,7 +63,9 @@ export function LeagueView({
           <p className="font-semibold text-secondary-text">
             <span lang={TARGET_LANG}>{ACTIVE_COURSE.phrases.finalWhistle}</span>{" "}
             in {timeLeft(left)}
-            {me ? ` · you’re ${me.rank} of ${league.table.length}` : ""}
+            {me
+              ? ` · you’re ${ordinal(me.rank)} of ${league.table.length}`
+              : ""}
           </p>
         </div>
       </header>
@@ -101,7 +109,7 @@ export function LeagueView({
             the final whistle at midnight UTC.
           </li>
           <li>
-            The XP you earn this week are your points. The top places move up a
+            The XP you earn this week is your score. The top places move up a
             division, the bottom places move down.
           </li>
           <li>

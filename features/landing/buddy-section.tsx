@@ -1,9 +1,11 @@
 import { Mascot } from "@/features/celebrations/mascot"
 
-import { buddy } from "./content"
+import type { LandingProps } from "./landing-page"
+import { RichText } from "./rich-text"
+import { buddyMoods } from "./stories"
 
 /** Hamsti, introduced like a colleague: four moods, four lines. */
-export function BuddySection() {
+export function BuddySection({ copy }: LandingProps) {
   return (
     <section
       id="buddy"
@@ -16,22 +18,23 @@ export function BuddySection() {
             id="buddy-title"
             className="font-display text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.08] font-semibold text-balance"
           >
-            {buddy.title}
+            {copy.buddy.title}
           </h2>
           <p className="mt-4 text-lg font-semibold text-secondary-text">
-            {buddy.lede.before}
-            <i lang="de">{buddy.lede.word}</i>
-            {buddy.lede.after}
+            {/* Hamsti's name comes from German, whichever course you take. */}
+            <RichText text={copy.buddy.lede} lang="de" />
           </p>
         </div>
         <ul className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {buddy.moods.map((item) => (
+          {buddyMoods.map((mood) => (
             <li
-              key={item.mood}
+              key={mood}
               className="flex flex-col items-center gap-2 rounded-3xl border-2 border-reward-border bg-card p-4 text-center shadow-[0_4px_0_var(--reward-border)]"
             >
-              <Mascot mood={item.mood} size={104} />
-              <p className="font-extrabold">{item.caption}</p>
+              <Mascot mood={mood} size={104} />
+              <p className="font-extrabold text-balance">
+                {copy.buddy.captions[mood]}
+              </p>
             </li>
           ))}
         </ul>

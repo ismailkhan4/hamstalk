@@ -72,7 +72,7 @@ export default async function LessonPage({ params }: Props) {
           }
         >
           {meta.lesson.title} is planned but not built yet. Nothing you’ve done
-          is lost, and it opens here as soon as it’s ready.
+          is lost, and it will open here as soon as it’s ready.
         </EmptyState>
       </main>
     )

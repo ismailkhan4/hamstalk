@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import { ACTIVE_COURSE, TARGET_LANG } from "@/content/courses"
 
-import { divisionName, zoneOf, type League } from "../model"
+import { divisionName, ordinal, zoneOf, type League } from "../model"
 import { DivisionCrest } from "./division-crest"
 
 /** Home's glance at the league: division, place and what it means right now. */
@@ -16,10 +16,10 @@ export function LeagueCard({ league }: { league: League }) {
     : !me
       ? "Earn XP this week to join a table."
       : zone === "promotion"
-        ? `You’re ${me.rank} of ${size}: in the promotion places.`
+        ? `You’re ${ordinal(me.rank)} of ${size}: in the promotion places.`
         : zone === "relegation"
-          ? `You’re ${me.rank} of ${size}: a lesson or two gets you clear.`
-          : `You’re ${me.rank} of ${size}.${league.promote > 0 ? ` The top ${league.promote} go up.` : ""}`
+          ? `You’re ${ordinal(me.rank)} of ${size}: a lesson or two gets you clear.`
+          : `You’re ${ordinal(me.rank)} of ${size}.${league.promote > 0 ? ` The top ${league.promote} go up.` : ""}`
 
   return (
     <Link

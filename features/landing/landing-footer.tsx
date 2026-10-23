@@ -2,22 +2,25 @@ import Link from "next/link"
 
 import { Logo } from "@/components/brand/logo"
 
-import { footerNote } from "./content"
+import type { LandingProps } from "./landing-page"
 
-const links = [
-  { href: "#week", label: "Your first week" },
-  { href: "#growth", label: "Levels" },
-  { href: "#buddy", label: "Hamsti" },
-  { href: "#faq", label: "FAQ" },
-  { href: "/signin", label: "Sign in" },
-]
+export function LandingFooter({ copy }: LandingProps) {
+  const links = [
+    { href: "#week", label: copy.footer.links.week },
+    { href: "#growth", label: copy.footer.links.levels },
+    { href: "#buddy", label: copy.footer.links.buddy },
+    { href: "#faq", label: copy.footer.links.faq },
+    { href: "/signin", label: copy.cta.signIn },
+  ]
 
-export function LandingFooter() {
   return (
     <footer className="border-t-2 border-border-subtle">
       <div className="mx-auto flex max-w-280 flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-center md:justify-between">
         <Logo symbolClassName="size-[26px]" />
-        <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2">
+        <nav
+          aria-label={copy.nav.footer}
+          className="flex flex-wrap gap-x-6 gap-y-2"
+        >
           {links.map((link) => (
             <Link
               key={link.href}
@@ -30,7 +33,7 @@ export function LandingFooter() {
         </nav>
       </div>
       <p className="mx-auto max-w-280 px-4 pb-10 text-sm font-semibold text-muted-foreground sm:px-6">
-        © 2026 Hamstalk. {footerNote}
+        © 2026 Hamstalk. {copy.footer.note}
       </p>
     </footer>
   )
