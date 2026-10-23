@@ -5,10 +5,12 @@ import { Avatar } from "@/components/learning/avatar"
 import { buttonVariants } from "@/components/ui/button-variants"
 import { Mascot } from "@/features/celebrations/mascot"
 
-import { cta, hero, invite } from "./content"
+import type { LandingProps } from "./landing-page"
+import { RichText } from "./rich-text"
+import { STANDUP_EVENT } from "./stories"
 
 /** The last push is a calendar invite to your first standup. Accepting it signs you up. */
-export function ClosingSection() {
+export function ClosingSection({ copy, story, cta }: LandingProps) {
   return (
     <section
       aria-labelledby="invite-title"
@@ -19,7 +21,7 @@ export function ClosingSection() {
           id="invite-title"
           className="font-display text-[clamp(2.25rem,5.5vw,4rem)] leading-[1.05] font-semibold"
         >
-          {invite.heading}
+          {copy.invite.heading}
         </h2>
         <div className="relative mt-10 w-full max-w-105">
           <div className="absolute -top-11 -right-3 z-10 motion-safe:animate-float">
@@ -27,11 +29,11 @@ export function ClosingSection() {
           </div>
           <div className="overflow-hidden rounded-3xl border-2 border-border bg-card text-left shadow-[0_6px_0_var(--border)]">
             <p className="bg-info px-5 py-2.5 text-sm font-extrabold tracking-wide text-info-foreground uppercase">
-              Invitation
+              {copy.invite.label}
             </p>
             <div className="p-5">
               <p className="font-display text-2xl font-semibold">
-                {invite.event}
+                {STANDUP_EVENT}
               </p>
               <ul className="mt-3 flex flex-col gap-2 font-semibold text-secondary-text">
                 <li className="flex items-center gap-2.5">
@@ -39,37 +41,41 @@ export function ClosingSection() {
                     aria-hidden="true"
                     className="size-5 shrink-0"
                   />
-                  {invite.when}
+                  {copy.invite.when}
                 </li>
                 <li className="flex items-center gap-2.5">
                   <MapPin aria-hidden="true" className="size-5 shrink-0" />
-                  <span lang="de">{invite.where}</span>
+                  {copy.invite.where}
                 </li>
                 <li className="flex items-center gap-2.5">
                   <UserRound aria-hidden="true" className="size-5 shrink-0" />
-                  Organiser: {invite.organiser}
-                  <Avatar person="lf" initials="LF" size="sm" />
+                  {copy.invite.organiser}: {story.lead.fullName}
+                  <Avatar
+                    person={story.lead.person}
+                    initials={story.lead.initials}
+                    size="sm"
+                  />
                 </li>
               </ul>
               <p className="mt-4 rounded-2xl bg-background-subtle px-4 py-3 font-semibold">
-                {invite.note}
+                <RichText text={copy.invite.note} lang={story.course} />
               </p>
               <Link
-                href="/signup"
+                href={cta.href}
                 className={`${buttonVariants({ size: "lg", fullWidth: true })} mt-5`}
               >
-                {invite.accept}
+                {story.available ? copy.invite.accept : cta.label}
               </Link>
             </div>
           </div>
         </div>
         <p className="mt-6 font-semibold text-muted-foreground">
-          {hero.signInPrompt}{" "}
+          {copy.hero.signInPrompt}{" "}
           <Link
             href="/signin"
             className="font-extrabold text-primary-text underline decoration-2 underline-offset-4"
           >
-            {cta.signIn}
+            {copy.cta.signIn}
           </Link>
         </p>
       </div>

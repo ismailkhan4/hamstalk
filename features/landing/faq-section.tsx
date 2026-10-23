@@ -1,8 +1,9 @@
 import { Plus } from "lucide-react"
 
-import { faq } from "./content"
+import type { LandingProps } from "./landing-page"
+import { RichText } from "./rich-text"
 
-export function FaqSection() {
+export function FaqSection({ copy, story }: LandingProps) {
   return (
     <section
       id="faq"
@@ -14,10 +15,10 @@ export function FaqSection() {
           id="faq-title"
           className="font-display text-[clamp(2rem,4.6vw,3.25rem)] leading-[1.08] font-semibold text-balance"
         >
-          {faq.title}
+          {copy.faq.title}
         </h2>
         <div className="flex flex-col gap-3">
-          {faq.items.map((item) => (
+          {copy.faq.items.map((item) => (
             <details
               key={item.q}
               className="group rounded-2xl border-2 border-border bg-card shadow-[0_4px_0_var(--border)]"
@@ -31,7 +32,7 @@ export function FaqSection() {
                 />
               </summary>
               <p className="px-5 pb-5 font-semibold text-secondary-text">
-                {item.a}
+                <RichText text={item.a} lang={story.course} />
               </p>
             </details>
           ))}
